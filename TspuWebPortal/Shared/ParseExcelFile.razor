@@ -1,0 +1,93 @@
+﻿@using TspuWebPortal.Data
+@inject IWebHostEnvironment env
+@inject SiteDataService objDataService
+@using Spire.Xls;
+@using Microsoft.EntityFrameworkCore
+
+
+<h1>Создание площадок ТСПУ</h1>
+
+<p>
+    <label>
+        <button class="btn btn-primary" @onclick="ParseExcel">Парсить файл</button>
+    </label>
+</p>
+
+
+
+@if (listSites == null)
+{
+    <p><em>Данные площадок не загружены...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Номер</th>
+                <th>Оператор</th>
+                <th>Город</th>
+                <th>Адрес</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var site in listSites)
+            {
+                <tr>
+                    <td>@site.ID</td>
+                    <td>@site.Oper</td>
+                    <td>@site.City</td>
+                    <td>@site.Address</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+
+@code {
+
+
+
+
+
+    //////////////////////////////////////////////////////
+
+    List<SiteData> listSites = new List<SiteData>();
+    List<SiteData> listFetchedData = new List<SiteData>();
+
+    async Task ParseExcel()
+    {
+        //string WebRootPath = env.WebRootPath;
+        await Task.Run(() =>
+        {
+            Spire.Xls.Workbook workbook = new Spire.Xls.Workbook();
+            workbook.LoadFromFile($"{env.WebRootPath}\\files\\Template.xlsx");
+            int intCurrentRow = 1;
+            int ID;
+            string Oper;
+            string City;
+            string Address;
+            Spire.Xls.Worksheet Sheet = workbook.Worksheets[0];
+            while (workbook.Worksheets[0].Range[intCurrentRow + 1,1].Value != "")
+            {
+                intCurrentRow++;
+                ID = Convert.ToInt32(Sheet.Range[intCurrentRow,1].Value);
+                Oper = Convert.ToString(Sheet.Range[intCurrentRow,2].Value);
+                City = Convert.ToString(Sheet.Range[intCurrentRow,3].Value);
+                Address = Convert.ToString(Sheet.Range[intCurrentRow,4].Value);
+                listSites.Add(new SiteData(ID,Oper, City, Address) );
+
+                SiteData objSite = new SiteData(ID, Oper, City, Address);
+                objDataService.CreateSite (new SiteData(ID, Oper, City, Address));
+            }
+
+            //listFetchedData = objDataService.GetSiteInfo(listFetchedData)
+
+            
+
+            });
+        }
+
+    }
