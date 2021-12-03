@@ -16,7 +16,9 @@ namespace TspuWebPortal.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Oper = table.Column<string>(type: "TEXT", nullable: false),
                     City = table.Column<string>(type: "TEXT", nullable: false),
-                    Address = table.Column<string>(type: "TEXT", nullable: false)
+                    Address = table.Column<string>(type: "TEXT", nullable: false),
+                    SiteType = table.Column<string>(type: "TEXT", nullable: false),
+                    Links = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {

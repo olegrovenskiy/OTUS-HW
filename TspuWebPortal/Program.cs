@@ -14,7 +14,8 @@ builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<SiteDataService>();
 //builder.Services.AddDbContext<SiteDBContext>(options => options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=aspnet-53bc9b9d-9d6a-45d4-8429-2a2761773502;Trusted_Connection=True;MultipleActiveResultSets=true"));
 //builder.Services.AddDbContextFactory<SiteDBContext>(options => options.UseSqlite("Data Source={nameof(SiteDBContext)}.db"));
-builder.Services.AddDbContext<SiteDBContext>(options => options.UseSqlite("Data Source=TSPU_Sites.db"));
+//builder.Services.AddDbContext<SiteDBContext>(options => options.UseSqlite("Data Source=TSPU_Sites.db"));
+builder.Services.AddDbContextFactory<SiteDBContext>(options => options.UseSqlite("Data Source=TSPU_Sites.db"));
 
 var app = builder.Build();
 

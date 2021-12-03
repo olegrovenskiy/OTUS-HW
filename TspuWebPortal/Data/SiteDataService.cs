@@ -17,7 +17,7 @@
         }
 
 
-        public List<SiteData> GetSiteInfo()
+        public List<SiteData> GetAllSitesInfo()
         {
             var SiteList = _db.Sites.ToList();
             return SiteList;

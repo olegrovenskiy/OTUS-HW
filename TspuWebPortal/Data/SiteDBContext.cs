@@ -3,8 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
     public class SiteDBContext : DbContext
     {
-        public SiteDBContext(DbContextOptions<SiteDBContext> options)
-        : base(options)
+        public SiteDBContext (DbContextOptions<SiteDBContext> options) : base (options)
         {
             
 

@@ -30,7 +30,15 @@ namespace TspuWebPortal.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Links")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Oper")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SiteType")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

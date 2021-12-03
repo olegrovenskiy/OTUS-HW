@@ -28,6 +28,8 @@ else
                 <th>Оператор</th>
                 <th>Город</th>
                 <th>Адрес</th>
+                <th>Тип Площадки</th>
+                <th>Линки площадки</th>
             </tr>
         </thead>
         <tbody>
@@ -38,6 +40,9 @@ else
                     <td>@site.Oper</td>
                     <td>@site.City</td>
                     <td>@site.Address</td>
+                    <td>@site.SiteType</td>
+                    <td>@site.Links</td>
+
                 </tr>
             }
         </tbody>
@@ -55,7 +60,7 @@ else
     //////////////////////////////////////////////////////
 
     List<SiteData> listSites = new List<SiteData>();
-    List<SiteData> listFetchedData = new List<SiteData>();
+    //List<SiteData> listFetchedData = new List<SiteData>();
 
     async Task ParseExcel()
     {
@@ -64,23 +69,37 @@ else
         {
             Spire.Xls.Workbook workbook = new Spire.Xls.Workbook();
             workbook.LoadFromFile($"{env.WebRootPath}\\files\\Template.xlsx");
-            int intCurrentRow = 1;
+            int intCurrentRow = 13;
             int ID;
             string Oper;
             string City;
             string Address;
+            string SiteType;
+            string Links;
+            int int100GNumber, int40GNumber, int10GNumber, int1GNumber;
             Spire.Xls.Worksheet Sheet = workbook.Worksheets[0];
             while (workbook.Worksheets[0].Range[intCurrentRow + 1,1].Value != "")
             {
+                Links = "";
                 intCurrentRow++;
                 ID = Convert.ToInt32(Sheet.Range[intCurrentRow,1].Value);
                 Oper = Convert.ToString(Sheet.Range[intCurrentRow,2].Value);
                 City = Convert.ToString(Sheet.Range[intCurrentRow,3].Value);
                 Address = Convert.ToString(Sheet.Range[intCurrentRow,4].Value);
-                listSites.Add(new SiteData(ID,Oper, City, Address) );
+                SiteType = Convert.ToString(Sheet.Range[intCurrentRow,8].Value);
+                int100GNumber = Convert.ToInt32(Sheet.Range[intCurrentRow, 14].Value) + Convert.ToInt32(Sheet.Range[intCurrentRow, 18].Value) + Convert.ToInt32(Sheet.Range[intCurrentRow, 22].Value) + Convert.ToInt32(Sheet.Range[intCurrentRow, 23].Value);
+                int40GNumber = Convert.ToInt32(Sheet.Range[intCurrentRow, 15].Value) + Convert.ToInt32(Sheet.Range[intCurrentRow, 19].Value);
+                int10GNumber = Convert.ToInt32(Sheet.Range[intCurrentRow, 16].Value) + Convert.ToInt32(Sheet.Range[intCurrentRow, 20].Value) + Convert.ToInt32(Sheet.Range[intCurrentRow, 21].Value);
+                int1GNumber = Convert.ToInt32(Sheet.Range[intCurrentRow, 17].Value) + Convert.ToInt32(Sheet.Range[intCurrentRow, 24].Value);
+                //if (int100GNumber > 0) Links = String.Concat(Links, Convert.ToString(int100GNumber));
+                if (int100GNumber > 0) Links = Links + String.Concat(Links, Convert.ToString(int100GNumber)) + "*100G; ";
+                if (int40GNumber > 0) Links = Links + String.Concat(Links, Convert.ToString(int40GNumber)) + "*40G; ";
+                if (int10GNumber > 0) Links = Links + String.Concat(Links, Convert.ToString(int10GNumber)) + "*10G; ";
+                if (int1GNumber > 0) Links = Links + String.Concat(Links, Convert.ToString(int1GNumber)) + "*1G; ";
 
-                SiteData objSite = new SiteData(ID, Oper, City, Address);
-                objDataService.CreateSite (new SiteData(ID, Oper, City, Address));
+                listSites.Add(new SiteData(ID,Oper, City, Address, SiteType, Links));
+                SiteData objSite = new SiteData(ID, Oper, City, Address, SiteType, Links);
+                objDataService.CreateSite (new SiteData(ID, Oper, City, Address, SiteType, Links));
             }
 
             //listFetchedData = objDataService.GetSiteInfo(listFetchedData)

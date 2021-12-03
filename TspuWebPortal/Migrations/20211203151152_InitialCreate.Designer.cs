@@ -10,7 +10,7 @@ using TspuWebPortal.Data;
 namespace TspuWebPortal.Migrations
 {
     [DbContext(typeof(SiteDBContext))]
-    [Migration("20211201191803_InitialCreate")]
+    [Migration("20211203151152_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,7 +32,15 @@ namespace TspuWebPortal.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Links")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Oper")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SiteType")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
