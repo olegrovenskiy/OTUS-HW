@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="wwwroot\files\WeatherForecast.cs" />
+    <Compile Include="wwwroot\files\WeatherForecastService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Data\SiteData.cs" />
     <Content Include="Data\SiteDataService.cs" />
     <Content Include="Data\SiteDBContext.cs" />

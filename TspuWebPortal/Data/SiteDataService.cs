@@ -25,7 +25,9 @@
 
         public SiteData GetSiteInfoById(int ID)
         {
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             SiteData SiteInfo = _db.Sites.FirstOrDefault(s => s.ID == ID);
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             if (SiteInfo == null)
             {
                 SiteData DefaultInfo = new SiteData();
