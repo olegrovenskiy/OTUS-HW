@@ -25,8 +25,20 @@
 
         public SiteData GetSiteInfoById(int ID)
         {
-            SiteData SiteInfo = _db.Sites.First(s => s.ID == ID);
-            return SiteInfo;
+            SiteData SiteInfo = _db.Sites.FirstOrDefault(s => s.ID == ID);
+            if (SiteInfo == null)
+            {
+                SiteData DefaultInfo = new SiteData();
+                DefaultInfo.ID = ID;
+                DefaultInfo.Oper = "Не найдено";
+                DefaultInfo.SiteType = "Не найдено";
+                DefaultInfo.City = "Не найдено";
+                DefaultInfo.SiteType = "Не найдено";
+                DefaultInfo.Address = "Не найдено";
+                DefaultInfo.Links = "Не найдено";
+                return DefaultInfo;
+            }
+            else return SiteInfo;
         }
 
     }
