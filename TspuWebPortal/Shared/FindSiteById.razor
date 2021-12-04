@@ -11,13 +11,9 @@
 
 <div>
     <input type="number" @bind="@ChosenID" />
+    <button class="btn btn-primary" @onclick="OnSubmitTask">Искать</button>
 </div>
 
-<p>
-    <label>
-        <button class="btn btn-primary" @onclick="OnSubmitTask">Искать</button>
-    </label>
-</p>
 
 
 @if (ChosenSite == null)
