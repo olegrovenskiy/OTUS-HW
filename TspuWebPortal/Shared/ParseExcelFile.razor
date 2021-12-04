@@ -15,40 +15,6 @@
 
 
 
-@if (listSites == null)
-{
-    <p><em>Данные площадок не загружены...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Номер</th>
-                <th>Оператор</th>
-                <th>Город</th>
-                <th>Адрес</th>
-                <th>Тип Площадки</th>
-                <th>Линки площадки</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var site in listSites)
-            {
-                <tr>
-                    <td>@site.ID</td>
-                    <td>@site.Oper</td>
-                    <td>@site.City</td>
-                    <td>@site.Address</td>
-                    <td>@site.SiteType</td>
-                    <td>@site.Links</td>
-
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-
 
 
 @code {
@@ -91,15 +57,15 @@ else
                 int40GNumber = Convert.ToInt32(Sheet.Range[intCurrentRow, 15].Value) + Convert.ToInt32(Sheet.Range[intCurrentRow, 19].Value);
                 int10GNumber = Convert.ToInt32(Sheet.Range[intCurrentRow, 16].Value) + Convert.ToInt32(Sheet.Range[intCurrentRow, 20].Value) + Convert.ToInt32(Sheet.Range[intCurrentRow, 21].Value);
                 int1GNumber = Convert.ToInt32(Sheet.Range[intCurrentRow, 17].Value) + Convert.ToInt32(Sheet.Range[intCurrentRow, 24].Value);
-                //if (int100GNumber > 0) Links = String.Concat(Links, Convert.ToString(int100GNumber));
-                if (int100GNumber > 0) Links = Links + String.Concat(Links, Convert.ToString(int100GNumber)) + "*100G; ";
+            //if (int100GNumber > 0) Links = String.Concat(Links, Convert.ToString(int100GNumber));
+            if (int100GNumber > 0) Links = Links + String.Concat(Links, Convert.ToString(int100GNumber)) + "*100G; ";
                 if (int40GNumber > 0) Links = Links + String.Concat(Links, Convert.ToString(int40GNumber)) + "*40G; ";
                 if (int10GNumber > 0) Links = Links + String.Concat(Links, Convert.ToString(int10GNumber)) + "*10G; ";
                 if (int1GNumber > 0) Links = Links + String.Concat(Links, Convert.ToString(int1GNumber)) + "*1G; ";
 
-                listSites.Add(new SiteData(ID,Oper, City, Address, SiteType, Links));
-                SiteData objSite = new SiteData(ID, Oper, City, Address, SiteType, Links);
-                objDataService.CreateSite (new SiteData(ID, Oper, City, Address, SiteType, Links));
+            //listSites.Add(new SiteData(ID,Oper, City, Address, SiteType, Links));
+            //SiteData objSite = new SiteData {ID = ID, Oper = Oper, City = City, Address = Address, SiteType = SiteType, Links = Links };
+                objDataService.CreateSite (new SiteData{ID = ID, Oper = Oper, City = City, Address = Address, SiteType = SiteType, Links = Links });
             }
 
             //listFetchedData = objDataService.GetSiteInfo(listFetchedData)

@@ -1,0 +1,64 @@
+﻿@using TspuWebPortal.Data
+@inject SiteDataService objDataService
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Logging
+
+
+<h1>Поиск площадки по ID</h1>
+
+
+
+
+<div>
+    <input type="number" @bind="@ChosenID" />
+</div>
+
+<p>
+    <label>
+        <button class="btn btn-primary" @onclick="OnSubmitTask">Искать</button>
+    </label>
+</p>
+
+
+@if (ChosenSite == null)
+{
+    <p><em>Площадка не выбрана...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Номер</th>
+                <th>Оператор</th>
+                <th>Город</th>
+                <th>Адрес</th>
+                <th>Тип Площадки</th>
+                <th>Линки площадки</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td>@ChosenSite.ID</td>
+                    <td>@ChosenSite.Oper</td>
+                    <td>@ChosenSite.City</td>
+                    <td>@ChosenSite.Address</td>
+                    <td>@ChosenSite.SiteType</td>
+                    <td>@ChosenSite.Links</td>
+
+                </tr>
+        </tbody>
+    </table>
+}
+
+@code {
+    int ChosenID;
+    SiteData ChosenSite = new SiteData ();
+
+    protected async Task OnSubmitTask()
+    {
+        ChosenSite = await Task.Run(() => objDataService.GetSiteInfoById(Convert.ToInt32(ChosenID)));
+    }
+
+    /**/
+    }

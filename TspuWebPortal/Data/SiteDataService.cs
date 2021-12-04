@@ -22,5 +22,12 @@
             var SiteList = _db.Sites.ToList();
             return SiteList;
         }
+
+        public SiteData GetSiteInfoById(int ID)
+        {
+            SiteData SiteInfo = _db.Sites.First(s => s.ID == ID);
+            return SiteInfo;
+        }
+
     }
 }
