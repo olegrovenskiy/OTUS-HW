@@ -5,14 +5,23 @@ namespace TspuWebPortal.Data
     public class SiteData
     {
         public int ID { get; set; }
-        public string? Oper { get; set; }
-        public string? City { get; set; }
-        public string? Address { get; set; }
-        public string? SiteType { get; set; }
-        public string? Links { get; set; }
+        public string Oper { get; set; }
+        public string FederalDistrict { get; set; }
+        public int RegionNumber { get; set; }
+        public string City { get; set; }
+        public string Address { get; set; }
+        public string SiteType { get; set; }
+        public string Links { get; set; }
+        public string IsInProject { get; set; }
+        public string MaintainanceStatus { get; set; }
+        public string PipelineStage { get; set; }
 
-        //public SiteData(int ID, string Oper, string City, string Address, string SiteType, string Links) 
-        //{ this.ID = ID; this.Oper = Oper; this.City = City; this.Address = Address; this.SiteType = SiteType; this.Links = Links; }
+        public SiteData() 
+        { 
+            ID = 0; Oper = "не определено"; City = "не определено"; FederalDistrict = "не определено";
+            RegionNumber = 0; Address = "не определено"; SiteType = "не определено"; Links = "не определено";
+            IsInProject = "нет"; MaintainanceStatus = "в работе без инцидентов"; PipelineStage = "в работе без замечаний";
+        }
 
 
     }
