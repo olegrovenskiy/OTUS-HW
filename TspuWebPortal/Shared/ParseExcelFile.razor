@@ -40,21 +40,21 @@
             string Links;
             int int100GNumber, int40GNumber, int10GNumber, int1GNumber;
             Spire.Xls.Worksheet Sheet = workbook.Worksheets[0];
-            while (workbook.Worksheets[0].Range[intCurrentRow + 1,1].Value != "")
+            while (workbook.Worksheets[0].Range[intCurrentRow + 1, 1].Value != "")
             {
                 Links = "";
                 intCurrentRow++;
-                ID = Convert.ToInt32(Sheet.Range[intCurrentRow,1].Value);
-                Oper = Convert.ToString(Sheet.Range[intCurrentRow,2].Value);
-                City = Convert.ToString(Sheet.Range[intCurrentRow,3].Value);
-                Address = Convert.ToString(Sheet.Range[intCurrentRow,4].Value);
-                SiteType = Convert.ToString(Sheet.Range[intCurrentRow,8].Value);
+                ID = Convert.ToInt32(Sheet.Range[intCurrentRow, 1].Value);
+                Oper = Convert.ToString(Sheet.Range[intCurrentRow, 2].Value);
+                City = Convert.ToString(Sheet.Range[intCurrentRow, 3].Value);
+                Address = Convert.ToString(Sheet.Range[intCurrentRow, 4].Value);
+                SiteType = Convert.ToString(Sheet.Range[intCurrentRow, 8].Value);
                 int100GNumber = Convert.ToInt32(Sheet.Range[intCurrentRow, 14].Value) + Convert.ToInt32(Sheet.Range[intCurrentRow, 18].Value) + Convert.ToInt32(Sheet.Range[intCurrentRow, 22].Value) + Convert.ToInt32(Sheet.Range[intCurrentRow, 23].Value);
                 int40GNumber = Convert.ToInt32(Sheet.Range[intCurrentRow, 15].Value) + Convert.ToInt32(Sheet.Range[intCurrentRow, 19].Value);
                 int10GNumber = Convert.ToInt32(Sheet.Range[intCurrentRow, 16].Value) + Convert.ToInt32(Sheet.Range[intCurrentRow, 20].Value) + Convert.ToInt32(Sheet.Range[intCurrentRow, 21].Value);
                 int1GNumber = Convert.ToInt32(Sheet.Range[intCurrentRow, 17].Value) + Convert.ToInt32(Sheet.Range[intCurrentRow, 24].Value);
-            //if (int100GNumber > 0) Links = String.Concat(Links, Convert.ToString(int100GNumber));
-            if (int100GNumber > 0) Links = Links + String.Concat(Links, Convert.ToString(int100GNumber)) + "*100G; ";
+                //if (int100GNumber > 0) Links = String.Concat(Links, Convert.ToString(int100GNumber));
+                if (int100GNumber > 0) Links = Links + String.Concat(Links, Convert.ToString(int100GNumber)) + "*100G; ";
                 if (int40GNumber > 0) Links = Links + String.Concat(Links, Convert.ToString(int40GNumber)) + "*40G; ";
                 if (int10GNumber > 0) Links = Links + String.Concat(Links, Convert.ToString(int10GNumber)) + "*10G; ";
                 if (int1GNumber > 0) Links = Links + String.Concat(Links, Convert.ToString(int1GNumber)) + "*1G; ";

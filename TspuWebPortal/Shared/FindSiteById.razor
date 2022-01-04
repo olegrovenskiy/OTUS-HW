@@ -34,10 +34,11 @@ else
                 <th>Линки</th>
                 <th>Статус Эксплуатации</th>
                 <th>Этап конвейера</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
-                <tr>
+                <tr >
                     <td>@ChosenSite.ID</td>
                     <td>@ChosenSite.Oper</td>
                     <td>@ChosenSite.FederalDistrict</td>
@@ -47,10 +48,15 @@ else
                     <td>@ChosenSite.Links</td>
                     <td>@ChosenSite.MaintainanceStatus</td>
                     <td>@ChosenSite.PipelineStage</td>
-
+                     @if (ChosenSite.Oper != "Не создан" && ChosenSite.Oper != "не определено")
+                    {
+                        <td><a href=@($"/sites/{ChosenSite.ID}/basic")>Открыть</a></td>
+                    }
                 </tr>
         </tbody>
     </table>
+
+    
 }
 
 @code {

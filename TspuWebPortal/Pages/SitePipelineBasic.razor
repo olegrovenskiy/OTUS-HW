@@ -1,0 +1,27 @@
+﻿
+@page "/sites/{ID:int}/basic"
+@inject SiteDataService objDataService
+@using TspuWebPortal.Data
+@using TspuWebPortal.Shared
+
+<h3>Площадка @ID. Общая информация.</h3>
+
+<p>Оператор: @ChosenSite.Oper</p>
+
+
+
+
+@code {
+
+
+        [Parameter]
+        public int ID { get; set; }
+
+        SiteData ChosenSite = new SiteData ();
+        protected override async Task OnInitializedAsync()
+        {
+            ChosenSite = await Task.Run(() => objDataService.GetSiteInfoById(Convert.ToInt32(ID)));
+        }
+
+    }
+
