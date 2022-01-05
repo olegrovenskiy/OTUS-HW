@@ -4,9 +4,28 @@
 @using TspuWebPortal.Data
 @using TspuWebPortal.Shared
 
-<h3>Площадка @ID. Общая информация.</h3>
+<h3>Площадка @ChosenSite.ID. Общая информация.</h3>
 
-<p>Оператор: @ChosenSite.Oper</p>
+
+
+<EditForm Model=@ChosenSite OnSubmit=@FormSubmitted>
+  <div class="row">
+    <div class = "col-2">
+        <label for="FederalDistrict">Федеральный Округ</label>
+        <InputText @bind-Value=ChosenSite.FederalDistrict class="form-control" id="FederalDistrict"  Size="20" />
+    </div>
+    <div class = "col-2">
+        <label for="MaintainanceStatus">Операционный статус</label>
+        <InputText @bind-Value=ChosenSite.MaintainanceStatus class="form-control" id="MaintainanceStatus" />
+    </div>
+    <div class = "col-2">
+        <label for="PipelineStage">Этап конвейера</label>
+        <InputText @bind-Value=ChosenSite.PipelineStage class="form-control" id="PipelineStage" />
+    </div>
+  </div>
+<input type="submit" class="btn btn-primary" value="Save"/>
+</EditForm>
+
 
 
 
@@ -22,6 +41,12 @@
         {
             ChosenSite = await Task.Run(() => objDataService.GetSiteInfoById(Convert.ToInt32(ID)));
         }
+
+        void FormSubmitted(EditContext editContext)
+        {
+            bool formIsValid = editContext.Validate();
+            if (formIsValid) objDataService.UpdateSiteInfo(ChosenSite);
+        }        
 
     }
 

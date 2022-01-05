@@ -45,5 +45,13 @@
             else return SiteInfo;
         }
 
+        public void UpdateSiteInfo(SiteData objSite)
+        {
+            _db.Sites.Update(objSite);
+            _db.SaveChanges();
+            return;
+        }
+
+
     }
 }
