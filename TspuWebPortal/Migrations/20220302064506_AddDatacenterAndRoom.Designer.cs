@@ -11,8 +11,8 @@ using TspuWebPortal.Data;
 namespace TspuWebPortal.Migrations
 {
     [DbContext(typeof(AllDbContext))]
-    [Migration("20211228142840_AddNewColumnsToSitesTable")]
-    partial class AddNewColumnsToSitesTable
+    [Migration("20220302064506_AddDatacenterAndRoom")]
+    partial class AddDatacenterAndRoom
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,6 +22,53 @@ namespace TspuWebPortal.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("TspuWebPortal.Data.DataCenterData", b =>
+                {
+                    b.Property<int>("DataCenterId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("DataCenterId"));
+
+                    b.Property<string>("DataCenterAddress")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("DataCenterName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("DataCenterId");
+
+                    b.ToTable("DataCenters");
+                });
+
+            modelBuilder.Entity("TspuWebPortal.Data.RoomData", b =>
+                {
+                    b.Property<int>("RoomId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RoomId"));
+
+                    b.Property<int>("DataCenterId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("RoomCoordinates")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("RoomName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("RoomId");
+
+                    b.HasIndex("DataCenterId");
+
+                    b.ToTable("Rooms");
+                });
 
             modelBuilder.Entity("TspuWebPortal.Data.SiteData", b =>
                 {
@@ -73,6 +120,22 @@ namespace TspuWebPortal.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Sites");
+                });
+
+            modelBuilder.Entity("TspuWebPortal.Data.RoomData", b =>
+                {
+                    b.HasOne("TspuWebPortal.Data.DataCenterData", "DataCenter")
+                        .WithMany("Rooms")
+                        .HasForeignKey("DataCenterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DataCenter");
+                });
+
+            modelBuilder.Entity("TspuWebPortal.Data.DataCenterData", b =>
+                {
+                    b.Navigation("Rooms");
                 });
 #pragma warning restore 612, 618
         }

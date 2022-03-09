@@ -11,8 +11,8 @@ using TspuWebPortal.Data;
 namespace TspuWebPortal.Migrations
 {
     [DbContext(typeof(AllDbContext))]
-    [Migration("20211228142840_AddNewColumnsToSitesTable")]
-    partial class AddNewColumnsToSitesTable
+    [Migration("20220302063113_AddDcAndRoom")]
+    partial class AddDcAndRoom
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

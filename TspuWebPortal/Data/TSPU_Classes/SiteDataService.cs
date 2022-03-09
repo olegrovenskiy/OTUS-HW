@@ -2,9 +2,9 @@
 {
     public class SiteDataService
     {
-        private readonly SiteDBContext _db;
+        private readonly AllDbContext _db;
 
-        public SiteDataService(SiteDBContext db)
+        public SiteDataService(AllDbContext db)
         {
             _db = db;
         }
@@ -15,7 +15,6 @@
             _db.SaveChanges();
             return;
         }
-
         
         public List<SiteData> GetAllSitesInfo()
         {
@@ -28,7 +27,8 @@
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             SiteData SiteInfo = _db.Sites.FirstOrDefault(s => s.ID == ID);
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
-            
+
+
             if (SiteInfo == null)
             {
                 SiteData DefaultInfo = new SiteData();
@@ -43,6 +43,7 @@
             }
 
             else return SiteInfo;
+
         }
 
         public void UpdateSiteInfo(SiteData objSite)

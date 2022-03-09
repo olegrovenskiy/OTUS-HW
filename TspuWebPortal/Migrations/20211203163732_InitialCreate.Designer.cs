@@ -10,7 +10,7 @@ using TspuWebPortal.Data;
 
 namespace TspuWebPortal.Migrations
 {
-    [DbContext(typeof(SiteDBContext))]
+    [DbContext(typeof(AllDbContext))]
     [Migration("20211203163732_InitialCreate")]
     partial class InitialCreate
     {
