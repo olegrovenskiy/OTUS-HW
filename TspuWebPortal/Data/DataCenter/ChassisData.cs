@@ -14,7 +14,7 @@ namespace TspuWebPortal.Data
         public string Hostname { get; set; } = string.Empty;
         public string CurrentLocation { get; set; } = string.Empty;
         public bool IsInstalled { get; set; }
-        public int PrimaryRecordlId { get; set; }
+        public int InitialDetailRecordId { get; set; }
         public int DetailChangeId { get; set; }
         public string InventoryNumber { get; set; } = string.Empty;
         public int DeliveryYear { get; set; }
@@ -24,6 +24,7 @@ namespace TspuWebPortal.Data
         public List<UnitData>? Units { get; set; }
         public List<CardData>? Cards { get; set; }
         public List<ModuleData>? Modules { get; set; }
-        public DetailChangeData? DetailChange { get; set; }
+        public ChangeApplicationData? DetailChange { get; set; }
+        public InitialDetailRecordData? InitialDetailRecord { get; set; }
     }
 }

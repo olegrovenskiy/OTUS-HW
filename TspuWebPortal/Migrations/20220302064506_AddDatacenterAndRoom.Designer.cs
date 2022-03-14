@@ -10,7 +10,7 @@ using TspuWebPortal.Data;
 
 namespace TspuWebPortal.Migrations
 {
-    [DbContext(typeof(AllDbContext))]
+    [DbContext(typeof(TspuDbContext))]
     [Migration("20220302064506_AddDatacenterAndRoom")]
     partial class AddDatacenterAndRoom
     {

@@ -11,7 +11,7 @@ using TspuWebPortal.Data;
 
 namespace TspuWebPortal.Migrations
 {
-    [DbContext(typeof(AllDbContext))]
+    [DbContext(typeof(TspuDbContext))]
     [Migration("20220309095316_Add_ModulesInChassisAndCards")]
     partial class Add_ModulesInChassisAndCards
     {

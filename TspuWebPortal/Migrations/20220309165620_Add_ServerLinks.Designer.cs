@@ -11,7 +11,7 @@ using TspuWebPortal.Data;
 
 namespace TspuWebPortal.Migrations
 {
-    [DbContext(typeof(AllDbContext))]
+    [DbContext(typeof(TspuDbContext))]
     [Migration("20220309165620_Add_ServerLinks")]
     partial class Add_ServerLinks
     {

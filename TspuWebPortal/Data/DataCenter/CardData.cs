@@ -14,7 +14,7 @@ namespace TspuWebPortal.Data
         public string SerialNumber { get; set; } = string.Empty;
         public string CardSlotInChassis { get; set; } = string.Empty;
         public string Location { get; set; } = string.Empty;
-        public int PrimaryRecordlId { get; set; }
+        public int InitialDetailRecordId { get; set; }
         public int DetailChangeId { get; set; }
         public string InventoryNumber { get; set; } = string.Empty;
         public bool IsInstalled { get; set; }
@@ -23,7 +23,8 @@ namespace TspuWebPortal.Data
         public int ChassisId { get; set; }
         public ChassisData? Chassis { get; set; }
         public List<ModuleData>? Modules { get; set; }
-        public DetailChangeData? DetailChange { get; set; }
+        public ChangeApplicationData? DetailChange { get; set; }
+        public InitialDetailRecordData? InitialDetailRecord { get; set; }
 
     }
 }

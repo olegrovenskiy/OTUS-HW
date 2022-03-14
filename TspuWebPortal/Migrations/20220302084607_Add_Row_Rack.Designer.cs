@@ -11,7 +11,7 @@ using TspuWebPortal.Data;
 
 namespace TspuWebPortal.Migrations
 {
-    [DbContext(typeof(AllDbContext))]
+    [DbContext(typeof(TspuDbContext))]
     [Migration("20220302084607_Add_Row_Rack")]
     partial class Add_Row_Rack
     {

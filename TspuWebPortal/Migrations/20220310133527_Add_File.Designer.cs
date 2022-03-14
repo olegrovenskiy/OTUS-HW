@@ -12,8 +12,8 @@ using TspuWebPortal.Data;
 namespace TspuWebPortal.Migrations
 {
     [DbContext(typeof(TspuDbContext))]
-    [Migration("20220309183834_Add_DetaileChange")]
-    partial class Add_DetaileChange
+    [Migration("20220310133527_Add_File")]
+    partial class Add_File
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -45,6 +45,9 @@ namespace TspuWebPortal.Migrations
                     b.Property<int>("EntityModelId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("InitialDetailRecordId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("InventoryNumber")
                         .IsRequired()
                         .HasColumnType("text");
@@ -55,9 +58,6 @@ namespace TspuWebPortal.Migrations
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("PrimaryRecordlId")
-                        .HasColumnType("integer");
 
                     b.Property<string>("SerialNumber")
                         .IsRequired()
@@ -72,6 +72,8 @@ namespace TspuWebPortal.Migrations
                     b.HasIndex("DetailChangeId");
 
                     b.HasIndex("EntityModelId");
+
+                    b.HasIndex("InitialDetailRecordId");
 
                     b.ToTable("Cables");
                 });
@@ -108,6 +110,9 @@ namespace TspuWebPortal.Migrations
                     b.Property<int>("EntityModelId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("InitialDetailRecordId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("InventoryNumber")
                         .IsRequired()
                         .HasColumnType("text");
@@ -118,9 +123,6 @@ namespace TspuWebPortal.Migrations
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("PrimaryRecordlId")
-                        .HasColumnType("integer");
 
                     b.Property<string>("SerialNumber")
                         .IsRequired()
@@ -137,6 +139,8 @@ namespace TspuWebPortal.Migrations
                     b.HasIndex("DetailChangeId");
 
                     b.HasIndex("EntityModelId");
+
+                    b.HasIndex("InitialDetailRecordId");
 
                     b.ToTable("Cards");
                 });
@@ -174,6 +178,9 @@ namespace TspuWebPortal.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("InitialDetailRecordId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("InventoryNumber")
                         .IsRequired()
                         .HasColumnType("text");
@@ -184,9 +191,6 @@ namespace TspuWebPortal.Migrations
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("PrimaryRecordlId")
-                        .HasColumnType("integer");
 
                     b.Property<string>("SerialNumber")
                         .IsRequired()
@@ -201,6 +205,8 @@ namespace TspuWebPortal.Migrations
                     b.HasIndex("DetailChangeId");
 
                     b.HasIndex("EntityModelId");
+
+                    b.HasIndex("InitialDetailRecordId");
 
                     b.ToTable("Chassis");
                 });
@@ -309,6 +315,175 @@ namespace TspuWebPortal.Migrations
                     b.ToTable("EntityModel");
                 });
 
+            modelBuilder.Entity("TspuWebPortal.Data.FileData", b =>
+                {
+                    b.Property<int>("FileId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("FileId"));
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateOnly>("LastChangeDate")
+                        .HasColumnType("date");
+
+                    b.Property<DateOnly>("UploadDate")
+                        .HasColumnType("date");
+
+                    b.HasKey("FileId");
+
+                    b.ToTable("FileData");
+                });
+
+            modelBuilder.Entity("TspuWebPortal.Data.InitialDetailRecordData", b =>
+                {
+                    b.Property<int>("InitialDetailRecordId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("InitialDetailRecordId"));
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateOnly>("DeliveryDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("DetailOfficialName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("DetailOrigin")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("DocumentNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("InitialDetailTableId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsSplittable")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsSuccessfullyUploaded")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("OperationId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ResponsiblePerson")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("SerialNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("InitialDetailRecordId");
+
+                    b.HasIndex("InitialDetailTableId");
+
+                    b.ToTable("DetailRecord");
+                });
+
+            modelBuilder.Entity("TspuWebPortal.Data.InitialDetailTableData", b =>
+                {
+                    b.Property<int>("InitialDetailTableId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("InitialDetailTableId"));
+
+                    b.Property<int>("FileId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TableFileFileId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("InitialDetailTableId");
+
+                    b.HasIndex("TableFileFileId");
+
+                    b.ToTable("DetailTable");
+                });
+
+            modelBuilder.Entity("TspuWebPortal.Data.InitialMaterialRecordData", b =>
+                {
+                    b.Property<int>("InitialMaterialId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("InitialMaterialId"));
+
+                    b.Property<DateOnly>("DeliveryDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("DocumentNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("InitialMaterialTableId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("MaterialOfficialName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("OperationId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.HasKey("InitialMaterialId");
+
+                    b.HasIndex("InitialMaterialTableId");
+
+                    b.ToTable("MaterialRecord");
+                });
+
+            modelBuilder.Entity("TspuWebPortal.Data.InitialMaterialTableData", b =>
+                {
+                    b.Property<int>("InitialMaterialTableId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("InitialMaterialTableId"));
+
+                    b.Property<int>("FileId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TableFileFileId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("InitialMaterialTableId");
+
+                    b.HasIndex("TableFileFileId");
+
+                    b.ToTable("MaterialTable");
+                });
+
             modelBuilder.Entity("TspuWebPortal.Data.LicenseData", b =>
                 {
                     b.Property<int>("LicenseId")
@@ -327,12 +502,12 @@ namespace TspuWebPortal.Migrations
                     b.Property<int>("EntityModelId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("InitialDetailRecordId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("PrimaryRecordlId")
-                        .HasColumnType("integer");
 
                     b.Property<string>("SerialNumber")
                         .IsRequired()
@@ -345,6 +520,8 @@ namespace TspuWebPortal.Migrations
                     b.HasKey("LicenseId");
 
                     b.HasIndex("EntityModelId");
+
+                    b.HasIndex("InitialDetailRecordId");
 
                     b.ToTable("Licenses");
                 });
@@ -380,6 +557,9 @@ namespace TspuWebPortal.Migrations
                     b.Property<int>("EntityModelId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("InitialDetailRecordId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("InventoryNumber")
                         .IsRequired()
                         .HasColumnType("text");
@@ -394,9 +574,6 @@ namespace TspuWebPortal.Migrations
                     b.Property<string>("ModuleStatus")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("PrimaryRecordlId")
-                        .HasColumnType("integer");
 
                     b.Property<string>("SerialNumber")
                         .IsRequired()
@@ -418,6 +595,8 @@ namespace TspuWebPortal.Migrations
                     b.HasIndex("DetailChangeId");
 
                     b.HasIndex("EntityModelId");
+
+                    b.HasIndex("InitialDetailRecordId");
 
                     b.ToTable("Modules");
                 });
@@ -671,9 +850,17 @@ namespace TspuWebPortal.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TspuWebPortal.Data.InitialDetailRecordData", "InitialDetailRecord")
+                        .WithMany("Cables")
+                        .HasForeignKey("InitialDetailRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("DetailChange");
 
                     b.Navigation("EntityModel");
+
+                    b.Navigation("InitialDetailRecord");
                 });
 
             modelBuilder.Entity("TspuWebPortal.Data.CardData", b =>
@@ -696,11 +883,19 @@ namespace TspuWebPortal.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TspuWebPortal.Data.InitialDetailRecordData", "InitialDetailRecord")
+                        .WithMany("Card")
+                        .HasForeignKey("InitialDetailRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Chassis");
 
                     b.Navigation("DetailChange");
 
                     b.Navigation("EntityModel");
+
+                    b.Navigation("InitialDetailRecord");
                 });
 
             modelBuilder.Entity("TspuWebPortal.Data.ChassisData", b =>
@@ -717,9 +912,57 @@ namespace TspuWebPortal.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TspuWebPortal.Data.InitialDetailRecordData", "InitialDetailRecord")
+                        .WithMany("Chassis")
+                        .HasForeignKey("InitialDetailRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("DetailChange");
 
                     b.Navigation("EntityModel");
+
+                    b.Navigation("InitialDetailRecord");
+                });
+
+            modelBuilder.Entity("TspuWebPortal.Data.InitialDetailRecordData", b =>
+                {
+                    b.HasOne("TspuWebPortal.Data.InitialDetailTableData", "InitialDetailTable")
+                        .WithMany("InitialDetailRecords")
+                        .HasForeignKey("InitialDetailTableId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("InitialDetailTable");
+                });
+
+            modelBuilder.Entity("TspuWebPortal.Data.InitialDetailTableData", b =>
+                {
+                    b.HasOne("TspuWebPortal.Data.FileData", "TableFile")
+                        .WithMany("InitialDetailTables")
+                        .HasForeignKey("TableFileFileId");
+
+                    b.Navigation("TableFile");
+                });
+
+            modelBuilder.Entity("TspuWebPortal.Data.InitialMaterialRecordData", b =>
+                {
+                    b.HasOne("TspuWebPortal.Data.InitialMaterialTableData", "InitialMaterialTable")
+                        .WithMany("InitialMaterialRecords")
+                        .HasForeignKey("InitialMaterialTableId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("InitialMaterialTable");
+                });
+
+            modelBuilder.Entity("TspuWebPortal.Data.InitialMaterialTableData", b =>
+                {
+                    b.HasOne("TspuWebPortal.Data.FileData", "TableFile")
+                        .WithMany("InitialMaterialTables")
+                        .HasForeignKey("TableFileFileId");
+
+                    b.Navigation("TableFile");
                 });
 
             modelBuilder.Entity("TspuWebPortal.Data.LicenseData", b =>
@@ -730,7 +973,15 @@ namespace TspuWebPortal.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TspuWebPortal.Data.InitialDetailRecordData", "InitialDetailRecord")
+                        .WithMany("Licenses")
+                        .HasForeignKey("InitialDetailRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("EntityModel");
+
+                    b.Navigation("InitialDetailRecord");
                 });
 
             modelBuilder.Entity("TspuWebPortal.Data.ModuleData", b =>
@@ -759,6 +1010,12 @@ namespace TspuWebPortal.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TspuWebPortal.Data.InitialDetailRecordData", "InitialDetailRecord")
+                        .WithMany("Module")
+                        .HasForeignKey("InitialDetailRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Card");
 
                     b.Navigation("Chassis");
@@ -766,6 +1023,8 @@ namespace TspuWebPortal.Migrations
                     b.Navigation("DetailChange");
 
                     b.Navigation("EntityModel");
+
+                    b.Navigation("InitialDetailRecord");
                 });
 
             modelBuilder.Entity("TspuWebPortal.Data.RackData", b =>
@@ -876,6 +1135,36 @@ namespace TspuWebPortal.Migrations
                     b.Navigation("Licenses");
 
                     b.Navigation("Modules");
+                });
+
+            modelBuilder.Entity("TspuWebPortal.Data.FileData", b =>
+                {
+                    b.Navigation("InitialDetailTables");
+
+                    b.Navigation("InitialMaterialTables");
+                });
+
+            modelBuilder.Entity("TspuWebPortal.Data.InitialDetailRecordData", b =>
+                {
+                    b.Navigation("Cables");
+
+                    b.Navigation("Card");
+
+                    b.Navigation("Chassis");
+
+                    b.Navigation("Licenses");
+
+                    b.Navigation("Module");
+                });
+
+            modelBuilder.Entity("TspuWebPortal.Data.InitialDetailTableData", b =>
+                {
+                    b.Navigation("InitialDetailRecords");
+                });
+
+            modelBuilder.Entity("TspuWebPortal.Data.InitialMaterialTableData", b =>
+                {
+                    b.Navigation("InitialMaterialRecords");
                 });
 
             modelBuilder.Entity("TspuWebPortal.Data.RackData", b =>

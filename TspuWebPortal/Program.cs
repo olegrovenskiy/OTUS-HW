@@ -11,9 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
+//builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<SiteDataService>();
-builder.Services.AddDbContextFactory<AllDbContext>(options => options.UseNpgsql("Server=192.168.105.250;Port=5432;Database=TspuSitesDb;Username=viktor;Password=postgres"));
+builder.Services.AddDbContextFactory<TspuDbContext>(options => options.UseNpgsql("Server=192.168.105.250;Port=5432;Database=TspuSitesDb;Username=viktor;Password=postgres"));
+//builder.Services.AddDbContextFactory<TspuDbContext>(options => options.UseNpgsql("Server=192.168.105.250;Port=5432;Database=TspuSitesDb;Username=viktor;Password=postgres"));
 
 var app = builder.Build();
 

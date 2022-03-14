@@ -1,10 +1,11 @@
-﻿namespace TspuWebPortal.Data;
+﻿
+namespace TspuWebPortal.Data;
 using Microsoft.EntityFrameworkCore;
-
-    public class AllDbContext : DbContext
+/* */
+public class TspuDbContext : DbContext
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public AllDbContext(DbContextOptions<AllDbContext> options) : base(options) {}
+        public TspuDbContext(DbContextOptions<TspuDbContext> options) : base(options) {}
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         public DbSet<SiteData> Sites { get; set; }
@@ -21,5 +22,12 @@ using Microsoft.EntityFrameworkCore;
         public DbSet<LicenseData> Licenses { get; set; }
         public DbSet<ServerSlotData> ServerSlots { get; set; }
         public DbSet<ServerLinkData> ServerLinks { get; set; }
-        public DbSet<DetailChangeData> DetailChange { get; set; }
+        public DbSet<ChangeApplicationData> DetailChange { get; set; }
+        public DbSet<InitialDetailRecordData> DetailRecord { get; set; }
+        public DbSet<InitialDetailTableData> DetailTable { get; set; }
+        public DbSet<InitialMaterialRecordData> MaterialRecord { get; set; }
+        public DbSet<InitialMaterialTableData> MaterialTable { get; set; }
+        public DbSet<LinkData> Links { get; set; }
+        public DbSet<UserListData>? UserAccounts { get; set; }
+
 }

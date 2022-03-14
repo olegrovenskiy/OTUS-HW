@@ -2,9 +2,9 @@
 {
     public class SiteDataService
     {
-        private readonly AllDbContext _db;
+        private readonly TspuDbContext _db;
 
-        public SiteDataService(AllDbContext db)
+        public SiteDataService(TspuDbContext db)
         {
             _db = db;
         }

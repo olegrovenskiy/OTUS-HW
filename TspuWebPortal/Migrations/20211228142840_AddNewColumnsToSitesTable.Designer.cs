@@ -10,7 +10,7 @@ using TspuWebPortal.Data;
 
 namespace TspuWebPortal.Migrations
 {
-    [DbContext(typeof(AllDbContext))]
+    [DbContext(typeof(TspuDbContext))]
     [Migration("20211228142840_AddNewColumnsToSitesTable")]
     partial class AddNewColumnsToSitesTable
     {
