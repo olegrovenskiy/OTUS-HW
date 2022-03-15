@@ -1,9 +1,9 @@
 ﻿namespace TspuWebPortal.Data;
 using Microsoft.EntityFrameworkCore;
 
-    public class DcDbContext : DbContext
+public class DcDbContext : DbContext
 {
-    public DcDbContext(DbContextOptions<TspuDbContext> options) : base(options) { }
+    public DcDbContext(DbContextOptions<DcDbContext> options) : base(options) { }
 
     public DbSet<DataCenterData>? DataCenters { get; set; }
     public DbSet<RoomData>? Rooms { get; set; }
@@ -23,6 +23,11 @@ using Microsoft.EntityFrameworkCore;
     public DbSet<InitialDetailTableData>? DetailTable { get; set; }
     public DbSet<InitialMaterialRecordData>? MaterialRecord { get; set; }
     public DbSet<InitialMaterialTableData>? MaterialTable { get; set; }
-    public DbSet<InitialMaterialTableData>? Accounts { get; set; }
+    public DbSet<LinkData>? Links { get; set; }
+    public DbSet<UserListData>? UserAccounts { get; set; }
+    public DbSet<RequestCreationData>? CreationRequests { get; set; }
+    public DbSet<RequestCompletionData>? CompletionRequests { get; set; }
+    public DbSet<ModuleAData>? ModulesA { get; set; }
+    public DbSet<ModuleBData>? ModulesB { get; set; }
 }
 

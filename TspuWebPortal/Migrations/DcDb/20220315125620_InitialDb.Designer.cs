@@ -2,18 +2,20 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TspuWebPortal.Data;
 
 #nullable disable
 
-namespace TspuWebPortal.Migrations
+namespace TspuWebPortal.Migrations.DcDb
 {
-    [DbContext(typeof(TspuDbContext))]
-    partial class SiteDBContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(DcDbContext))]
+    [Migration("20220315125620_InitialDb")]
+    partial class InitialDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -906,58 +908,6 @@ namespace TspuWebPortal.Migrations
                     b.HasKey("ServerSlotId");
 
                     b.ToTable("ServerSlots");
-                });
-
-            modelBuilder.Entity("TspuWebPortal.Data.SiteData", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("FederalDistrict")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("IsInProject")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Links")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("MaintainanceStatus")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Oper")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("PipelineStage")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("RegionNumber")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("SiteType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Sites");
                 });
 
             modelBuilder.Entity("TspuWebPortal.Data.UnitData", b =>

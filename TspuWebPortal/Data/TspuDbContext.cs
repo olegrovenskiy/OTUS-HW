@@ -29,5 +29,10 @@ public class TspuDbContext : DbContext
         public DbSet<InitialMaterialTableData> MaterialTable { get; set; }
         public DbSet<LinkData> Links { get; set; }
         public DbSet<UserListData>? UserAccounts { get; set; }
+        public DbSet<RequestCreationData>? CreationRequests { get; set; }
+        public DbSet<RequestCompletionData>? CompletionRequests { get; set; }
+        public DbSet<ModuleAData> ModulesA { get; set; }
+        public DbSet<ModuleBData> ModulesB { get; set; }
+
 
 }
