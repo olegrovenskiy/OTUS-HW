@@ -5,7 +5,7 @@ public class DcDbContext : DbContext
 {
     public DcDbContext(DbContextOptions<DcDbContext> options) : base(options) { }
 
-    public DbSet<DataCenterData>? DataCenters { get; set; }
+    public DbSet<DcData>? DataCenters { get; set; }
     public DbSet<RoomData>? Rooms { get; set; }
     public DbSet<RowData>? Rows { get; set; }
     public DbSet<RackData>? Racks { get; set; }

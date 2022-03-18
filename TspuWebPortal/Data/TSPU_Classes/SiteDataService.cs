@@ -24,10 +24,8 @@
 
         public SiteData GetSiteInfoById(int ID)
         {
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-            SiteData SiteInfo = _db.Sites.FirstOrDefault(s => s.ID == ID);
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 
+            SiteData SiteInfo = _db.Sites.FirstOrDefault(s => s.ID == ID);
 
             if (SiteInfo == null)
             {
@@ -52,6 +50,14 @@
             _db.SaveChanges();
             return;
         }
+
+
+        public List<DcData> ListAllDcSites()
+        {
+            List <DcData> SitesList = _db.DataCenters.ToList();
+            return SitesList;
+        }
+
 
 
     }

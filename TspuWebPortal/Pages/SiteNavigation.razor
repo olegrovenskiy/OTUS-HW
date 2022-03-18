@@ -1,0 +1,42 @@
+﻿@page "/site_navigation"
+@using TspuWebPortal.Data
+@inject SiteDataService objDataService
+
+<h3>Добавление и Редактирование Площадок</h3>
+
+@if (DcSiteList == null)
+{
+    <p><em>Список загружается...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID ЦОДа</th>
+                <th>Название ЦОДа</th>
+                <th>Адрес ЦОДа</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DcData DcSite in DcSiteList)
+            { 
+                <tr>
+                    <td>@DcSite.DataCenterId</td>
+                    <td>@DcSite.DataCenterName</td>
+                    <td>@DcSite.DataCenterAddress</td>
+                </tr>
+            }
+               
+        </tbody>
+    </table>    
+}
+
+@code 
+{
+    List<DcData> DcSiteList = new List<DcData>();
+    protected override async Task OnInitializedAsync()
+    {
+        DcSiteList = await Task.Run(() => objDataService.ListAllDcSites());
+    }
+}

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TspuWebPortal.Data
 {
-    public class DataCenterData
+    public class DcData
     {
         [Key]
         public int DataCenterId { get; set; }
