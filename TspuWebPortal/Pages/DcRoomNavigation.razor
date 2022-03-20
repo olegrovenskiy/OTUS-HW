@@ -15,6 +15,7 @@ else
             <tr>
                 <th>ID помещения</th>
                 <th>Название помещения</th>
+                <th>Координаты</th>
                 <th>Название ЦОДа</th>
                 <th></th>
             </tr>
@@ -25,7 +26,8 @@ else
                     <tr>
                     <td>@CurrentDcRoom.RoomId</td>
                     <td>@CurrentDcRoom.RoomName</td>
-                    <td>@CurrentDcRoom.DataCenterId</td>
+                    <td>@CurrentDcRoom.RoomCoordinates</td>
+                    <td>@CurrentDcRoom.DataCenter?.DataCenterName</td>
                     <td><a href=@($"/room_navigation/{CurrentDcRoom?.RoomId}")>Редактировать</a></td>
                     </tr>
             }
@@ -36,9 +38,11 @@ else
 
 @code 
 {
+    List<DcData> DcSiteList = new List<DcData>();
     List<RoomData> DcRoomList = new List<RoomData>();
     protected override async Task OnInitializedAsync()
     {
+        DcSiteList = await Task.Run(() => objDataService.ListAllDcSites());
         DcRoomList = await Task.Run(() => objDataService.ListAllDcRooms());
     } 
 
