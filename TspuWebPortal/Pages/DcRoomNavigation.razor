@@ -1,0 +1,45 @@
+﻿@page "/room_navigation"
+@using TspuWebPortal.Data
+@inject SiteDataService objDataService
+
+<h3>Добавление и Редактирование Помещений</h3>
+
+@if (DcRoomList == null)
+{
+    <p><em>Список загружается...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID помещения</th>
+                <th>Название помещения</th>
+                <th>Название ЦОДа</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (RoomData CurrentDcRoom in DcRoomList)
+            { 
+                    <tr>
+                    <td>@CurrentDcRoom.RoomId</td>
+                    <td>@CurrentDcRoom.RoomName</td>
+                    <td>@CurrentDcRoom.DataCenterId</td>
+                    <td><a href=@($"/room_navigation/{CurrentDcRoom?.RoomId}")>Редактировать</a></td>
+                    </tr>
+            }
+               
+        </tbody>
+    </table>    
+}
+
+@code 
+{
+    List<RoomData> DcRoomList = new List<RoomData>();
+    protected override async Task OnInitializedAsync()
+    {
+        DcRoomList = await Task.Run(() => objDataService.ListAllDcRooms());
+    } 
+
+}

@@ -54,8 +54,8 @@
 
         public List<DcData> ListAllDcSites()
         {
-            List <DcData>? SitesList = _db.DataCenters?.ToList();
-            return SitesList;
+            List <DcData>? SiteList = _db.DataCenters?.ToList();
+            return SiteList;
         }
 
         public DcData GetDcInfoById(int ID)
@@ -81,6 +81,13 @@
             _db.DataCenters?.Update(objDcSite);
             _db.SaveChanges();
             return;
+        }
+
+
+        public List<RoomData> ListAllDcRooms()
+        {
+            List<RoomData>? RoomList = _db.Rooms?.ToList();
+            return RoomList;
         }
 
     }
