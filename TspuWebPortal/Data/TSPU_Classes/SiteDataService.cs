@@ -11,14 +11,14 @@
 
         public void CreateSite (SiteData objSite)
         {
-            _db.Sites.Add(objSite);
+            _db.Sites?.Add(objSite);
             _db.SaveChanges();
             return;
         }
         
         public List<SiteData> GetAllSitesInfo()
         {
-            var SiteList = _db.Sites.ToList();
+            var SiteList = _db.Sites?.ToList();
             return SiteList;
         }
 
@@ -46,7 +46,7 @@
 
         public void UpdateSiteInfo(SiteData objSite)
         {
-            _db.Sites.Update(objSite);
+            _db.Sites?.Update(objSite);
             _db.SaveChanges();
             return;
         }
@@ -54,11 +54,34 @@
 
         public List<DcData> ListAllDcSites()
         {
-            List <DcData> SitesList = _db.DataCenters.ToList();
+            List <DcData>? SitesList = _db.DataCenters?.ToList();
             return SitesList;
         }
 
+        public DcData GetDcInfoById(int ID)
+        {
 
+            DcData? DcInfo = _db.DataCenters?.FirstOrDefault(s => s.DataCenterId == ID);
+
+            if (DcInfo == null)
+            {
+                DcData DcDefaultInfo = new DcData();
+                DcDefaultInfo.DataCenterId = ID;
+                DcDefaultInfo.DataCenterName = "Не создан";
+                DcDefaultInfo.DataCenterAddress = "Не создан";
+                return DcDefaultInfo;
+            }
+
+            else return DcInfo;
+
+        }
+
+        public void UpdateDcInfo(DcData objDcSite)
+        {
+            _db.DataCenters?.Update(objDcSite);
+            _db.SaveChanges();
+            return;
+        }
 
     }
 }

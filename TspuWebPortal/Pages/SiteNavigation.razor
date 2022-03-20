@@ -16,16 +16,18 @@ else
                 <th>ID ЦОДа</th>
                 <th>Название ЦОДа</th>
                 <th>Адрес ЦОДа</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (DcData DcSite in DcSiteList)
             { 
-                <tr>
+                    <tr>
                     <td>@DcSite.DataCenterId</td>
                     <td>@DcSite.DataCenterName</td>
                     <td>@DcSite.DataCenterAddress</td>
-                </tr>
+                    <td><a href=@($"/site_navigation/{DcSite.DataCenterId}")>Редактировать</a></td>
+                    </tr>
             }
                
         </tbody>
@@ -38,5 +40,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         DcSiteList = await Task.Run(() => objDataService.ListAllDcSites());
-    }
+    } 
+
 }
