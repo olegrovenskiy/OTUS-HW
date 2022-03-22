@@ -4,6 +4,12 @@
 
 <h3>Добавление и Редактирование Помещений</h3>
 
+<p>
+    <label>
+        <button class="btn btn-primary" @onclick="AddNewRoom">Добавить помещение</button>
+    </label>
+</p>
+
 @if (DcRoomList == null)
 {
     <p><em>Список загружается...</em></p>
@@ -45,5 +51,11 @@ else
         DcSiteList = await Task.Run(() => objDataService.ListAllDcSites());
         DcRoomList = await Task.Run(() => objDataService.ListAllDcRooms());
     } 
+    
+    async Task AddNewRoom()
+    {
+        objDataService.CreateRoom (new RoomData {RoomName = "не назначен", RoomCoordinates = "не назначен", DataCenterId = 1});
+        DcRoomList = await Task.Run(() => objDataService.ListAllDcRooms());
+    }
 
 }

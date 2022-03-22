@@ -99,6 +99,13 @@
             return RoomList;
         }
 
+        public void CreateRoom(RoomData objRoom)
+        {
+            _db.Rooms?.Add(objRoom);
+            _db.SaveChanges();
+            return;
+        }
+
         public RoomData GetRoomInfoById(int ID)
         {
 
