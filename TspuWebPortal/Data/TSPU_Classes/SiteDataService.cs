@@ -58,6 +58,15 @@
             return SiteList;
         }
 
+
+        public void CreateDc(DcData objDc)
+        {
+            _db.DataCenters?.Add(objDc);
+            _db.SaveChanges();
+            return;
+        }
+
+
         public DcData GetDcInfoById(int ID)
         {
 
@@ -88,6 +97,31 @@
         {
             List<RoomData>? RoomList = _db.Rooms?.ToList();
             return RoomList;
+        }
+
+        public RoomData GetRoomInfoById(int ID)
+        {
+
+            RoomData? RoomInfo = _db.Rooms?.FirstOrDefault(s => s.RoomId == ID);
+
+            if (RoomInfo == null)
+            {
+                RoomData RoomDefaultInfo = new RoomData();
+                RoomDefaultInfo.DataCenterId = ID;
+                RoomDefaultInfo.RoomName = "Не создан";
+                RoomDefaultInfo.RoomCoordinates = "Не создан";
+                return RoomDefaultInfo;
+            }
+
+            else return RoomInfo;
+
+        }
+
+        public void UpdateRoomInfo(RoomData objDcRoom)
+        {
+            _db.Rooms?.Update(objDcRoom);
+            _db.SaveChanges();
+            return;
         }
 
     }

@@ -7,6 +7,7 @@ namespace TspuWebPortal.Data
     public class DcData
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int DataCenterId { get; set; }
         public string DataCenterName { get; set; } = string.Empty;
         public string DataCenterAddress { get; set;} = string.Empty;

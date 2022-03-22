@@ -1,8 +1,17 @@
 ﻿@page "/site_navigation"
 @using TspuWebPortal.Data
 @inject SiteDataService objDataService
+@inject NavigationManager NavigationManager
 
 <h3>Добавление и Редактирование Площадок</h3>
+
+
+<p>
+    <label>
+        <button class="btn btn-primary" @onclick="AddNewDc">Добавить ЦОД</button>
+    </label>
+</p>
+
 
 @if (DcSiteList == null)
 {
@@ -40,6 +49,12 @@ else
     protected override async Task OnInitializedAsync()
     {
         DcSiteList = await Task.Run(() => objDataService.ListAllDcSites());
-    } 
+    }
+
+    async Task AddNewDc()
+    {
+        objDataService.CreateDc (new DcData {DataCenterAddress = "не назначен", DataCenterName = "не назначен"});
+        DcSiteList = await Task.Run(() => objDataService.ListAllDcSites());
+    }
 
 }
