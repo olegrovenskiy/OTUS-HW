@@ -53,7 +53,8 @@ else
 
     async Task AddNewDc()
     {
-        objDataService.CreateDc (new DcData {DataCenterAddress = "не назначен", DataCenterName = "не назначен"});
+        //objDataService.CreateDc (new DcData {DataCenterAddress = "не назначен", DataCenterName = "не назначен"});
+        objDataService.CreateDc (new DcData ());
         DcSiteList = await Task.Run(() => objDataService.ListAllDcSites());
     }
 
