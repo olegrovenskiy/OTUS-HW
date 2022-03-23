@@ -1,4 +1,4 @@
-namespace TspuWebPortal.Data
+namespace TspuWebPortal.Model
 {
     public class WeatherForecastService
     {

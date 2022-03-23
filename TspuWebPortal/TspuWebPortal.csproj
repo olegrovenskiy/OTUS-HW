@@ -13,9 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Data\TSPU_Classes\SiteData.cs" />
-    <Content Include="Data\TSPU_Classes\SiteDataService.cs" />
-    <Content Include="Data\TspuDbContext.cs" />
+    <Content Include="Model\TSPU_Classes\SiteData.cs" />
+    <Content Include="ORM\SiteDataService.cs" />
+    <Content Include="ORM\TspuDbContext.cs" />
   </ItemGroup>
 
   <ItemGroup>

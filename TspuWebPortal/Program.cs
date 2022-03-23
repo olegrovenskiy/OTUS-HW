@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using TspuWebPortal.Data;
+using TspuWebPortal.Model;
 using TspuWebPortal.Shared;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Microsoft.EntityFrameworkCore.SqlServer;
+using TspuWebPortal.ORM;
 
 var builder = WebApplication.CreateBuilder(args);
 
