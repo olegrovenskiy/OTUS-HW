@@ -1,0 +1,60 @@
+﻿
+@page "/row_navigation/{ID:int}"
+@inject SiteDataService objDataService
+@using TspuWebPortal.Model
+@using TspuWebPortal.ORM
+@using TspuWebPortal.Shared
+@inherits OwningComponentBase<SiteDataService>
+
+<h3>Ряд @ChosenRow.RowId. Редактирование данных ряда.</h3>
+
+
+
+<EditForm Model=@ChosenRow OnSubmit=@FormSubmitted>
+  <div class="row">
+    <div class = "col-2">
+        <label for="RoomName">Название ряда АСБИ</label>
+        <InputText @bind-Value=ChosenRow.RowNameAsbi class="form-control" id="RowNameAsbi"  Size="20" />
+    </div>
+        <div class = "col-2">
+        <label for="RoomName">Название ряда ЦОД</label>
+        <InputText @bind-Value=ChosenRow.RowNameDataCenter class="form-control" id="RowNameDataCenter"  Size="20" />
+    </div>
+    <div class = "col-4">
+        <label for="RoomCoordinates">Помещение</label>
+        <InputSelect id="DataCenter" @bind-Value="ChosenRow.RoomId" class="form-control">
+            @foreach (var item in DcRoomList)
+            {
+                <option value="@item.RoomId">@item.RoomName</option>
+            }
+        </InputSelect>
+    </div>
+  </div>
+  <br>
+<input type="submit" class="btn btn-primary" value="Сохранить"/>
+</EditForm>
+
+
+
+@code {
+        [Parameter]
+        public int ID { get; set; }
+
+        RowData ChosenRow = new RowData ();
+        List<RoomData> DcRoomList = new List<RoomData>();
+        List<DcData> DcSiteList = new List<DcData>();
+        protected override async Task OnInitializedAsync()
+        {
+            DcSiteList = await Task.Run(() => objDataService.ListAllDcSites());
+            DcRoomList = await Task.Run(() => objDataService.ListAllDcRooms());
+            ChosenRow = await Task.Run(() => objDataService.GetRowInfoById(Convert.ToInt32(ID)));
+        }
+
+
+
+        void FormSubmitted(EditContext editContext)
+        {
+            bool formIsValid = editContext.Validate();
+            if (formIsValid) objDataService.UpdateRowInfo(ChosenRow);
+        }        
+    }

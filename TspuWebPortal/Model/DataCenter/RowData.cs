@@ -6,11 +6,12 @@ namespace TspuWebPortal.Model
     public class RowData
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int RowId { get; set; }
-        public string RowNameAsbi { get; set; } = string.Empty;
-        public string RowNameDataCenter { get; set; } = string.Empty;
-        public int RoomId { get; set; }
-        public RoomData? Room { get; set; }
+        public string? RowNameAsbi { get; set; } = string.Empty;
+        public string? RowNameDataCenter { get; set; } = string.Empty;
+        public int? RoomId { get; set; }
+        public virtual RoomData? Room { get; set; }
         public List<RackData>? Rows { get; set; }
     }
 }

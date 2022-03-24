@@ -7,11 +7,6 @@
 <h3>Добавление и Редактирование Площадок</h3>
 
 
-<p>
-    <label>
-        <button class="btn btn-primary" @onclick="AddNewDc">Добавить ЦОД</button>
-    </label>
-</p>
 
 
 @if (!IsDisplayListDownloaded)
@@ -20,6 +15,12 @@
 }
 else
 {
+    <p>
+    <label>
+        <button class="btn btn-primary" @onclick="AddNewDc">Добавить ЦОД</button>
+    </label>
+    </p>
+
     <table class="table">
         <thead>
             <tr>

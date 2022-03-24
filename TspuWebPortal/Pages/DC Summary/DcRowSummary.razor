@@ -1,8 +1,8 @@
-﻿@page "/room_navigation"
+﻿@page "/row_navigation"
 @using TspuWebPortal.Model
 @inject SiteDataService objDataService
 
-<h3>Добавление и Редактирование Помещений</h3>
+<h3>Добавление и Редактирование Рядов</h3>
 
 
 
@@ -14,29 +14,29 @@ else
 {
     <p>
     <label>
-        <button class="btn btn-primary" @onclick="AddNewRoom">Добавить помещение</button>
+        <button class="btn btn-primary" @onclick="AddNewRow">Добавить ряд</button>
     </label>
     </p>
 
     <table class="table">
         <thead>
             <tr>
-                <th>ID помещения</th>
+                <th>ID ряда</th>
+                <th>Название ряда АСБИ</th>
+                <th>Название ряда ЦОД</th>
                 <th>Название помещения</th>
-                <th>Координаты</th>
-                <th>Название ЦОДа</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (RoomData CurrentDcRoom in DcRoomList)
+            @foreach (RowData CurrentDcRow in DcRowList)
             { 
                     <tr>
-                    <td>@CurrentDcRoom.RoomId</td>
-                    <td>@CurrentDcRoom.RoomName</td>
-                    <td>@CurrentDcRoom.RoomCoordinates</td>
-                    <td>@CurrentDcRoom.DataCenter?.DataCenterName</td>
-                    <td><a href=@($"/room_navigation/{CurrentDcRoom?.RoomId}")>Редактировать</a></td>
+                    <td>@CurrentDcRow.RowId</td>
+                    <td>@CurrentDcRow.RowNameAsbi</td>
+                    <td>@CurrentDcRow.RowNameDataCenter</td>
+                    <td>@CurrentDcRow.Room?.RoomName</td>
+                    <td><a href=@($"/row_navigation/{CurrentDcRow.RowId}")>Редактировать</a></td>
                     </tr>
             }
                
@@ -48,20 +48,22 @@ else
 {
     List<DcData> DcSiteList = new List<DcData>();
     List<RoomData> DcRoomList = new List<RoomData>();
+    List<RowData> DcRowList = new List<RowData>();
     bool IsDisplayListDownloaded = false;
     protected override async Task OnInitializedAsync()
     {
         DcSiteList = await Task.Run(() => objDataService.ListAllDcSites());
         DcRoomList = await Task.Run(() => objDataService.ListAllDcRooms());
+        DcRowList = await Task.Run(() => objDataService.ListAllDcRows());
         IsDisplayListDownloaded = true;
     } 
     
-    async Task AddNewRoom()
+    async Task AddNewRow()
     {
         //objDataService.CreateRoom (new RoomData {RoomName = "не назначен", RoomCoordinates = "не назначен", DataCenterId = 0});
         //objDataService.CreateRoom (new RoomData {RoomName = "не назначен", DataCenterId = 0});
-        objDataService.CreateRoom (new RoomData ());
-        DcRoomList = await Task.Run(() => objDataService.ListAllDcRooms());
+        objDataService.CreateRow (new RowData ());
+        DcRowList = await Task.Run(() => objDataService.ListAllDcRows());
     }
 
 }
