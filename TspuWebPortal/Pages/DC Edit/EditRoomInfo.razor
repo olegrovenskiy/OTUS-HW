@@ -23,7 +23,8 @@
     <div class = "col-4">
         <label for="RoomCoordinates">Название ЦОДа</label>
         <InputSelect id="DataCenter" @bind-Value="ChosenRoom.DataCenterId" class="form-control">
-            @foreach (var item in DcSiteList)
+            <option value=null>Надо выбрать</option>                                                                 
+            @foreach (var item in DcSiteList)                                   //здесь надо добавить проверку, что не выбрана подсказка
             {
                 <option value="@item.DataCenterId">@item.DataCenterName</option>
             }

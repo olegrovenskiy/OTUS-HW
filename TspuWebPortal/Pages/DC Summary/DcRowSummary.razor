@@ -61,7 +61,6 @@ else
     async Task AddNewRow()
     {
         //objDataService.CreateRoom (new RoomData {RoomName = "не назначен", RoomCoordinates = "не назначен", DataCenterId = 0});
-        //objDataService.CreateRoom (new RoomData {RoomName = "не назначен", DataCenterId = 0});
         objDataService.CreateRow (new RowData ());
         DcRowList = await Task.Run(() => objDataService.ListAllDcRows());
     }

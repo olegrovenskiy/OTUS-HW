@@ -20,12 +20,23 @@
         <label for="RoomName">Название ряда ЦОД</label>
         <InputText @bind-Value=ChosenRow.RowNameDataCenter class="form-control" id="RowNameDataCenter"  Size="20" />
     </div>
-    <div class = "col-4">
+        <div class = "col-2">
+        <label for="RoomCoordinates">ЦОД</label>
+        <InputSelect id="DataCenter" @bind-Value="DcId" class="form-control">
+            <option value=null>Надо выбрать</option>
+            @foreach (var item in DcSiteList)
+            {
+                <option value="@item.DataCenterId">@item.DataCenterName</option>
+            }
+        </InputSelect>
+    </div>
+    <div class = "col-2">
         <label for="RoomCoordinates">Помещение</label>
         <InputSelect id="DataCenter" @bind-Value="ChosenRow.RoomId" class="form-control">
-            @foreach (var item in DcRoomList)
+            <option value=null>Надо выбрать</option>
+            @foreach (var ChosenRoom in DcRoomPartialList)                                               //здесь надо добавить проверку, что не выбрана подсказка
             {
-                <option value="@item.RoomId">@item.RoomName</option>
+                <option value="@ChosenRoom.RoomId">@ChosenRoom.RoomName</option>
             }
         </InputSelect>
     </div>
@@ -33,28 +44,39 @@
   <br>
 <input type="submit" class="btn btn-primary" value="Сохранить"/>
 </EditForm>
+<p></p>
+
+@code 
+{
+    [Parameter]
+    public int ID { get; set; }
+
+    bool IsRoomAssigned = true;
+    List<RoomData> DcRoomPartialList = new List<RoomData>();
+    private int _DcId;
+    //int DcId { get { return _DcId; } set { DcRoomPartialList = objDataService.ListRoomsOnSpecificDataCenter(value); } }
+    public int DcId { get => _DcId;  set { _DcId = value; DcRoomPartialList = objDataService.ListRoomsOnSpecificDataCenter(value); } }
+    //ListRoomsOnSpecificDataCenter
+    RowData ChosenRow = new RowData ();
+    List<RoomData> DcRoomList = new List<RoomData>();
+    List<DcData> DcSiteList = new List<DcData>();
+
+    string tempstring = "";
 
 
-
-@code {
-        [Parameter]
-        public int ID { get; set; }
-
-        RowData ChosenRow = new RowData ();
-        List<RoomData> DcRoomList = new List<RoomData>();
-        List<DcData> DcSiteList = new List<DcData>();
-        protected override async Task OnInitializedAsync()
-        {
-            DcSiteList = await Task.Run(() => objDataService.ListAllDcSites());
-            DcRoomList = await Task.Run(() => objDataService.ListAllDcRooms());
-            ChosenRow = await Task.Run(() => objDataService.GetRowInfoById(Convert.ToInt32(ID)));
-        }
-
-
-
-        void FormSubmitted(EditContext editContext)
-        {
-            bool formIsValid = editContext.Validate();
-            if (formIsValid) objDataService.UpdateRowInfo(ChosenRow);
-        }        
+    protected override async Task OnInitializedAsync()
+    {
+        DcSiteList = await Task.Run(() => objDataService.ListAllDcSites());
+        DcRoomList = await Task.Run(() => objDataService.ListAllDcRooms());
+        ChosenRow = await Task.Run(() => objDataService.GetRowInfoById(Convert.ToInt32(ID))); 
     }
+
+
+    void FormSubmitted(EditContext editContext)
+    {
+        bool formIsValid = editContext.Validate();
+        if (formIsValid) objDataService.UpdateRowInfo(ChosenRow);
+    }
+
+
+}

@@ -1,10 +1,13 @@
 ﻿
 
 namespace TspuWebPortal.ORM;
+
+using System.Linq;
 using TspuWebPortal.Model;
 
     public class SiteDataService
     {
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~    Базовые настройки   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         private readonly TspuDbContext _db;
 
         public SiteDataService(TspuDbContext db)
@@ -12,6 +15,7 @@ using TspuWebPortal.Model;
             _db = db;
         }
 
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~    ТСПУ   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         public void CreateSite (SiteData objSite)
         {
             _db.Sites?.Add(objSite);
@@ -54,7 +58,7 @@ using TspuWebPortal.Model;
             return;
         }
 
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    ЦОДы    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         public List<DcData> ListAllDcSites()
         {
@@ -97,7 +101,7 @@ using TspuWebPortal.Model;
         }
 
 
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    Помещения   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     public List<RoomData> ListAllDcRooms()
         {
@@ -105,7 +109,15 @@ using TspuWebPortal.Model;
             return RoomList;
         }
 
-        public void CreateRoom(RoomData objRoom)
+    public List<RoomData> ListRoomsOnSpecificDataCenter(int ID)
+    {
+        //List<RoomData>? RoomList = _db.Rooms?.ToList();
+        List<RoomData>? SelectedRoomList = _db.Rooms.Where(s => s.DataCenterId == ID).ToList();
+        return SelectedRoomList;
+    }
+
+
+    public void CreateRoom(RoomData objRoom)
         {
             _db.Rooms?.Add(objRoom);
             _db.SaveChanges();
@@ -136,7 +148,8 @@ using TspuWebPortal.Model;
             _db.SaveChanges();
             return;
         }
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    Ряды    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     public List<RowData> ListAllDcRows()
     {
