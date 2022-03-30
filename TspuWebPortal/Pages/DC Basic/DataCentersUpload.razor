@@ -1,0 +1,36 @@
+﻿@page "/dc_upload"
+@using System.Threading.Tasks;
+@inject IWebHostEnvironment Environment
+
+<h3>Загрузка файла ведомости</h3>
+<InputFile OnChange="@UploadExcel" />
+
+<ul>
+    <li>Name: @FileName</li>
+    <li>Last modified: @LastModifiedDate</li>
+    <li>Size (bytes): @FileSize</li>
+    <li>Content type: @ContentType</li>
+</ul>
+
+@code
+{
+    string FileName = "";
+    string LastModifiedDate = "";
+    string FileSize = "";
+    string ContentType = "";
+
+    async Task UploadExcel(InputFileChangeEventArgs e)
+    {
+        IBrowserFile LoadedFile = e.File;
+        FileName = LoadedFile.Name;
+        LastModifiedDate = LoadedFile.LastModified.ToString();
+        FileSize = LoadedFile.Size.ToString();
+        ContentType = LoadedFile.ContentType;
+        var trustedFileNameForFileStorage = Path.GetRandomFileName();
+        var path = Path.Combine(Environment.ContentRootPath,
+                        Environment.EnvironmentName, "unsafe_uploads",
+                        trustedFileNameForFileStorage);
+        await using FileStream fs = new(path, FileMode.Create);
+        await LoadedFile.OpenReadStream().CopyToAsync(fs);
+    }
+}

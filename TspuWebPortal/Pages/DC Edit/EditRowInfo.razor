@@ -53,10 +53,10 @@
 
     bool IsRoomAssigned = true;
     List<RoomData> DcRoomPartialList = new List<RoomData>();
+
     private int _DcId;
-    //int DcId { get { return _DcId; } set { DcRoomPartialList = objDataService.ListRoomsOnSpecificDataCenter(value); } }
     public int DcId { get => _DcId;  set { _DcId = value; DcRoomPartialList = objDataService.ListRoomsOnSpecificDataCenter(value); } }
-    //ListRoomsOnSpecificDataCenter
+
     RowData ChosenRow = new RowData ();
     List<RoomData> DcRoomList = new List<RoomData>();
     List<DcData> DcSiteList = new List<DcData>();
