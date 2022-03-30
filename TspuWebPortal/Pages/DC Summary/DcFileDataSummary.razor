@@ -1,0 +1,52 @@
+﻿@page "/filedata_navigation"
+@using TspuWebPortal.Model
+@inject SiteDataService objDataService
+
+<h3>Информация о загруженных файлах</h3>
+
+@if (!IsDisplayListDownloaded)
+{
+    <p><em>Список загружается...</em></p>
+}
+else
+{
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Имя файла</th>
+                <th>Дата загрузки</th>
+                <th>Последние изменения</th>
+                <th>Путь</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (FileData CurrentDcFileData in DcFileDataList)
+            { 
+                    <tr>
+                    <td>@CurrentDcFileData.FileId</td>
+                    <td>@CurrentDcFileData.FileName</td>
+                    <td>@CurrentDcFileData.UploadDate</td>
+                    <td>@CurrentDcFileData.LastChangeDate</td>
+                    <td>@CurrentDcFileData.FilePath</td>
+                    </tr>
+            }
+               
+        </tbody>
+    </table>    
+}
+
+@code 
+{
+    List<FileData> DcFileDataList = new List<FileData>();
+    bool IsDisplayListDownloaded = false;
+    protected override async Task OnInitializedAsync()
+    {
+        DcFileDataList = await Task.Run(() => objDataService.ListAllDcFileData());
+        IsDisplayListDownloaded = true;
+    } 
+    
+
+}

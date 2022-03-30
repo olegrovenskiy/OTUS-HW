@@ -234,4 +234,32 @@ using TspuWebPortal.Model;
         return;
     }
 
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    Файлы    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    public List<FileData> ListAllDcFileData()
+    {
+        List<FileData>? FileDataList = _db.FileData?.ToList();
+        return FileDataList;
+    }
+
+    public FileData GetFileDataInfoById(int ID)
+    {
+
+        FileData? FileDataInfo = _db.FileData?.FirstOrDefault(s => s.FileId == ID);
+
+        if (FileDataInfo == null)
+        {
+            FileData FileDataDefaultInfo = new FileData();
+            FileDataDefaultInfo.FileId = ID;
+            FileDataDefaultInfo.FileName = "no files";
+//            FileDataDefaultInfo.UploadDate = null;
+//            FileDataDefaultInfo.LastChangeDate = ;
+            FileDataDefaultInfo.FilePath = "";
+            return FileDataDefaultInfo;
+        }
+
+        else return FileDataInfo;
+
+    }
+
 }
