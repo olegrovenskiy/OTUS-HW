@@ -9,13 +9,6 @@
 <h3>Загрузка файла ведомости</h3>
 <InputFile OnChange="@UploadExcel" />
 
-<ul>
-    <li>Name: @FileName</li>
-    <li>Last modified: @LastModifiedDate.ToString()</li>
-    <li>Size (bytes): @FileSize</li>
-    <li>Content type: @ContentType</li>
-</ul>
-
 @if (IsFileUploaded)
 {
     <a>Сохранено в @FilePath </a>
