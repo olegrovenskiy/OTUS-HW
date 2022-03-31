@@ -9,7 +9,7 @@ namespace TspuWebPortal.Model
         public int FileId { get; set; }
         public string? FileName { get; set; } = string.Empty;        //enum
         public DateOnly? UploadDate { get; set; }
-        public DateTimeOffset? LastChangeDate { get; set; }
+        public DateOnly? LastChangeDate { get; set; }
         public string? FilePath { get; set; } = string.Empty;        //enum
         public List<InitialDetailTableData>? InitialDetailTables { get; set; }
         public List<InitialMaterialTableData>? InitialMaterialTables { get; set; }

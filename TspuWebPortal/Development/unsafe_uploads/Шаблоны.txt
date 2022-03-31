@@ -1,0 +1,79 @@
+
+
+Похоже на вопрос к чату типа "у моей подруги с её другом проблема...".)
+
+9067700300
+
+template1=# create database TSPU_db;
+CREATE DATABASE
+
+
+QSFP28		-----	15	
+SFP+ 		-----	9
+QSFP+		-----	10
+SFP			-----	4
+hardwired	-----	1
+
+1000BASE-LX 	----- 	1204
+1000BASE-SX 	----- 	1202
+1000BASE-T 		----- 	24
+10GBASE-LR		-----	36
+40GBASE-LR4		-----	1664
+40GBASE-SR4		-----	1663
+
+В RT заведён экземпляр площадки с учётом модернизации. Старый экземпляр площадки оставлен.
+
+
+Добавил площадку в RT. Для завершения задачи вместо силикомов нужно вставить глсаны и экобайпасы.
+
+Добавил три площадки в RT. Нужно объединить. Порядок генерации такой же как в РД сверху вниз. Также нужно вместо силикомов вставить глсаны и экобайпасы.
+
+Добавил площадку в RT. Также нужно вместо силикомов вставить глсаны и экобайпасы.
+
+Площадка заведена в RT.
+Площадка заведена в RT. Старый экземпляр площадки в RT удалён.
+Площадка заведена в RT. Старый экземпляр площадки в RT оставлен до ПНР.
+Площадка заведена в RT. Старый экземпляр площадки в RT удалён.
+Площадка заведена в RT. Много ручных правок. Без согласования площадку из RT не удалять!
+Исправлено.
+
+- сгенерил (+руками+доделать_КЖ)
+
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+
+
+селекты:
+------------------------
+SELECT * FROM Object WHERE label = 5726;
+
+SELECT * FROM Object WHERE Name LIKE '902%';
+
+делеты:
+-------------------------
+delete from RackObject where Name LIKE '%4785%';
+delete from Object where Name LIKE '%4785%';
+
+delete from RackObject WHERE label = 6006;
+delete from Object WHERE label = 6006;
+
+delete from RackObject WHERE label = 5726 AND id > 21622;
+delete from Object WHERE label = 5726 AND id > 21622;
+
+delete from RackObject WHERE label = 6029 AND id > 15124 AND objtype_id <> 50001;
+delete from Object WHERE label = 6029 AND id > 15124 AND objtype_id <> 50001;
+
+
+
+
+
+postgres:
+
+      SELECT "Links"
+      FROM "Sites"
+      ORDER BY "ID";
+	  
+	  
+	ALTER TABLE "Sites"
+	ALTER TABLE "Sites" ALTER COLUMN "MaintainanceStatus" SET DEFAULT 'в работе без инцидентов';

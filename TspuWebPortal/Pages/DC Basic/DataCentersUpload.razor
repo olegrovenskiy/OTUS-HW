@@ -31,7 +31,7 @@
 @code
 {
     string FileName = "";
-    DateTimeOffset LastModifiedDate;
+    DateOnly LastModifiedDate;
     string FileSize = "";
     string ContentType = "";
 
@@ -43,8 +43,9 @@
     async Task UploadExcel(InputFileChangeEventArgs e)
     {
         IBrowserFile LoadedFile = e.File;
-        FileName = LoadedFile.Name;
-        LastModifiedDate = LoadedFile.LastModified;
+        //FileName = $"{LoadedFile.Name}_{DateTime.Now}";                           //Почему не цепляется дата?             
+        FileName = $"{LoadedFile.Name}";    
+        LastModifiedDate = DateOnly.FromDateTime(LoadedFile.LastModified.DateTime);
         FileSize = LoadedFile.Size.ToString();
         ContentType = LoadedFile.ContentType;
         var trustedFileNameForFileStorage = Path.GetRandomFileName();
@@ -58,34 +59,9 @@
 
     void AddNewFile()
     {
-        objDataService.CreateFileModel (new FileData {FileName = this.FileName, UploadDate = DateOnly.FromDateTime(DateTime.Now), LastChangeDate = LastModifiedDate, FilePath = this.FileName});
+        objDataService.CreateFileModel (new FileData {FileName = this.FileName, UploadDate = DateOnly.FromDateTime(DateTime.Now), LastChangeDate = LastModifiedDate, FilePath = this.FilePath});
         IsFileAddedToTable = true;
+        //DateTime test1 = LastModifiedDate.DateTime;
     }
 
-
-    /*
-    public void CreateFileModel(FileData objFileModel)
-    {
-        _db.FileData?.Add(objFileModel);
-        _db.SaveChanges();
-        return;
-    }
-
-        async Task AddNewDc()
-    {
-        objDataService.CreateDc (new DcData ());
-        DcSiteList = await Task.Run(() => objDataService.ListAllDcSites());
-    }
-
-
-        [Key]
-        public int FileId { get; set; }
-        public string? FileName { get; set; } = string.Empty;        //enum
-        public DateOnly? UploadDate { get; set; }
-        public DateOnly? LastChangeDate { get; set; }
-        public string? FilePath { get; set; } = string.Empty;        //enum
-        public List<InitialDetailTableData>? InitialDetailTables { get; set; }
-        public List<InitialMaterialTableData>? InitialMaterialTables { get; set; }
-
-     */
 }
