@@ -1,36 +1,98 @@
 ﻿@page "/dc_upload"
 @using System.Threading.Tasks;
 @inject IWebHostEnvironment Environment
+@inject SiteDataService objDataService
+@using TspuWebPortal.Model
+@using TspuWebPortal.ORM
+@using TspuWebPortal.Shared
 
 <h3>Загрузка файла ведомости</h3>
 <InputFile OnChange="@UploadExcel" />
 
 <ul>
     <li>Name: @FileName</li>
-    <li>Last modified: @LastModifiedDate</li>
+    <li>Last modified: @LastModifiedDate.ToString()</li>
     <li>Size (bytes): @FileSize</li>
     <li>Content type: @ContentType</li>
 </ul>
 
+@if (IsFileUploaded)
+{
+    <a>Сохранено в @FilePath </a>
+    <p>
+        <label>
+            <button class="btn btn-primary" @onclick="AddNewFile">Добавить в базу файлов</button>
+        </label>
+    </p>
+}
+
+@if (IsFileAddedToTable)
+{
+    <a>Добавлена запись в таблицу загруженных файлов.</a>
+    <NavLink class="nav-link" href="filedata_navigation">
+        <span class="oi oi-plus" aria-hidden="true"></span> Просмотреть таблицу
+    </NavLink>
+}
+
+
 @code
 {
     string FileName = "";
-    string LastModifiedDate = "";
+    DateTimeOffset LastModifiedDate;
     string FileSize = "";
     string ContentType = "";
+
+    string FilePath = "";
+
+    bool IsFileUploaded = false;
+    bool IsFileAddedToTable = false;
 
     async Task UploadExcel(InputFileChangeEventArgs e)
     {
         IBrowserFile LoadedFile = e.File;
         FileName = LoadedFile.Name;
-        LastModifiedDate = LoadedFile.LastModified.ToString();
+        LastModifiedDate = LoadedFile.LastModified;
         FileSize = LoadedFile.Size.ToString();
         ContentType = LoadedFile.ContentType;
         var trustedFileNameForFileStorage = Path.GetRandomFileName();
-        var path = Path.Combine(Environment.ContentRootPath,
+        FilePath = Path.Combine(Environment.ContentRootPath,
                         Environment.EnvironmentName, "unsafe_uploads",
-                        trustedFileNameForFileStorage);
-        await using FileStream fs = new(path, FileMode.Create);
+                        FileName);
+        await using FileStream fs = new(FilePath, FileMode.Create);
+        IsFileUploaded = true;
         await LoadedFile.OpenReadStream().CopyToAsync(fs);
     }
+
+    void AddNewFile()
+    {
+        objDataService.CreateFileModel (new FileData {FileName = this.FileName, UploadDate = DateOnly.FromDateTime(DateTime.Now), LastChangeDate = LastModifiedDate, FilePath = this.FilePath});
+        IsFileAddedToTable = true;
+    }
+
+
+    /*
+    public void CreateFileModel(FileData objFileModel)
+    {
+        _db.FileData?.Add(objFileModel);
+        _db.SaveChanges();
+        return;
+    }
+
+        async Task AddNewDc()
+    {
+        objDataService.CreateDc (new DcData ());
+        DcSiteList = await Task.Run(() => objDataService.ListAllDcSites());
+    }
+
+
+        [Key]
+        public int FileId { get; set; }
+        public string? FileName { get; set; } = string.Empty;        //enum
+        public DateOnly? UploadDate { get; set; }
+        public DateOnly? LastChangeDate { get; set; }
+        public string? FilePath { get; set; } = string.Empty;        //enum
+        public List<InitialDetailTableData>? InitialDetailTables { get; set; }
+        public List<InitialMaterialTableData>? InitialMaterialTables { get; set; }
+
+     */
 }

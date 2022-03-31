@@ -242,6 +242,13 @@ using TspuWebPortal.Model;
         return FileDataList;
     }
 
+    public void CreateFileModel(FileData objFileModel)
+    {
+        _db.FileData?.Add(objFileModel);
+        _db.SaveChanges();
+        return;
+    }
+
     public FileData GetFileDataInfoById(int ID)
     {
 
