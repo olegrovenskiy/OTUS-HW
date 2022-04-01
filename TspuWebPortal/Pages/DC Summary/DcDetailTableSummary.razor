@@ -1,0 +1,61 @@
+﻿@page "/detailtable_navigation"
+@using TspuWebPortal.Model
+@inject SiteDataService objDataService
+
+<h3>Добавление и Редактирование Загруженных Таблиц Деталей</h3>
+
+@if (!IsDisplayListDownloaded)
+{
+    <p><em>Список загружается...</em></p>
+}
+else
+{
+    <p>
+    <label>
+        <button class="btn btn-primary" @onclick="AddNewDetailTableModel">Добавить таблицу</button>
+    </label>
+    </p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID таблицы</th>
+                <th>Путь к файлу</th>
+                <th>Дата обработки</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (InitialDetailTableData CurrentDetailTableModel in DcDetailTableModelList)
+            { 
+                    <tr>
+                    <td>@CurrentDetailTableModel.InitialDetailTableId</td>
+                    <td>@CurrentDetailTableModel.TableFile?.FilePath</td>
+                    <td>@CurrentDetailTableModel.RegisterDate</td>
+                    <td><a href=@($"/detailtable_navigation/{CurrentDetailTableModel?.InitialDetailTableId}")>Редактировать</a></td>
+                    </tr>
+            }
+               
+        </tbody>
+    </table>    
+}
+
+@code 
+{
+    List<InitialDetailTableData> DcDetailTableModelList = new List<InitialDetailTableData>();
+    List<FileData> DcFileDataList = new List<FileData>();
+    bool IsDisplayListDownloaded = false;
+    protected override async Task OnInitializedAsync()
+    {
+        DcFileDataList = await Task.Run(() => objDataService.ListAllDcFileData());
+        DcDetailTableModelList = await Task.Run(() => objDataService.ListAllDetailTableData());
+        IsDisplayListDownloaded = true;
+    } 
+    
+    async Task AddNewDetailTableModel()
+    {
+        objDataService.CreateDetailTableModel (new InitialDetailTableData ());
+        DcDetailTableModelList = await Task.Run(() => objDataService.ListAllDetailTableData());
+    }
+
+}

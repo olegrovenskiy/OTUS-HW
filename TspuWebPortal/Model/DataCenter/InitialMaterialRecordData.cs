@@ -6,6 +6,7 @@ namespace TspuWebPortal.Model
     public class InitialMaterialRecordData
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int InitialMaterialId { get; set; }
         public int InitialMaterialTableId { get; set; }
         public InitialMaterialTableData? InitialMaterialTable { get; set; }

@@ -59,7 +59,7 @@
 
     void AddNewFile()
     {
-        objDataService.CreateFileModel (new FileData {FileName = this.FileName, UploadDate = DateOnly.FromDateTime(DateTime.Now), LastChangeDate = LastModifiedDate, FilePath = this.FilePath});
+        objDataService.CreateFileModel (new FileData {FileName = this.FileName, UploadDate = DateOnly.FromDateTime(DateTime.Now), LastChangeDate = LastModifiedDate, FilePath = this.FilePath, FileCategory = "Детали", IsAppliedToTable = false});
         IsFileAddedToTable = true;
         //DateTime test1 = LastModifiedDate.DateTime;
     }

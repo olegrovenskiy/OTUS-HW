@@ -269,4 +269,59 @@ using TspuWebPortal.Model;
 
     }
 
+    public List<FileData> ListFilesOfSpecificCategory()
+    {
+        List<FileData>? SelectedFileList = _db.FileData.Where(s => (s.FileCategory == "Детали") && (s.IsAppliedToTable == false)).ToList();
+        //List<FileData>? SelectedFileList = _db.FileData.Where(s =>  s.IsAppliedToTable == false).ToList();
+        return SelectedFileList;
+    }
+
+
+    public void FileInfoAppendedToDetailTable(FileData objFileModel)
+    {
+        objFileModel.IsAppliedToTable = true;
+        _db.SaveChanges();
+        return;
+    }
+
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    Таблицы деталей    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    public List<InitialDetailTableData> ListAllDetailTableData()
+    {
+        List<InitialDetailTableData>? DetailTableDataList = _db.DetailTable?.ToList();
+        return DetailTableDataList;
+    }
+
+    public void CreateDetailTableModel(InitialDetailTableData objDetailTableModel)
+    {
+        _db.DetailTable?.Add(objDetailTableModel);
+        _db.SaveChanges();
+        return;
+    }
+
+    public InitialDetailTableData GetDetailTableDataInfoById(int ID)
+    {
+
+        InitialDetailTableData? DetailTableDataInfo = _db.DetailTable?.FirstOrDefault(s => s.InitialDetailTableId == ID);
+
+        if (DetailTableDataInfo == null)
+        {
+            InitialDetailTableData DetailTableDataDefaultInfo = new InitialDetailTableData();
+            DetailTableDataInfo.InitialDetailTableId = ID;
+            return DetailTableDataDefaultInfo;
+        }
+
+        else return DetailTableDataInfo;
+
+    }
+
+    public void UpdateDetailTableInfo(InitialDetailTableData objDetailTableModel)
+    {
+        
+        _db.DetailTable?.Update(objDetailTableModel);
+        _db.SaveChanges();
+        return;
+    }
+
 }

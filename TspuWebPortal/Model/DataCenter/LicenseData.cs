@@ -6,6 +6,7 @@ namespace TspuWebPortal.Model
     public class LicenseData
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int LicenseId { get; set; }
         public string SnType { get; set; } = string.Empty;
         public int DeliveryYear { get; set; }

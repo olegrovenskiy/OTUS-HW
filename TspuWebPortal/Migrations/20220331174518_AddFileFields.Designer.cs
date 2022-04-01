@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TspuWebPortal.ORM;
@@ -11,9 +12,10 @@ using TspuWebPortal.ORM;
 namespace TspuWebPortal.Migrations
 {
     [DbContext(typeof(TspuDbContext))]
-    partial class SiteDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220331174518_AddFileFields")]
+    partial class AddFileFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -419,15 +421,15 @@ namespace TspuWebPortal.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("InitialDetailTableId"));
 
-                    b.Property<int?>("FileId")
+                    b.Property<int>("FileId")
                         .HasColumnType("integer");
 
-                    b.Property<DateOnly?>("RegisterDate")
-                        .HasColumnType("date");
+                    b.Property<int?>("TableFileFileId")
+                        .HasColumnType("integer");
 
                     b.HasKey("InitialDetailTableId");
 
-                    b.HasIndex("FileId");
+                    b.HasIndex("TableFileFileId");
 
                     b.ToTable("DetailTable");
                 });
@@ -1151,7 +1153,7 @@ namespace TspuWebPortal.Migrations
                 {
                     b.HasOne("TspuWebPortal.Model.FileData", "TableFile")
                         .WithMany("InitialDetailTables")
-                        .HasForeignKey("FileId");
+                        .HasForeignKey("TableFileFileId");
 
                     b.Navigation("TableFile");
                 });

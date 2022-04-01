@@ -6,6 +6,7 @@ namespace TspuWebPortal.Model
     public class ModuleAData
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ModuleAId { get; set; }
         public int ModuleId { get; set; }
         public ModuleData? Module { get; set; }
