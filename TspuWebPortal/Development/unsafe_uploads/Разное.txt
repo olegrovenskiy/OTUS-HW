@@ -1,0 +1,1278 @@
+
+
+System.InvalidOperationException: 'The property 'InitialDetailTableData.InitialDetailTableId' is part of a key and so cannot be modified or marked as modified.
+To change the principal of an existing entity with an identifying foreign key, first delete the dependent and invoke 'SaveChanges', and then associate the dependent with the new principal.'
+
+
+    <div class = "col-2">
+        <label for="DataCenterId">Принадлежность к ЦОДу</label>
+        <select @bind="ChosenRoom.DataCenter.DataCenterId" class="form-select">
+          <option selected>Выберите ЦОД</option>
+          @foreach (DcData CurrentDcObject in DcSiteList)
+                {
+                   <option value=@CurrentDcObject.DataCenterId>@CurrentDcObject.DataCenterName</option>
+                }
+        </select>
+    </div>
+	
+	
+	
+
+Add-Migration ChangeNullable -C TspuDbContext
+
+Update-Database -Context TspuDbContext
+
+
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: https://localhost:7163
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5163
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: C:\Users\v.patrukhachev\source\repos\TspuWebPortal\TspuWebPortal\
+info: Microsoft.EntityFrameworkCore.Infrastructure[10403]
+      Entity Framework Core 6.0.0 initialized 'TspuDbContext' using provider 'Npgsql.EntityFrameworkCore.PostgreSQL:6.0.1+5a6c0a71dc304030ce2cd52124ec08a915eca978' with options: None
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (72ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT d."DataCenterId", d."DataCenterAddress", d."DataCenterName"
+      FROM "DataCenters" AS d
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT r."RoomId", r."DataCenterId", r."RoomCoordinates", r."RoomName"
+      FROM "Rooms" AS r
+fail: Microsoft.EntityFrameworkCore.Database.Command[20102]
+      Failed executing DbCommand (40ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?', @p2='?'], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "Rooms" ("DataCenterId", "RoomCoordinates", "RoomName")
+      VALUES (@p0, @p1, @p2)
+      RETURNING "RoomId";
+fail: Microsoft.EntityFrameworkCore.Update[10000]
+      An exception occurred in the database while saving changes for context type 'TspuWebPortal.Data.TspuDbContext'.
+      Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+       ---> Npgsql.PostgresException (0x80004005): 23502: null value in column "DataCenterId" violates not-null constraint
+
+      DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+         at Npgsql.Internal.NpgsqlConnector.<ReadMessage>g__ReadMessageLong|213_0(NpgsqlConnector connector, Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+         at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+         at Npgsql.NpgsqlDataReader.NextResult()
+         at Npgsql.NpgsqlCommand.ExecuteReader(CommandBehavior behavior, Boolean async, CancellationToken cancellationToken)
+         at Npgsql.NpgsqlCommand.ExecuteReader(CommandBehavior behavior, Boolean async, CancellationToken cancellationToken)
+         at Npgsql.NpgsqlCommand.ExecuteReader(CommandBehavior behavior)
+         at Npgsql.NpgsqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+         at System.Data.Common.DbCommand.ExecuteReader()
+         at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+         at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.Execute(IRelationalConnection connection)
+        Exception data:
+          Severity: ERROR
+          SqlState: 23502
+          MessageText: null value in column "DataCenterId" violates not-null constraint
+          Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+          SchemaName: public
+          TableName: Rooms
+          ColumnName: DataCenterId
+          File: execMain.c
+          Line: 1948
+          Routine: ExecConstraints
+         --- End of inner exception stack trace ---
+         at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.Execute(IRelationalConnection connection)
+         at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.Execute(IEnumerable`1 commandBatches, IRelationalConnection connection)
+         at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChanges(IList`1 entries)
+         at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(IList`1 entriesToSave)
+         at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(StateManager stateManager, Boolean acceptAllChangesOnSuccess)
+         at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.<>c.<SaveChanges>b__104_0(DbContext _, ValueTuple`2 t)
+         at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+         at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(Boolean acceptAllChangesOnSuccess)
+         at Microsoft.EntityFrameworkCore.DbContext.SaveChanges(Boolean acceptAllChangesOnSuccess)
+      Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+       ---> Npgsql.PostgresException (0x80004005): 23502: null value in column "DataCenterId" violates not-null constraint
+
+      DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+         at Npgsql.Internal.NpgsqlConnector.<ReadMessage>g__ReadMessageLong|213_0(NpgsqlConnector connector, Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+         at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+         at Npgsql.NpgsqlDataReader.NextResult()
+         at Npgsql.NpgsqlCommand.ExecuteReader(CommandBehavior behavior, Boolean async, CancellationToken cancellationToken)
+         at Npgsql.NpgsqlCommand.ExecuteReader(CommandBehavior behavior, Boolean async, CancellationToken cancellationToken)
+         at Npgsql.NpgsqlCommand.ExecuteReader(CommandBehavior behavior)
+         at Npgsql.NpgsqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+         at System.Data.Common.DbCommand.ExecuteReader()
+         at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+         at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.Execute(IRelationalConnection connection)
+        Exception data:
+          Severity: ERROR
+          SqlState: 23502
+          MessageText: null value in column "DataCenterId" violates not-null constraint
+          Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+          SchemaName: public
+          TableName: Rooms
+          ColumnName: DataCenterId
+          File: execMain.c
+          Line: 1948
+          Routine: ExecConstraints
+         --- End of inner exception stack trace ---
+         at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.Execute(IRelationalConnection connection)
+         at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.Execute(IEnumerable`1 commandBatches, IRelationalConnection connection)
+         at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChanges(IList`1 entries)
+         at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(IList`1 entriesToSave)
+         at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(StateManager stateManager, Boolean acceptAllChangesOnSuccess)
+         at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.<>c.<SaveChanges>b__104_0(DbContext _, ValueTuple`2 t)
+         at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+         at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(Boolean acceptAllChangesOnSuccess)
+         at Microsoft.EntityFrameworkCore.DbContext.SaveChanges(Boolean acceptAllChangesOnSuccess)
+warn: Microsoft.AspNetCore.Components.Server.Circuits.RemoteRenderer[100]
+      Unhandled exception rendering component: An error occurred while saving the entity changes. See the inner exception for details.
+      Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+       ---> Npgsql.PostgresException (0x80004005): 23502: null value in column "DataCenterId" violates not-null constraint
+
+      DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+         at Npgsql.Internal.NpgsqlConnector.<ReadMessage>g__ReadMessageLong|213_0(NpgsqlConnector connector, Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+         at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+         at Npgsql.NpgsqlDataReader.NextResult()
+         at Npgsql.NpgsqlCommand.ExecuteReader(CommandBehavior behavior, Boolean async, CancellationToken cancellationToken)
+         at Npgsql.NpgsqlCommand.ExecuteReader(CommandBehavior behavior, Boolean async, CancellationToken cancellationToken)
+         at Npgsql.NpgsqlCommand.ExecuteReader(CommandBehavior behavior)
+         at Npgsql.NpgsqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+         at System.Data.Common.DbCommand.ExecuteReader()
+         at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+         at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.Execute(IRelationalConnection connection)
+        Exception data:
+          Severity: ERROR
+          SqlState: 23502
+          MessageText: null value in column "DataCenterId" violates not-null constraint
+          Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+          SchemaName: public
+          TableName: Rooms
+          ColumnName: DataCenterId
+          File: execMain.c
+          Line: 1948
+          Routine: ExecConstraints
+         --- End of inner exception stack trace ---
+         at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.Execute(IRelationalConnection connection)
+         at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.Execute(IEnumerable`1 commandBatches, IRelationalConnection connection)
+         at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChanges(IList`1 entries)
+         at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(IList`1 entriesToSave)
+         at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(StateManager stateManager, Boolean acceptAllChangesOnSuccess)
+         at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.<>c.<SaveChanges>b__104_0(DbContext _, ValueTuple`2 t)
+         at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+         at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(Boolean acceptAllChangesOnSuccess)
+         at Microsoft.EntityFrameworkCore.DbContext.SaveChanges(Boolean acceptAllChangesOnSuccess)
+         at Microsoft.EntityFrameworkCore.DbContext.SaveChanges()
+         at TspuWebPortal.Data.SiteDataService.CreateRoom(RoomData objRoom) in C:\Users\v.patrukhachev\source\repos\TspuWebPortal\TspuWebPortal\Data\TSPU_Classes\SiteDataService.cs:line 105
+         at TspuWebPortal.Pages.DcRoomNavigation.AddNewRoom() in C:\Users\v.patrukhachev\source\repos\TspuWebPortal\TspuWebPortal\Pages\DcRoomNavigation.razor:line 59
+         at Microsoft.AspNetCore.Components.ComponentBase.CallStateHasChangedOnAsyncCompletion(Task task)
+         at Microsoft.AspNetCore.Components.RenderTree.Renderer.GetErrorHandledTask(Task taskToHandle, ComponentState owningComponentState)
+fail: Microsoft.AspNetCore.Components.Server.Circuits.CircuitHost[111]
+      Unhandled exception in circuit '-57a_o2M1FV5Oq0n-GeKi11JP73D8_C_MD8oBSQliNA'.
+      Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+       ---> Npgsql.PostgresException (0x80004005): 23502: null value in column "DataCenterId" violates not-null constraint
+
+      DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+         at Npgsql.Internal.NpgsqlConnector.<ReadMessage>g__ReadMessageLong|213_0(NpgsqlConnector connector, Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+         at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+         at Npgsql.NpgsqlDataReader.NextResult()
+         at Npgsql.NpgsqlCommand.ExecuteReader(CommandBehavior behavior, Boolean async, CancellationToken cancellationToken)
+         at Npgsql.NpgsqlCommand.ExecuteReader(CommandBehavior behavior, Boolean async, CancellationToken cancellationToken)
+         at Npgsql.NpgsqlCommand.ExecuteReader(CommandBehavior behavior)
+         at Npgsql.NpgsqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+         at System.Data.Common.DbCommand.ExecuteReader()
+         at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+         at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.Execute(IRelationalConnection connection)
+        Exception data:
+          Severity: ERROR
+          SqlState: 23502
+          MessageText: null value in column "DataCenterId" violates not-null constraint
+          Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+          SchemaName: public
+          TableName: Rooms
+          ColumnName: DataCenterId
+          File: execMain.c
+          Line: 1948
+          Routine: ExecConstraints
+         --- End of inner exception stack trace ---
+         at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.Execute(IRelationalConnection connection)
+         at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.Execute(IEnumerable`1 commandBatches, IRelationalConnection connection)
+         at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChanges(IList`1 entries)
+         at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(IList`1 entriesToSave)
+         at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(StateManager stateManager, Boolean acceptAllChangesOnSuccess)
+         at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.<>c.<SaveChanges>b__104_0(DbContext _, ValueTuple`2 t)
+         at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+         at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(Boolean acceptAllChangesOnSuccess)
+         at Microsoft.EntityFrameworkCore.DbContext.SaveChanges(Boolean acceptAllChangesOnSuccess)
+         at Microsoft.EntityFrameworkCore.DbContext.SaveChanges()
+         at TspuWebPortal.Data.SiteDataService.CreateRoom(RoomData objRoom) in C:\Users\v.patrukhachev\source\repos\TspuWebPortal\TspuWebPortal\Data\TSPU_Classes\SiteDataService.cs:line 105
+         at TspuWebPortal.Pages.DcRoomNavigation.AddNewRoom() in C:\Users\v.patrukhachev\source\repos\TspuWebPortal\TspuWebPortal\Pages\DcRoomNavigation.razor:line 59
+         at Microsoft.AspNetCore.Components.ComponentBase.CallStateHasChangedOnAsyncCompletion(Task task)
+         at Microsoft.AspNetCore.Components.RenderTree.Renderer.GetErrorHandledTask(Task taskToHandle, ComponentState owningComponentState)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Информация о загруженных файлах
+ID			Имя файла				Дата загрузки			Последние изменения			Путь	
+56			installation-09092019	09.09.2019				09.09.2019					//share/installation/installation-09092019.txt
+
+
+
+29.03.
+
+	
+2. Хирург
+
+
+59 тысяч сидящих в неоплачиваемых отпусках в течение месяца на всю страну - это немного.
+
+
+
+1. Сделать ступенчатую навигацию по внешним ключам.
+2. Сформулировать список типовых команд для обращению к БД для поиска информации.
+3. Сформулировать список типовых команд для обращению к БД для записи новой информации.
+4. Разработать форму для поиска данных из формы. Разработать формулы.
+
+
+PostgresException: 23505: duplicate key value violates unique constraint "PK_DataCenters"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+
+
+System.InvalidOperationException: The DbContextOptions passed to the DcDbContext constructor must be a DbContextOptions<DcDbContext>. When registering multiple DbContext types, make sure that the constructor for each context type has a DbContextOptions<TContext> parameter rather than a non-generic DbContextOptions parameter.
+
+57UhzNfhDsvGsk
+Грязная тарелка вымела пыль
+
+сгенерил (+руками)
+
+«Путин умен. Он захватил страну (Украину) в обмен на 2 доллара западных санкций, я бы сказал, что это очень умно» (с) Дональд Трамп
+
+Да и партизанские авантюры Гевары в Африке и Боливии - они спорные с точки зрения пользы для коммунистического движения. Поддержки населения не было у партизан.
+
+
+дмитрий захаров
+
+сергей бушманов цму оиб +7-968-7559098
+сергей севостьянов гамма
+
+
+5667	АО «Компания ТрансТелеКом»	г. Москва	ул. Бутлерова, д. 7
+
+
+Надеюсь, малолетних хипстеров во вселенной ЗВ мы больше не увидим. Они были ужасны со всех сторон. Актёрская игра так просто отвратительна, как будто в современных молодёжных комедиях снимались.
+
+Учитывать набивку серверов, но без связи с портами подключения.
+
+
+int[] arrCurrentUplinkPortInBalancer = new int[20];
+for (int intCurrentBalancer = 1; intCurrentBalancer <= intTotalBalancers; intCurrentBalancer++)
+{
+	arrCurrentUplinkPortInBalancer[intCurrentBalancer] = 16;
+}
+
+intCurrentBalancerChassis++;
+intCurrentPortInChassis = arrCurrentUplinkPortInBalancer[intCurrentBalancerChassis] + 1;	//WAN
+intCurrentPortInChassis = arrCurrentUplinkPortInBalancer[intCurrentBalancerChassis] + 2;	//LAN
+
+
+//После отрисовки пары WAN-LAN сдвиг указателя на 2 порта для нижнего эшелона и на один порт для верхнего.
+if (!boolEshelon) arrCurrentUplinkPortInBalancer[intCurrentBalancerChassis] += 2;
+
+Error:
+Each parameter in the deserialization constructor on type 'TspuObjects.SummarySiteInfo' must bind to an object property or field on deserialization.
+Each parameter name must match with a property or field on the object. The match can be case-insensitive.
+
+Excel.Worksheet xlWorksheet
+Excel.Range xlRange
+bool IsLan
+
+
+            string CurrentDeviceHostname, CurrentLanName, CurrentPortType, CurrentLagId, CurrentOdfRack, CurrentOdfPort;
+
+            string CurrentLanDeviceHostname, CurrentLanPortName, CurrentLanPortType, CurrentLanLagId, CurrentLanOdfRack, CurrentLanOdfPort;
+            string CurrentWanDeviceHostname, CurrentWanPortName, CurrentWanPortType, CurrentWanLagId, CurrentWanOdfRack, CurrentWanOdfPort;
+            string CurrentPortSpeed;
+            DeviceAndCollectionSpPorts CurrentDeviceSpCollection = new DeviceAndCollectionSpPorts();
+
+            PortSp CurrentPortSpLan, CurrentPortSpWan;
+            int PortCounter1G = 0;  int PortCounter10G = 0; int PortCounter40G = 0; int PortCounter100G = 0; int CurrentPortCounter;
+			
+			for (int intCurrentRow = 4; intCurrentRow <= xlRange.Rows.Count; intCurrentRow++)
+            {
+                CurrentLanDeviceHostname = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 4]).Value);
+                CurrentLanPortName = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 5]).Value);
+                CurrentLanPortType = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 6]).Value);
+                CurrentLanLagId = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 7]).Value);
+                CurrentLanOdfRack = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 12]).Value);
+                CurrentLanOdfPort = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 13]).Value);
+
+                CurrentWanDeviceHostname = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 8]).Value);
+                CurrentWanPortName = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 9]).Value);
+                CurrentWanPortType = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 10]).Value);
+                CurrentWanLagId = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 11]).Value);
+                CurrentWanOdfRack = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 14]).Value);
+                CurrentWanOdfPort = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 15]).Value);
+
+                if (CurrentLanPortType.IndexOf("1G") > -1) { PortCounter1G++; CurrentPortCounter = PortCounter1G; CurrentPortSpeed = "1"; }
+                else if (CurrentLanPortType.IndexOf("10G") > -1) { PortCounter10G++; CurrentPortCounter = PortCounter10G; CurrentPortSpeed = "10"; }
+                else if (CurrentLanPortType.IndexOf("40G") > -1) { PortCounter40G++; CurrentPortCounter = PortCounter40G; CurrentPortSpeed = "40"; }
+                else if (CurrentLanPortType.IndexOf("100G") > -1) { PortCounter100G++; CurrentPortCounter = PortCounter100G; CurrentPortSpeed = "100"; }
+                else throw new Exception("Неверный тип линка в форме.");
+
+                //Создаём порт LAN
+                CurrentPortSpLan = new PortSp 
+                { Name = CurrentLanPortName, Type = CurrentLanPortType, LagId = CurrentLanLagId, OdfRack = CurrentLanOdfRack,
+                    OdfPort = CurrentLanOdfPort, Speed = CurrentPortSpeed, ConnectId = CurrentPortCounter };
+
+                //Ищем hostname в уже добавленных объектах
+                if (ListFullLanDevices.Any(item => item.Device.Name == CurrentLanDeviceHostname)) 
+                {
+                    //Работаем с существующим объектом
+                    CurrentDeviceSpCollection = ListFullLanDevices.Single(item => item.Device.Name == CurrentLanDeviceHostname);
+                }
+                else
+                {
+                    //Создаём новый объект с новым hostname
+                    ListFullLanDevices.Add(new DeviceAndCollectionSpPorts());
+                    ListFullLanDevices[ListFullLanDevices.Count - 1].Device = new DeviceSp { Name = CurrentLanDeviceHostname, Category = "LAN_Router" };
+                    ListFullLanDevices[ListFullLanDevices.Count - 1].PortsSp = new List<PortSp>();
+                    CurrentDeviceSpCollection = ListFullLanDevices[ListFullLanDevices.Count - 1];
+                }
+                //Добавляем порт в список портов объекта с выбранным hostname
+                CurrentDeviceSpCollection.PortsSp?.Add(CurrentPortSpLan);
+
+                //Добавляем порт WAN
+                CurrentPortSpWan = new PortSp 
+                { Name = CurrentWanPortName, Type = CurrentWanPortType, LagId = CurrentWanLagId, OdfRack = CurrentWanOdfRack, OdfPort = CurrentWanOdfPort, Speed = CurrentPortSpeed, ConnectId = CurrentPortCounter };
+                
+                if (ListFullWanDevices.Any(item => item.Device.Name == CurrentWanDeviceHostname))
+                {
+                    //добавляем порт в существующий объект
+                    CurrentDeviceSpCollection = ListFullWanDevices.Single(item => item.Device.Name == CurrentWanDeviceHostname);
+                }
+                else
+                {
+                    ListFullWanDevices.Add(new DeviceAndCollectionSpPorts());
+                    ListFullWanDevices[ListFullWanDevices.Count - 1].Device = new DeviceSp { Name = CurrentWanDeviceHostname, Category = "WAN_Router" };
+                    ListFullWanDevices[ListFullWanDevices.Count - 1].PortsSp = new List<PortSp>();
+                    CurrentDeviceSpCollection = ListFullWanDevices[ListFullWanDevices.Count - 1];
+                }
+                CurrentDeviceSpCollection.PortsSp?.Add(CurrentPortSpWan);
+            }
+			
+			
+			
+
+
+Name = "Unknown";
+
+        public enum DeviceType
+        {
+            Bypass_Silicom,
+            Bypass_Glsun,
+            Ecobypass,
+            EcoBalancer,
+            EcoHighway,
+            Filter
+        }
+
+
+
+
+
+
+
+        public int ID { get; set; }
+        public string Oper { get; set; }
+        public string FederalDistrict { get; set; }
+        public int RegionNumber { get; set; }
+        public string City { get; set; }
+        public string Address { get; set; }
+        public string SiteType { get; set; }
+        public string Links { get; set; }
+        public string IsInProject { get; set; }
+        public string MaintainanceStatus { get; set; }
+        public string PipelineStage { get; set; }
+		
+		
+style="border: 1px double darkblue"
+
+
+
+    //private const string ConnectionString = "Host=192.168.105.250;Port=5432;Database=TspuSitesDb;Username=vstudio;Password=76Lj,<fpHf,Yjh";
+    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //{
+    //optionsBuilder.UseNpgsql(ConnectionString);
+    //}
+
+
+
+
+\////\яяяячя  с мм ит  ьь бббб  бююю.мсмч	ффыыыысвввсссаааиииииииииипппптирррроооооллллдддджэ
+эээ\\\йцйууукккеееерннооггггггщщззххххххх\\
+ъъъъйй11111111111111122333
+python3 -m grpc_tools.protoc  -I /home/viktor/GRPC_Server --python_out=. --grpc_python_out=. /home/viktor/GRPC_Server/4ененггн777789щ0х-х----===++.proto
+
+
+
+python3 -m grpc_tools.protoc  -I /home/viktor/GRPC_Server --python_out=. --grpc_python_out=. /home/viktor/GRPC_Server/helloworld.proto
+
+
+
+
+
+
+
+Error: Status(StatusCode="Unavailable", Detail="Error starting gRPC call. HttpRequestException: The SSL connection could not be established, see inner exception. IOException: Cannot determine the frame size or a corrupted frame was received.", DebugException="System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
+ ---> System.IO.IOException: Cannot determine the frame size or a corrupted frame was received.
+   at System.Net.Security.SslStream.GetFrameSize(ReadOnlySpan`1 buffer)
+   at System.Net.Security.SslStream.ReceiveBlobAsync[TIOAdapter](TIOAdapter adapter)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](TIOAdapter adapter, Boolean receiveFirst, Byte[] reAuthenticationData, Boolean isApm)
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.ConnectHelper.EstablishSslConnectionAsync(SslClientAuthenticationOptions sslOptions, HttpRequestMessage request, Boolean async, Stream stream, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp2ConnectionAsync(HttpRequestMessage request)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.GetHttp2ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at Grpc.Net.Client.Internal.GrpcCall`2.RunCall(HttpRequestMessage request, Nullable`1 timeout)")
+Press any key to exit...
+
+
+
+
+
+python3 -m grpc_tools.protoc -I../../protos --python_out=. --grpc_python_out=. ../../helloworld.proto
+
+
+
+for (int intCurrentRow = 4; intCurrentRow <= xlRange.Rows.Count; intCurrentRow++)
+            {
+                CurrentLanDeviceHostname = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 4]).Value);
+                CurrentLanPortName = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 5]).Value);
+                CurrentLanPortType = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 6]).Value);
+                CurrentLanLagId = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 7]).Value);
+                CurrentLanOdfRack = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 12]).Value);
+                CurrentLanOdfPort = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 13]).Value);
+
+                CurrentWanDeviceHostname = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 8]).Value);
+                CurrentWanPortName = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 9]).Value);
+                CurrentWanPortType = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 10]).Value);
+                CurrentWanLagId = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 11]).Value);
+                CurrentWanOdfRack = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 14]).Value);
+                CurrentWanOdfPort = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 15]).Value);
+
+                if (CurrentLanPortType.IndexOf("1G") > -1) { PortCounter1G++; CurrentPortCounter = PortCounter1G; CurrentPortSpeed = "1"; }
+                else if (CurrentLanPortType.IndexOf("10G") > -1) { PortCounter10G++; CurrentPortCounter = PortCounter10G; CurrentPortSpeed = "10"; }
+                else if (CurrentLanPortType.IndexOf("40G") > -1) { PortCounter40G++; CurrentPortCounter = PortCounter40G; CurrentPortSpeed = "40"; }
+                else if (CurrentLanPortType.IndexOf("100G") > -1) { PortCounter100G++; CurrentPortCounter = PortCounter100G; CurrentPortSpeed = "100"; }
+                else throw new Exception("Неверный тип линка в форме.");
+
+                //Создаём порт LAN
+                CurrentPortSpLan = new PortSp 
+                { Name = CurrentLanPortName, Type = CurrentLanPortType, LagId = CurrentLanLagId, OdfRack = CurrentLanOdfRack,
+                    OdfPort = CurrentLanOdfPort, Speed = CurrentPortSpeed, ConnectId = CurrentPortCounter };
+
+                //Ищем hostname в уже добавленных объектах
+                if (ListFullLanDevices.Any(item => item.Device.Name == CurrentLanDeviceHostname)) 
+                {
+                    //Работаем с существующим объектом
+                    CurrentDeviceSpCollection = ListFullLanDevices.Single(item => item.Device.Name == CurrentLanDeviceHostname);
+                }
+                else
+                {
+                    //Создаём новый объект с новым hostname
+                    ListFullLanDevices.Add(new DeviceAndCollectionSpPorts());
+                    ListFullLanDevices[ListFullLanDevices.Count - 1].Device = new DeviceSp { Name = CurrentLanDeviceHostname, Category = "LAN_Router" };
+                    ListFullLanDevices[ListFullLanDevices.Count - 1].PortsSp = new List<PortSp>();
+                    CurrentDeviceSpCollection = ListFullLanDevices[ListFullLanDevices.Count - 1];
+                }
+                //Добавляем порт в список портов объекта с выбранным hostname
+                CurrentDeviceSpCollection.PortsSp?.Add(CurrentPortSpLan);
+
+                //Добавляем порт WAN
+                CurrentPortSpWan = new PortSp 
+                { Name = CurrentWanPortName, Type = CurrentWanPortType, LagId = CurrentWanLagId, OdfRack = CurrentWanOdfRack, OdfPort = CurrentWanOdfPort, Speed = CurrentPortSpeed, ConnectId = CurrentPortCounter };
+                
+                if (ListFullWanDevices.Any(item => item.Device.Name == CurrentWanDeviceHostname))
+                {
+                    //добавляем порт в существующий объект
+                    CurrentDeviceSpCollection = ListFullWanDevices.Single(item => item.Device.Name == CurrentWanDeviceHostname);
+                }
+                else
+                {
+                    ListFullWanDevices.Add(new DeviceAndCollectionSpPorts());
+                    ListFullWanDevices[ListFullWanDevices.Count - 1].Device = new DeviceSp { Name = CurrentWanDeviceHostname, Category = "WAN_Router" };
+                    ListFullWanDevices[ListFullWanDevices.Count - 1].PortsSp = new List<PortSp>();
+                    CurrentDeviceSpCollection = ListFullWanDevices[ListFullWanDevices.Count - 1];
+                }
+                CurrentDeviceSpCollection.PortsSp?.Add(CurrentPortSpWan);
+            }
+			
+			
+			
+
+- сделать таблицу с ЦОДами , а помещения - это номер команты в ЦОДе
+- сделать таблицу складов
+- АОС с двух сторон подключается
+- таблица трека замен
+- иметь указание было ли откгружено по договору. + номер договора.+дата откгрузки.
+
+
+
+
+
+
+
+int CurrentIs100, string CurrentModel, queue<PortSp> QueueLanSp,
+
+
+
+6056 GLSUN			+
+5553 GLSUN			+
+5554 GLSUN			+
+5555 GLSUN			+
+6059 Silicom		+
+6062 Silicom		+
+6064 Silicom		+
+5552 GLSUN			+
+
+
+
+
+
+
+
+
+DC2-R05-MGMT-E5448-1 (стойка 5): ESC9000065
+DC2-R07-MGMT-E5448-1 (стойка 7): ESC9000065
+DC2-R07-MGMT-E5448-1 (стойка 8): ESC9000067
+DC2-R15-MGMT-E5448-1 (стойка 15): ESC9000070
+
+
+
+1. Проставить SN блоков питания из фоток.
+2. SFOC вместо FOC.	+
+3. Нолик в номере порта нексуса?	+
+4. Годы поправить. 	+
+5. Привести в порядок порты на СЕ.
+
+
+ES23000370
+
+
+
+ES23000337
+
+
+
+
+
+DC2-R04-CORE-N9504-2# show inventory 
+
+NAME: "Chassis",  DESCR: "Nexus9000 C9504 (4 Slot) Chassis"      				2020
+PID: N9K-C9504           ,  VID: V01 ,  SN: FOX2347PBJ2          
+
+NAME: "Slot 1",  DESCR: "48x10/25G + 4x40/100G Ethernet Module" 				2020 
+PID: N9K-X97160YC-EX     ,  VID: V01 ,  SN: FOC23501SR7          
+
+NAME: "Slot 2",  DESCR: "48x10/25G + 4x40/100G Ethernet Module" 				2020
+PID: N9K-X97160YC-EX     ,  VID: V01 ,  SN: FOC24213C40          
+
+NAME: "Slot 3",  DESCR: "48x10/25G + 4x40/100G Ethernet Module" 				2021
+PID: N9K-X97160YC-EX     ,  VID: V01 ,  SN: FOC25233SFE          
+	
+NAME: "Slot 4",  DESCR: "48x10/25G + 4x40/100G Ethernet Module" 				2021
+PID: N9K-X97160YC-EX     ,  VID: V01 ,  SN: FOC25233SL7          
+
+NAME: "Slot 22",  DESCR: "4-slot Fabric Module"                  				N/A
+PID: N9K-C9504-FM-E      ,  VID: V02 ,  SN: FOC24021VC3          
+
+NAME: "Slot 23",  DESCR: "4-slot Fabric Module"                  				N/A
+PID: N9K-C9504-FM-E      ,  VID: V02 ,  SN: FOC24021VAA          
+
+NAME: "Slot 24",  DESCR: "4-slot Fabric Module"                  				N/A
+PID: N9K-C9504-FM-E      ,  VID: V02 ,  SN: FOC24021V8Y          
+
+NAME: "Slot 26",  DESCR: "4-slot Fabric Module"                  				N/A
+PID: N9K-C9504-FM-E      ,  VID: V02 ,  SN: FOC24021VHV          
+
+NAME: "Slot 27",  DESCR: "Supervisor Module"                     				2020
+PID: N9K-SUP-A+          ,  VID: V01 ,  SN: FOC23470NAA          				
+
+NAME: "Slot 28",  DESCR: "Supervisor Module"                     				2021
+PID: N9K-SUP-A+          ,  VID: V01 ,  SN: FOC251935DY          				
+
+NAME: "Slot 29",  DESCR: "System Controller"                     				N/A
+PID: N9K-SC-A            ,  VID: V02 ,  SN: FOC23490RDK          				
+
+NAME: "Slot 30",  DESCR: "System Controller"                     				N/A
+PID: N9K-SC-A            ,  VID: V02 ,  SN: FOC23490R5B          				
+
+NAME: "Power Supply 1",  DESCR: "Nexus9000 C9504 (4 Slot) Chassis Power Supply"	2020
+PID: N9K-PAC-3000W-B     ,  VID: V03 ,  SN: ART2411F2B0          
+
+NAME: "Power Supply 2",  DESCR: "Nexus9000 C9504 (4 Slot) Chassis Power Supply"	2020
+PID: N9K-PAC-3000W-B     ,  VID: V03 ,  SN: ART2411F2BB          
+
+NAME: "Power Supply 3",  DESCR: "Nexus9000 C9504 (4 Slot) Chassis Power Supply"	2020
+PID: N9K-PAC-3000W-B     ,  VID: V03 ,  SN: ART2411F2BL          
+
+NAME: "Power Supply 4",  DESCR: "Nexus9000 C9504 (4 Slot) Chassis Power Supply"	2021
+PID: N9K-PAC-3000W-B     ,  VID: V03 ,  SN: ART2517F03L          
+
+NAME: "Fan 1",  DESCR: "Nexus9000 C9504 (4 Slot) Chassis Fan Module"			N/A
+PID: N9K-C9504-FAN       ,  VID: V01 ,  SN: FOX2348P7DA          
+
+NAME: "Fan 2",  DESCR: "Nexus9000 C9504 (4 Slot) Chassis Fan Module"			N/A
+PID: N9K-C9504-FAN       ,  VID: V01 ,  SN: FOX2348P85W          
+
+NAME: "Fan 3",  DESCR: "Nexus9000 C9504 (4 Slot) Chassis Fan Module"			N/A
+PID: N9K-C9504-FAN       ,  VID: V01 ,  SN: FOX2348P7CN  
+
+
+
+отключенные и ненайденные
+
+FT4J20A729
+FT4J20A906
+FT4J20A730
+FT4J20A905
+FT4J20A731
+FT4J20A732
+FT4J20A904
+
+
+
+
+
+1/0/44		 (SC4J19J533)
+
+FT202006222851
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DC2-R03-CORE-N9504-1# 
+---------------------------------
+
+Software
+  BIOS: version 05.39
+ NXOS: version 9.3(3)
+  BIOS compile time:  08/30/2019
+  NXOS image file is: bootflash:///nxos.9.3.3.bin
+  NXOS compile time:  12/22/2019 2:00:00 [12/22/2019 17:00:37]
+
+
+Hardware
+  cisco Nexus9000 C9504 (4 Slot) Chassis ("Supervisor Module")
+  Intel(R) Xeon(R) CPU D-1526 @ 1.80GHz with 16337468 kB of memory.
+  Processor Board ID FOC23470N54
+
+  Device name: DC2-R03-CORE-N9504-1
+  bootflash:   21693714 kB
+Kernel uptime is 143 day(s), 2 hour(s), 42 minute(s), 41 second(s)
+
+
+DC2-R03-CORE-N9504-1# show inventory 
+NAME: "Chassis",  DESCR: "Nexus9000 C9504 (4 Slot) Chassis"      				
+PID: N9K-C9504           ,  VID: V01 ,  SN: FOX2346PE6S          					2020
+
+NAME: "Slot 1",  DESCR: "48x10/25G + 4x40/100G Ethernet Module" 
+PID: N9K-X97160YC-EX     ,  VID: V01 ,  SN: FOC23501SQX          					2020
+
+NAME: "Slot 2",  DESCR: "48x10/25G + 4x40/100G Ethernet Module" 
+PID: N9K-X97160YC-EX     ,  VID: V01 ,  SN: FOC24213C5R          					2020
+
+NAME: "Slot 3",  DESCR: "48x10/25G + 4x40/100G Ethernet Module" 
+PID: N9K-X97160YC-EX     ,  VID: V01 ,  SN: FOC25233SG1          					2021
+
+NAME: "Slot 4",  DESCR: "48x10/25G + 4x40/100G Ethernet Module" 
+PID: N9K-X97160YC-EX     ,  VID: V01 ,  SN: FOC25233SC5          					2021
+
+NAME: "Slot 22",  DESCR: "4-slot Fabric Module"                  
+PID: N9K-C9504-FM-E      ,  VID: V02 ,  SN: FOC24021VAK          					N/A
+
+NAME: "Slot 23",  DESCR: "4-slot Fabric Module"                  
+PID: N9K-C9504-FM-E      ,  VID: V02 ,  SN: FOC24021VAE          					N/A
+
+NAME: "Slot 24",  DESCR: "4-slot Fabric Module"                  
+PID: N9K-C9504-FM-E      ,  VID: V02 ,  SN: FOC24021V84          					N/A
+
+NAME: "Slot 26",  DESCR: "4-slot Fabric Module"                  
+PID: N9K-C9504-FM-E      ,  VID: V02 ,  SN: FOC24021V82          					N/A
+
+NAME: "Slot 27",  DESCR: "Supervisor Module"                     
+PID: N9K-SUP-A+          ,  VID: V01 ,  SN: FOC23470N54          					2020
+
+NAME: "Slot 28",  DESCR: "Supervisor Module"                     
+PID: N9K-SUP-A+          ,  VID: V01 ,  SN: FOC251935D0          					2021
+
+NAME: "Slot 29",  DESCR: "System Controller"                     
+PID: N9K-SC-A            ,  VID: V02 ,  SN: FOC24102HTW          					N/A
+
+NAME: "Slot 30",  DESCR: "System Controller"                     
+PID: N9K-SC-A            ,  VID: V02 ,  SN: FOC24102HRW          					N/A
+
+NAME: "Power Supply 1",  DESCR: "Nexus9000 C9504 (4 Slot) Chassis Power Supply"		2020
+PID: N9K-PAC-3000W-B     ,  VID: V03 ,  SN: ART2410F49K          
+
+NAME: "Power Supply 2",  DESCR: "Nexus9000 C9504 (4 Slot) Chassis Power Supply"		2020
+PID: N9K-PAC-3000W-B     ,  VID: V03 ,  SN: ART2411F2BF          
+
+NAME: "Power Supply 3",  DESCR: "Nexus9000 C9504 (4 Slot) Chassis Power Supply"		2020
+PID: N9K-PAC-3000W-B     ,  VID: V03 ,  SN: ART2411F2CG          
+
+NAME: "Power Supply 4",  DESCR: "Nexus9000 C9504 (4 Slot) Chassis Power Supply"		2021
+PID: N9K-PAC-3000W-B     ,  VID: V03 ,  SN: ART2517F01J          					
+
+NAME: "Fan 1",  DESCR: "Nexus9000 C9504 (4 Slot) Chassis Fan Module"				N/A
+PID: N9K-C9504-FAN       ,  VID: V01 ,  SN: FOX2344PN3R          
+
+NAME: "Fan 2",  DESCR: "Nexus9000 C9504 (4 Slot) Chassis Fan Module"				N/A
+PID: N9K-C9504-FAN       ,  VID: V01 ,  SN: FOX2348P7DE          
+
+NAME: "Fan 3",  DESCR: "Nexus9000 C9504 (4 Slot) Chassis Fan Module"				N/A
+PID: N9K-C9504-FAN       ,  VID: V01 ,  SN: FOX2344P6KC  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# https://www.nginx.com/resources/wiki/start/topics/tutorials/config_pitfalls/
+# https://wiki.debian.org/Nginx/DirectoryStructure
+#
+# In most cases, administrators will remove this file from sites-enabled/ and
+# leave it as reference inside of sites-available where it will continue to be
+# updated by the nginx packaging team.
+#
+# This file will automatically load configuration files provided by other
+# applications, such as Drupal or Wordpress. These applications will be made
+# available underneath a path with that package name, such as /drupal8.
+#
+# Please see /usr/share/doc/nginx-doc/examples/ for more detailed examples.
+##
+
+# Default server configuration
+#
+server {
+        #listen 80 default_server;
+         listen 80;
+        listen [::]:80 default_server;
+
+        # SSL configuration
+        #
+        # listen 443 ssl default_server;
+        # listen [::]:443 ssl default_server;
+        #
+        # Note: You should disable gzip for SSL traffic.
+        # See: https://bugs.debian.org/773332
+        #
+        # Read up on ssl_ciphers to ensure a secure configuration.
+        # See: https://bugs.debian.org/765782
+        #
+        # Self signed certs generated by the ssl-cert package
+        # Don't use them in a production server!
+        #
+        # include snippets/snakeoil.conf;
+
+        root /var/www/html;
+
+        # Add index.php to the list if you are using PHP
+        index index.html index.htm index.nginx-debian.html;
+
+        #server_name _;
+        server_name http://192.168.105.252;
+
+        location / {
+            proxy_pass http://localhost:5000;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection keep-alive;
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header Connection $connection_upgrade;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            # First attempt to serve request as file, then
+            # as directory, then fall back to displaying a 404.
+            try_files $uri $uri/ =404;
+        }
+
+        # pass PHP scripts to FastCGI server
+        #
+        #location ~ \.php$ {
+        #       include snippets/fastcgi-php.conf;
+        #
+        #       # With php-fpm (or other unix sockets):
+		
+		
+		
+sudo apt-get purge nginx nginx-common
+
+334		стоматолог		Тарасова Лариса Алексеевна
+507б	стоматолог		Сорокина Элла Владимировна   15/12 
+
+201		хирург			Базоева Марта Георгиевна
+203		хирург			Голубчикова Елена Олеговна
+
+
+5744 силиком					готово
+6074 GLSUN			сгенерил
+1759 силиком					готово
+6060 GLSUN			сгенерил	Моисеев
+6072 GLSUN			сгенерил	Моисеев
+1249 GLSUN			сгенерил
+6068 GLSUN			сгенерил
+
+
+
+
+
+System.InvalidOperationException: 'Sequence contains no elements'
+
+fail: Microsoft.AspNetCore.Components.Server.Circuits.CircuitHost[111]
+      Unhandled exception in circuit 'm4KKzbcjm8izWta71EvuCppbdxFrNrcsLVwqOUJ0MIU'.
+      System.InvalidOperationException: Sequence contains no elements
+         at System.Linq.ThrowHelper.ThrowNoElementsException()
+		 
+		 
+		 
+
+Password=76Lj,<fpHf,Yjh
+ДобраяБазаРаботаетНормально
+
+Ubuntu20.04x64_TspuWebPortal
+
+c:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\NuGet\Modules\NuGet\
+
+Мазь!
+private const string ConnectionString = "Host=192.168.105.250;Port=5432;Database=TspuSitesDb;Username=vstudio;Password=76Lj,<fpHf,Yjh";
+
+
+
+5964:
+
+К1: 12*100G, 4*Хв+15*4160
+К2: 6*10G,   1*Хв+2*4120
+
+Usergate D200 (NAT) - 1 
+(4*10Gb+2*1G SFP+5 Copper)
+
+
+
+'curl -sk -u zabbix:1q2w3e4r5t -X GET "https://172.16.1.251/rest/api/2/search?jql=project=Networks+and+created>=' + date1 + '+and+created<=' + date2 + '&maxResults=1000" | jq'
+
+
+4483
+4494
+4450
+4455
+4500
+5839
+3490
+2577
+3536
+5750
+4954
+5338
+4061
+
+
+
+
+
+
+
+
+
+
+
+стойки 7, 12, 13
+
+5967	АО «КВАНТ-ТЕЛЕКОМ»	п. Дубовое, Белгородская область	мкр. «Улитка», стр. 3
+
+
+5963	АО «КВАНТ-ТЕЛЕКОМ»	г. Воронеж	ул. Еремеева, д. 22
+
+
+
+
+4899
+4900
+5040
+5041
+4897
+4898
+5337
+4903
+4904
+0668
+
+5854
+
+
+
+5403	ООО «Сетел»	г. Москва	ул. Сущевский Вал, д. 26
+
+
+
+11 хайвэев, 30 фильтров
+
+на 8 соток имеем 3 хайвэя, по 3 сотки в каждый, в третий 2 сотки					--- 14 фильтров
+на 143 десятки имеем 8 хайвэев, по 20 десяток на каждый, в последний 3 десятки		---	16 фильтров
+десятки побьются по лагами двум комплексам по 4 хайвэя на каждый					
+
+
+
+0653
+5665
+5057
+5190
+5749
+5774
+
+
+
+
+
+
+
+Подобные штуки активно используются пожилыми людьми в странах запада. Постоянно закреплённые на человеке датчики передают значения температуры и пульса по GPRS на пульт скорой.
+Тут, как я понял, передачи данных наружу не будет - только на локальный пульт дома.
+
+
+
+
+curl -sk -u zabbix:1q2w3e4r5t -X GET "https://jira-clone.dev.cems/rest/api/2/search?jql=project=Networks+and+created>=2021-08-27+and+created<=2021-09-27&maxResults=1" | jq
+
+
+curl -sk -u zabbix:1q2w3e4r5t -X GET "https://172.16.1.251/rest/api/2/search?jql=project=Networks+and+created>=2021-08-27+and+created<=2021-09-27&maxResults=5" | jq
+
+
+ Command returned non-zero exit status 2.
+
+
+printf "Система отчётов NetOps выражает вам своё почтение,\\n\\nи направляет вам 'Отчет по авариям оборудования в ЦОДах' для ознакомления.\\n\\nС уважением,\\nch240" | mailx -a /tmp/Отчет\\ по\\ авариям\\ оборудования\\ в\\ ЦОДах.xlsx -S smtp="192.168.57.3:25" -r report_netops\@dcoa.ru -s "\$(echo -e "Ежемесячная отчётность. Отчёт № 4")" netops\@dcoa.ru`;
+
+
+
+
+curl -sk -u zabbix:1q2w3e4r5t -X GET https://172.16.1.251/rest/api/2/search?jql=project=Networks+and+created>=2021-08-27+and+created<=$2021-09-27&maxResults=1000 | jq
+
+Non-authoritative answer:
+Name:   jira-clone.dev.cems
+Address: 172.16.1.251
+
+pip install --upgrade  subprocess.run
+
+pip install XlsxWriter
+
+
+5933	ПАО «Ростелеком»	г. Оренбург	ул. Терешковой, д. 10
+
+
+v.patrukhachev@asbi.grfc.ru
+Viktor123!@#
+
+
+83VtlDcfGyeCj,
+83VtlDcfGyeCj,
+медный всадник пнул поребрик
+
+83МедВсаПнуСоб
+
+
+1663
+
+10
+
+
+Object id > 15024
+
+Сложные:
+6033
+6006
+
+Нет готовности:
+5750
+5749
+
+
+
+
+
+
+delete from RackObject where Name LIKE '%4785%';
+delete from Object where Name LIKE '%4785%';
+
+
+
+
+Прямая коммутация байпасов к фильтру. Без балансировщиков.
+porta: 157368
+porta: 157369
+porta: 157370
+porta: 157371
+porta: 157372
+porta: 157373
+porta: 157374
+porta: 157375
+porta: 157368, portb: 157388
+Error: Column 'porta' cannot be null
+
+https://lurkmore.to/Гнездо_параноика
+5552 - сгенерил ( + руками + КЖ_не_правился)
+
+
+
+
+
+
+Разбивка комплексов (в тупую) 
+8*100 – 3 баланса – 11 фильтров
+80*10 – 4 баланса – 11 фильтров
+48*10 – 3 баланса – 7 фильтров
+
+Можно для 10Г сделать (предложение Таскаева), но получится + 1 балансер
+64*10 – 4 баланса – 9 фильтров
+64*10 – 4 баланса – 9 фильтров
+8*100 – 3 баланса – 11 фильтров
+
+
+
+
+
+
+
+К1: 7*100G ( 3 + 2 + 2) 	3Х + 10Ф (по 3 гидры)
+К2: 68*10G ( 20+20+20+8)	4Х + 9Ф (по 4 гидры)
+К3: 60*10G (20+20+20)	3Х + 8Ф (по 3 гидры)
+
+
+
+
+
+1153
+
+7*100G + 128*10G
+10Х + 27Ф
+
+К1: 7*100G	3Х + 9Ф (по 3 гидры)
+К2: 80*10G	4Х + 12Ф (по 4 гидры)
+К3: 80*48G	3Х + 6Ф (по 4 гидры)
+
+
+
+
+6035	ПАО «МегаФон»	г. Санкт-Петербург	ул. Летчика Пилютова д. 11
+
+- сгенерил (+руками+доделать_КЖ)
+
+сгенерил ( + руками + КЖ_не_правился)
+
+21272ск
+
+Error: Column 'porta' cannot be null
+
+Error: Cannot add or update a child row: a foreign key constraint fails (`racktables_db`.`Port`, CONSTRAINT `Port-FK-iif-oif` FOREIGN KEY (`iif_id`, `type`) REFERENCES `PortInterfaceCompat` (`iif_id`, `oif_id`))
+
+
+noMoreTwoLinksInGydra
+
+SELECT name from Object where objtype_id = '1562';
+SELECT COUNT(*) from Object where NAME = 'ПАО «МегаФон»';
+SELECT id from Object where objtype_id = '1562' AND name = 'ПАО «МегаФон»';
+
+SELECT COUNT(*) FROM [Users] WHERE [Name]=@Name AND [Surname]=@Surname AND [GROUP]=@GROUP
+
+SELECT COUNT(*) from Object where name = 'ПАО «МегаФон»';
+
+
+
+
+delete from RackObject where Name LIKE '901 %';
+delete from Object where Name LIKE '901 %';
+
+
+select id from Object ORDER BY id DESC LIMIT 1
+
+
+Terragrunt, TerraTest и tfswitch
+
+2503
+2829
+2575
+3516
+3994
+3992
+4039
+4038
+4029
+4810
+4847
+4035
+5776
+5226
+5155
+5154
+5774
+5149
+5153
+5876
+4785
+5771
+
+
+7752610820002161
