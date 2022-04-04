@@ -32,24 +32,34 @@
 
 
 @code {
-        [Parameter]
-        public int ID { get; set; }
+    [Parameter]
+    public int ID { get; set; }
 
-        InitialDetailTableData ChosenDetailTable = new InitialDetailTableData ();
-        List<FileData> DcFileList = new List<FileData>();
-        protected override async Task OnInitializedAsync()
+    InitialDetailTableData ChosenDetailTable = new InitialDetailTableData ();
+    List<FileData> DcFileList = new List<FileData>();
+    FileData UpdatedFile = new FileData();
+
+    protected override async Task OnInitializedAsync()
+    {
+        DcFileList = await Task.Run(() => objDataService.ListFilesOfSpecificCategory());
+        ChosenDetailTable = await Task.Run(() => objDataService.GetDetailTableDataInfoById(Convert.ToInt32(ID)));
+    }
+
+
+    //public int DcId { get => _DcId;  set { _DcId = value; DcRoomPartialList = objDataService.ListRoomsOnSpecificDataCenter(value); } }
+
+
+    void FormSubmitted(EditContext editContext)
+    {
+        bool formIsValid = editContext.Validate();
+        if (formIsValid)
         {
-            DcFileList = await Task.Run(() => objDataService.ListFilesOfSpecificCategory());
-            ChosenDetailTable = await Task.Run(() => objDataService.GetDetailTableDataInfoById(Convert.ToInt32(ID)));
+            objDataService.UpdateDetailTableInfo(ChosenDetailTable);
+            //if (ChosenDetailTable.FileId != null)
+            //UpdatedFile = objDataService.GetFileDataInfoById(ChosenDetailTable.FileId);
+            //UpdatedFile.
         }
-
-
-
-        void FormSubmitted(EditContext editContext)
-        {
-            bool formIsValid = editContext.Validate();
-            if (formIsValid) objDataService.UpdateDetailTableInfo(ChosenDetailTable);
-        }
+    }
         
 
         //1. Для записи файла установить в true переменную IsApplied...
@@ -57,5 +67,7 @@
         //3. Добавить публикацию имени/пути файла.
 
         //FileInfoAppendedToDetailTable
+
+        //UpdateEntityModelInfo
 
     }

@@ -252,8 +252,9 @@ using TspuWebPortal.Model;
     public FileData GetFileDataInfoById(int ID)
     {
 
-        FileData? FileDataInfo = _db.FileData?.FirstOrDefault(s => s.FileId == ID);
+        return _db.FileData.FirstOrDefault(s => s.FileId == ID);
 
+        /*
         if (FileDataInfo == null)
         {
             FileData FileDataDefaultInfo = new FileData();
@@ -266,7 +267,7 @@ using TspuWebPortal.Model;
         }
 
         else return FileDataInfo;
-
+        */
     }
 
     public List<FileData> ListFilesOfSpecificCategory()
@@ -277,7 +278,7 @@ using TspuWebPortal.Model;
     }
 
 
-    public void FileInfoAppendedToDetailTable(FileData objFileModel)
+    public void UpdateEntityModelInfo(FileData objFileModel)
     {
         objFileModel.IsAppliedToTable = true;
         _db.SaveChanges();

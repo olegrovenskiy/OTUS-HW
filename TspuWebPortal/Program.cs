@@ -15,7 +15,7 @@ builder.Services.AddServerSideBlazor();
 //builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<SiteDataService>();
 builder.Services.AddDbContextFactory<TspuDbContext>(options => options.UseNpgsql("Server=192.168.105.250;Port=5432;Database=TspuSitesDb;Username=viktor;Password=postgres"));
-builder.Services.AddDbContextFactory<DcDbContext>(options => options.UseNpgsql("Server=192.168.105.13;Port=5432;Database=asbi_inventory;Username=asbi_inventory;Password=57UhzNfhDsvGsk"));
+//builder.Services.AddDbContextFactory<DcDbContext>(options => options.UseNpgsql("Server=192.168.105.13;Port=5432;Database=asbi_inventory;Username=asbi_inventory;Password=57UhzNfhDsvGsk"));
 
 var app = builder.Build();
 
