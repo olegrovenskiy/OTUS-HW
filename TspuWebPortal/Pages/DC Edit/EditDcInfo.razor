@@ -1,6 +1,7 @@
 ﻿
 @page "/site_navigation/{ID:int}"
 @inject SiteDataService objDataService
+@inject DcSiteService objDcService
 @using TspuWebPortal.Model
 @using TspuWebPortal.ORM
 @using TspuWebPortal.Shared
@@ -35,12 +36,12 @@
         DcData ChosenDc = new DcData ();
         protected override async Task OnInitializedAsync()
         {
-            ChosenDc = await Task.Run(() => objDataService.GetDcInfoById(Convert.ToInt32(ID)));
+            ChosenDc = await Task.Run(() => objDcService.GetDcInfoById(Convert.ToInt32(ID)));
         }
 
         void FormSubmitted(EditContext editContext)
         {
             bool formIsValid = editContext.Validate();
-            if (formIsValid) objDataService.UpdateDcInfo(ChosenDc);
+            if (formIsValid) objDcService.UpdateDcInfo(ChosenDc);
         }        
     }

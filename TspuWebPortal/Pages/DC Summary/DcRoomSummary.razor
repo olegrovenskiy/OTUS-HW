@@ -1,6 +1,8 @@
 ﻿@page "/room_navigation"
 @using TspuWebPortal.Model
 @inject SiteDataService objDataService
+@inject DcSiteService objSiteService
+@inject DcRoomService objRoomService
 
 <h3>Добавление и Редактирование Помещений</h3>
 
@@ -51,8 +53,8 @@ else
     bool IsDisplayListDownloaded = false;
     protected override async Task OnInitializedAsync()
     {
-        DcSiteList = await Task.Run(() => objDataService.ListAllDcSites());
-        DcRoomList = await Task.Run(() => objDataService.ListAllDcRooms());
+        DcSiteList = await Task.Run(() => objSiteService.ListAllDcSites());
+        DcRoomList = await Task.Run(() => objRoomService.ListAllDcRooms());
         IsDisplayListDownloaded = true;
     } 
     
@@ -60,8 +62,8 @@ else
     {
         //objDataService.CreateRoom (new RoomData {RoomName = "не назначен", RoomCoordinates = "не назначен", DataCenterId = 0});
         //objDataService.CreateRoom (new RoomData {RoomName = "не назначен", DataCenterId = 0});
-        objDataService.CreateRoom (new RoomData ());
-        DcRoomList = await Task.Run(() => objDataService.ListAllDcRooms());
+        objRoomService.CreateRoom (new RoomData ());
+        DcRoomList = await Task.Run(() => objRoomService.ListAllDcRooms());
     }
 
 }

@@ -1,6 +1,9 @@
 ﻿
 @page "/row_navigation/{ID:int}"
 @inject SiteDataService objDataService
+@inject DcSiteService objSiteService
+@inject DcRoomService objRoomService
+@inject DcRowService objRowService
 @using TspuWebPortal.Model
 @using TspuWebPortal.ORM
 @using TspuWebPortal.Shared
@@ -55,7 +58,7 @@
     List<RoomData> DcRoomPartialList = new List<RoomData>();
 
     private int _DcId;
-    public int DcId { get => _DcId;  set { _DcId = value; DcRoomPartialList = objDataService.ListRoomsOnSpecificDataCenter(value); } }
+    public int DcId { get => _DcId;  set { _DcId = value; DcRoomPartialList = objRoomService.ListRoomsOnSpecificDataCenter(value); } }
 
     RowData ChosenRow = new RowData ();
     List<RoomData> DcRoomList = new List<RoomData>();
@@ -66,16 +69,16 @@
 
     protected override async Task OnInitializedAsync()
     {
-        DcSiteList = await Task.Run(() => objDataService.ListAllDcSites());
-        DcRoomList = await Task.Run(() => objDataService.ListAllDcRooms());
-        ChosenRow = await Task.Run(() => objDataService.GetRowInfoById(Convert.ToInt32(ID))); 
+        DcSiteList = await Task.Run(() => objSiteService.ListAllDcSites());
+        DcRoomList = await Task.Run(() => objRoomService.ListAllDcRooms());
+        ChosenRow = await Task.Run(() => objRowService.GetRowInfoById(Convert.ToInt32(ID))); 
     }
 
 
     void FormSubmitted(EditContext editContext)
     {
         bool formIsValid = editContext.Validate();
-        if (formIsValid) objDataService.UpdateRowInfo(ChosenRow);
+        if (formIsValid) objRowService.UpdateRowInfo(ChosenRow);
     }
 
 

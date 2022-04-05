@@ -1,6 +1,7 @@
 ﻿
 @page "/entitymodel_navigation/{ID:int}"
 @inject SiteDataService objDataService
+@inject DcEntityService objEntityService
 @using TspuWebPortal.Model
 @using TspuWebPortal.ORM
 @using TspuWebPortal.Shared
@@ -52,12 +53,12 @@
         protected override async Task OnInitializedAsync()
         {
 //            DcSiteList = await Task.Run(() => objDataService.ListAllDcSites());
-            ChosenEntityModel = await Task.Run(() => objDataService.GetEntityModelInfoById(Convert.ToInt32(ID)));
+            ChosenEntityModel = await Task.Run(() => objEntityService.GetEntityModelInfoById(Convert.ToInt32(ID)));
         }
 
         void FormSubmitted(EditContext editContext)
         {
             bool formIsValid = editContext.Validate();
-            if (formIsValid) objDataService.UpdateEntityModelInfo(ChosenEntityModel);
+            if (formIsValid) objEntityService.UpdateEntityModelInfo(ChosenEntityModel);
         }        
     }

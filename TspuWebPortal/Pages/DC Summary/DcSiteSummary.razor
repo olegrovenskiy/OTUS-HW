@@ -1,7 +1,7 @@
 ﻿@page "/site_navigation"
 @using TspuWebPortal.Model
 @using TspuWebPortal.ORM
-@inject DcSiteService objDataService
+@inject DcSiteService objDcService
 @inject NavigationManager NavigationManager
 
 <h3>Добавление и Редактирование Площадок</h3>
@@ -51,15 +51,15 @@ else
     List<DcData> DcSiteList = new List<DcData>();
     protected override async Task OnInitializedAsync()
     {
-        DcSiteList = await Task.Run(() => objDataService.ListAllDcSites());
+        DcSiteList = await Task.Run(() => objDcService.ListAllDcSites());
         IsDisplayListDownloaded = true;
     }
 
     async Task AddNewDc()
     {
         //objDataService.CreateDc (new DcData {DataCenterAddress = "не назначен", DataCenterName = "не назначен"});
-        objDataService.CreateDc (new DcData ());
-        DcSiteList = await Task.Run(() => objDataService.ListAllDcSites());
+        objDcService.CreateDc (new DcData ());
+        DcSiteList = await Task.Run(() => objDcService.ListAllDcSites());
     }
 
 }

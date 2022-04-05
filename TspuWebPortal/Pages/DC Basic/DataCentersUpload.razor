@@ -2,6 +2,7 @@
 @using System.Threading.Tasks;
 @inject IWebHostEnvironment Environment
 @inject SiteDataService objDataService
+@inject DcFileService objFileService
 @using TspuWebPortal.Model
 @using TspuWebPortal.ORM
 @using TspuWebPortal.Shared
@@ -59,7 +60,7 @@
 
     void AddNewFile()
     {
-        objDataService.CreateFileModel (new FileData {FileName = this.FileName, UploadDate = DateOnly.FromDateTime(DateTime.Now), LastChangeDate = LastModifiedDate, FilePath = this.FilePath, FileCategory = "Детали", IsAppliedToTable = false});
+        objFileService.CreateFileModel (new FileData {FileName = this.FileName, UploadDate = DateOnly.FromDateTime(DateTime.Now), LastChangeDate = LastModifiedDate, FilePath = this.FilePath, FileCategory = "Детали", IsAppliedToTable = false});
         IsFileAddedToTable = true;
         //DateTime test1 = LastModifiedDate.DateTime;
     }

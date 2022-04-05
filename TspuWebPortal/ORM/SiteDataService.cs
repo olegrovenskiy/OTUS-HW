@@ -58,6 +58,8 @@ using TspuWebPortal.Model;
             return;
         }
 
+
+    /*
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    ЦОДы    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         public List<DcData> ListAllDcSites()
@@ -251,23 +253,7 @@ using TspuWebPortal.Model;
 
     public FileData GetFileDataInfoById(int ID)
     {
-
         return _db.FileData.FirstOrDefault(s => s.FileId == ID);
-
-        /*
-        if (FileDataInfo == null)
-        {
-            FileData FileDataDefaultInfo = new FileData();
-            FileDataDefaultInfo.FileId = ID;
-            FileDataDefaultInfo.FileName = "no files";
-//            FileDataDefaultInfo.UploadDate = null;
-//            FileDataDefaultInfo.LastChangeDate = ;
-            FileDataDefaultInfo.FilePath = "";
-            return FileDataDefaultInfo;
-        }
-
-        else return FileDataInfo;
-        */
     }
 
     public List<FileData> ListFilesOfSpecificCategory()
@@ -324,5 +310,5 @@ using TspuWebPortal.Model;
         _db.SaveChanges();
         return;
     }
-
+    */
 }

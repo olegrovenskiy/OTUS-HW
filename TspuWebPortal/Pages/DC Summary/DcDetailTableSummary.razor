@@ -1,6 +1,8 @@
 ﻿@page "/detailtable_navigation"
 @using TspuWebPortal.Model
 @inject SiteDataService objDataService
+@inject DcFileService objFileService
+@inject DcInitialDetailTableService objDetailTableService
 
 <h3>Добавление и Редактирование Загруженных Таблиц Деталей</h3>
 
@@ -47,15 +49,15 @@ else
     bool IsDisplayListDownloaded = false;
     protected override async Task OnInitializedAsync()
     {
-        DcFileDataList = await Task.Run(() => objDataService.ListAllDcFileData());
-        DcDetailTableModelList = await Task.Run(() => objDataService.ListAllDetailTableData());
+        DcFileDataList = await Task.Run(() => objFileService.ListAllDcFileData());
+        DcDetailTableModelList = await Task.Run(() => objDetailTableService.ListAllDetailTableData());
         IsDisplayListDownloaded = true;
     } 
     
     async Task AddNewDetailTableModel()
     {
-        objDataService.CreateDetailTableModel (new InitialDetailTableData ());
-        DcDetailTableModelList = await Task.Run(() => objDataService.ListAllDetailTableData());
+        objDetailTableService.CreateDetailTableModel (new InitialDetailTableData ());
+        DcDetailTableModelList = await Task.Run(() => objDetailTableService.ListAllDetailTableData());
     }
 
 }

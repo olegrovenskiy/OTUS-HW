@@ -1,6 +1,7 @@
 ﻿@page "/entitymodel_navigation"
 @using TspuWebPortal.Model
 @inject SiteDataService objDataService
+@inject DcEntityService objEntityService
 
 <h3>Добавление и Редактирование Сущностей</h3>
 
@@ -52,7 +53,7 @@ else
     bool IsDisplayListDownloaded = false;
     protected override async Task OnInitializedAsync()
     {
-        DcEntityModelList = await Task.Run(() => objDataService.ListAllDcEntityModels());
+        DcEntityModelList = await Task.Run(() => objEntityService.ListAllDcEntityModels());
         IsDisplayListDownloaded = true;
     } 
     
@@ -60,8 +61,8 @@ else
     {
         //objDataService.CreateRoom (new RoomData {RoomName = "не назначен", RoomCoordinates = "не назначен", DataCenterId = 0});
         //objDataService.CreateRoom (new RoomData {RoomName = "не назначен", DataCenterId = 0});
-        objDataService.CreateEntityModel (new EntityModelData ());
-        DcEntityModelList = await Task.Run(() => objDataService.ListAllDcEntityModels());
+        objEntityService.CreateEntityModel (new EntityModelData ());
+        DcEntityModelList = await Task.Run(() => objEntityService.ListAllDcEntityModels());
     }
 
 }

@@ -1,6 +1,8 @@
 ﻿
 @page "/room_navigation/{ID:int}"
 @inject SiteDataService objDataService
+@inject DcSiteService objSiteService
+@inject DcRoomService objRoomService
 @using TspuWebPortal.Model
 @using TspuWebPortal.ORM
 @using TspuWebPortal.Shared
@@ -45,8 +47,8 @@
         List<DcData> DcSiteList = new List<DcData>();
         protected override async Task OnInitializedAsync()
         {
-            DcSiteList = await Task.Run(() => objDataService.ListAllDcSites());
-            ChosenRoom = await Task.Run(() => objDataService.GetRoomInfoById(Convert.ToInt32(ID)));
+            DcSiteList = await Task.Run(() => objSiteService.ListAllDcSites());
+            ChosenRoom = await Task.Run(() => objRoomService.GetRoomInfoById(Convert.ToInt32(ID)));
         }
 
 
@@ -54,6 +56,6 @@
         void FormSubmitted(EditContext editContext)
         {
             bool formIsValid = editContext.Validate();
-            if (formIsValid) objDataService.UpdateRoomInfo(ChosenRoom);
+            if (formIsValid) objRoomService.UpdateRoomInfo(ChosenRoom);
         }        
     }

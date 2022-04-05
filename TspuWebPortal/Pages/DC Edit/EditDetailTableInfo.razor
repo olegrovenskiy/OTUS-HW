@@ -1,5 +1,7 @@
 ﻿@page "/detailtable_navigation/{ID:int}"
 @inject SiteDataService objDataService
+@inject DcFileService objFileService
+@inject DcInitialDetailTableService objDetailTableService
 @using TspuWebPortal.Model
 @using TspuWebPortal.ORM
 @using TspuWebPortal.Shared
@@ -41,8 +43,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        DcFileList = await Task.Run(() => objDataService.ListFilesOfSpecificCategory());
-        ChosenDetailTable = await Task.Run(() => objDataService.GetDetailTableDataInfoById(Convert.ToInt32(ID)));
+        DcFileList = await Task.Run(() => objFileService.ListFilesOfSpecificCategory());
+        ChosenDetailTable = await Task.Run(() => objDetailTableService.GetDetailTableDataInfoById(Convert.ToInt32(ID)));
     }
 
 
@@ -54,7 +56,7 @@
         bool formIsValid = editContext.Validate();
         if (formIsValid)
         {
-            objDataService.UpdateDetailTableInfo(ChosenDetailTable);
+            objDetailTableService.UpdateDetailTableInfo(ChosenDetailTable);
             //if (ChosenDetailTable.FileId != null)
             //UpdatedFile = objDataService.GetFileDataInfoById(ChosenDetailTable.FileId);
             //UpdatedFile.

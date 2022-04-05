@@ -1,6 +1,7 @@
 ﻿@page "/filedata_navigation"
 @using TspuWebPortal.Model
 @inject SiteDataService objDataService
+@inject DcFileService objFileService
 
 <h3>Информация о загруженных файлах</h3>
 
@@ -48,7 +49,7 @@ else
     bool IsDisplayListDownloaded = false;
     protected override async Task OnInitializedAsync()
     {
-        DcFileDataList = await Task.Run(() => objDataService.ListAllDcFileData());
+        DcFileDataList = await Task.Run(() => objFileService.ListAllDcFileData());
         IsDisplayListDownloaded = true;
     } 
     

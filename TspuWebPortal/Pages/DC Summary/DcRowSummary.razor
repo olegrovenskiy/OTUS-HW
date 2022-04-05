@@ -1,6 +1,9 @@
 ﻿@page "/row_navigation"
 @using TspuWebPortal.Model
 @inject SiteDataService objDataService
+@inject DcSiteService objSiteService
+@inject DcRoomService objRoomService
+@inject DcRowService objRowService
 
 <h3>Добавление и Редактирование Рядов</h3>
 
@@ -52,17 +55,17 @@ else
     bool IsDisplayListDownloaded = false;
     protected override async Task OnInitializedAsync()
     {
-        DcSiteList = await Task.Run(() => objDataService.ListAllDcSites());
-        DcRoomList = await Task.Run(() => objDataService.ListAllDcRooms());
-        DcRowList = await Task.Run(() => objDataService.ListAllDcRows());
+        DcSiteList = await Task.Run(() => objSiteService.ListAllDcSites());
+        DcRoomList = await Task.Run(() => objRoomService.ListAllDcRooms());
+        DcRowList = await Task.Run(() => objRowService.ListAllDcRows());
         IsDisplayListDownloaded = true;
     } 
     
     async Task AddNewRow()
     {
         //objDataService.CreateRoom (new RoomData {RoomName = "не назначен", RoomCoordinates = "не назначен", DataCenterId = 0});
-        objDataService.CreateRow (new RowData ());
-        DcRowList = await Task.Run(() => objDataService.ListAllDcRows());
+        objRowService.CreateRow (new RowData ());
+        DcRowList = await Task.Run(() => objRowService.ListAllDcRows());
     }
 
 }
