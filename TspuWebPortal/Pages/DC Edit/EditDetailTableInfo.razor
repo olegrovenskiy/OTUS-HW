@@ -15,8 +15,10 @@
   <div class="row">
     <div class = "col-4">
         <label for="RoomCoordinates">Название файла</label>
-        <InputSelect id="DataCenter" @bind-Value="ChosenDetailTable.FileId" class="form-control">
-            <option value=null>Надо выбрать</option>                                                                 
+        <InputSelect id="DataCenter" @bind-Value="FileId" class="form-control">
+            <option value=null>Надо выбрать</option>
+
+            @if (ChosenDetailTable.TableFile != null) {<option value="@ChosenDetailTable.FileId">@ChosenDetailTable.TableFile?.FileName</option>}
             @foreach (var item in DcFileList)                                   //здесь надо добавить проверку, что не выбрана подсказка
             {
                 <option value="@item.FileId">@item.FileName</option>
@@ -41,6 +43,13 @@
     List<FileData> DcFileList = new List<FileData>();
     FileData UpdatedFile = new FileData();
 
+    bool? TestBool = false;
+
+    private int _FileId;
+    public int FileId { get => _FileId;
+        set { _FileId = value; UpdatedFile = objFileService.GetFileDataInfoById(value); ChosenDetailTable.FileId = value; UpdatedFile.IsAppliedToTable = true; objFileService.UpdateFileInfo(UpdatedFile); } }
+    
+
     protected override async Task OnInitializedAsync()
     {
         DcFileList = await Task.Run(() => objFileService.ListFilesOfSpecificCategory());
@@ -57,12 +66,13 @@
         if (formIsValid)
         {
             objDetailTableService.UpdateDetailTableInfo(ChosenDetailTable);
-            //if (ChosenDetailTable.FileId != null)
-            //UpdatedFile = objDataService.GetFileDataInfoById(ChosenDetailTable.FileId);
-            //UpdatedFile.
+
+
+            //UpdatedFile = objFileService.GetFileDataInfoById(ChosenDetailTable.FileId);
+
         }
     }
-        
+        // <option value="@ChosenDetailTable.FileId">@ChosenDetailTable.TableFile?.FileName</option>
 
         //1. Для записи файла установить в true переменную IsApplied...
         //2. Для записи таблицы вместе с добавлением переменной файла добавить дату регистрации.

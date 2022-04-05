@@ -13,9 +13,9 @@
 else
 {
     <p>
-    <label>
-        <button class="btn btn-primary" @onclick="AddNewDetailTableModel">Добавить таблицу</button>
-    </label>
+        <label>
+            <button class="btn btn-primary" @onclick="AddNewDetailTableModel">Добавить таблицу</button>
+        </label>
     </p>
 
     <table class="table">
@@ -29,17 +29,17 @@ else
         </thead>
         <tbody>
             @foreach (InitialDetailTableData CurrentDetailTableModel in DcDetailTableModelList)
-            { 
-                    <tr>
+            {
+                <tr>
                     <td>@CurrentDetailTableModel.InitialDetailTableId</td>
                     <td>@CurrentDetailTableModel.TableFile?.FilePath</td>
                     <td>@CurrentDetailTableModel.RegisterDate</td>
                     <td><a href=@($"/detailtable_navigation/{CurrentDetailTableModel?.InitialDetailTableId}")>Редактировать</a></td>
-                    </tr>
+                </tr>
             }
-               
+
         </tbody>
-    </table>    
+    </table>
 }
 
 @code 
@@ -47,6 +47,9 @@ else
     List<InitialDetailTableData> DcDetailTableModelList = new List<InitialDetailTableData>();
     List<FileData> DcFileDataList = new List<FileData>();
     bool IsDisplayListDownloaded = false;
+
+
+
     protected override async Task OnInitializedAsync()
     {
         DcFileDataList = await Task.Run(() => objFileService.ListAllDcFileData());

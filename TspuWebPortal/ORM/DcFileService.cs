@@ -30,23 +30,7 @@ public class DcFileService
 
     public FileData GetFileDataInfoById(int ID)
     {
-
-        return _db.FileData.FirstOrDefault(s => s.FileId == ID);
-
-        /*
-        if (FileDataInfo == null)
-        {
-            FileData FileDataDefaultInfo = new FileData();
-            FileDataDefaultInfo.FileId = ID;
-            FileDataDefaultInfo.FileName = "no files";
-//            FileDataDefaultInfo.UploadDate = null;
-//            FileDataDefaultInfo.LastChangeDate = ;
-            FileDataDefaultInfo.FilePath = "";
-            return FileDataDefaultInfo;
-        }
-
-        else return FileDataInfo;
-        */
+        return _db.FileData.First(s => s.FileId == ID);
     }
 
     public List<FileData> ListFilesOfSpecificCategory()
@@ -57,7 +41,7 @@ public class DcFileService
     }
 
 
-    public void UpdateEntityModelInfo(FileData objFileModel)
+    public void UpdateFileInfo(FileData objFileModel)
     {
         objFileModel.IsAppliedToTable = true;
         _db.SaveChanges();
