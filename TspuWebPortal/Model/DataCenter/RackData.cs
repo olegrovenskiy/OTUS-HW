@@ -16,7 +16,7 @@ namespace TspuWebPortal.Model
         public int InstallationYear { get; set; }
         public string RackType { get; set; } = string.Empty;            //Изменить тип на enum (ИБ/серверная/другая)
         public int RowId { get; set; }
-        public RowData? Room { get; set; }
+        public RowData? Row { get; set; }
         public List<UnitData>? Rows { get; set; }
     }
 }

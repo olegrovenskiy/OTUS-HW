@@ -17,6 +17,7 @@ builder.Services.AddScoped<SiteDataService>();
 builder.Services.AddScoped<DcSiteService>();
 builder.Services.AddScoped<DcRoomService>();
 builder.Services.AddScoped<DcRowService>();
+builder.Services.AddScoped<DcRackService>();
 builder.Services.AddScoped<DcEntityService>();
 builder.Services.AddScoped<DcFileService>();
 builder.Services.AddScoped<DcInitialDetailTableService>();

@@ -1,0 +1,152 @@
+﻿
+@page "/rack_navigation/{ID:int}"
+@inject SiteDataService objDataService
+@inject DcSiteService objSiteService
+@inject DcRoomService objRoomService
+@inject DcRowService objRowService
+@inject DcRackService objRackService
+@using TspuWebPortal.Model
+@using TspuWebPortal.ORM
+@using TspuWebPortal.Shared
+@inherits OwningComponentBase<SiteDataService>
+
+<h3>Ряд @ChosenRack.RackId. Редактирование данных стойки.</h3>
+
+
+
+<EditForm Model=@ChosenRack OnSubmit=@FormSubmitted>
+  <div class="rack">
+    <div class = "col-2">
+        <label for="RackNameAsbi">Название стойки АСБИ</label>
+        <InputText @bind-Value=ChosenRack.RackNameAsbi class="form-control" id="RackNameAsbi"  Size="20" />
+    </div>
+    <div class = "col-2">
+        <label for="RackNameDataCenter">Название стойки ЦОД</label>
+        <InputText @bind-Value=ChosenRack.RackNameDataCenter class="form-control" id="RackNameDataCenter"  Size="20" />
+    </div>
+    <div class = "col-2">
+        <label for="RackHight">Высота стойки</label>
+        <InputNumber @bind-Value=ChosenRack.RackHeight class="form-control" id="RackHight"  Size="20" />
+    </div>
+  
+   
+    <div class = "col-2">
+       <label for="RackServerSlotQuantity">Количество свободных серверомест</label>
+       <InputNumber @bind-Value=ChosenRack.FreeServerSlotsQuantity class="form-control" id="RackServerSlotQuantity"  Size="20" />
+    </div>
+   
+ 
+   
+    <div class = "col-2">
+       <label for="IsInstalled">Установлено</label>
+       <InputCheckbox @bind-Value=ChosenRack.IsInstalled />
+    </div>
+  
+
+    <div class = "col-2">
+       <label for="InstallationYear">Год установки</label>
+       <InputNumber @bind-Value=ChosenRack.InstallationYear class="form-control" id="InstallationYear"  Size="20" />
+     </div>
+     <div class = "col-2">
+       <label for="RackType">Тип (ИБ/серверная/другая)</label>
+       <InputText @bind-Value=ChosenRack.RackType class="form-control" id="RackType"  Size="20" />
+     </div>
+
+     <div class = "col-2">
+       <label for="DatacenterName">ЦОД</label>
+       <InputSelect id="DataCenter" @bind-Value="DcId" class="form-control">
+           <option value=null>Надо выбрать</option>
+           @foreach (var item in DcSiteList)
+           {
+               <option value="@item.DataCenterId">@item.DataCenterName</option>
+           }
+       </InputSelect>
+    </div>    
+
+ 
+
+    <div class = "col-2">
+       <label for="RoomName">Помещение</label>
+       <InputSelect id="Room" @bind-Value="RoomId" class="form-control">
+           <option value=null>Надо выбрать</option>
+           @foreach (var item in DcRoomList)
+           {
+               <option value="@item.RoomId">@item.RoomName</option>
+           }
+       </InputSelect>
+    </div>    
+
+
+    <div class = "col-2">
+       <label for="RowNameAsbi">Имя ряда АСБИ</label>
+       <InputSelect id="Row" @bind-Value="ChosenRack.RowId" class="form-control">
+           <option value=null>Надо выбрать</option>
+           @foreach (var ChosenRow in DcRowList)                                               //здесь надо добавить проверку, что не выбрана подсказка
+           {
+               <option value="@ChosenRow.RowId">@ChosenRow.RowNameAsbi</option>
+           }
+       </InputSelect>
+    </div>  
+
+
+
+   </div>
+  <br>
+<input type="submit" class="btn btn-primary" value="Сохранить"/>
+</EditForm>
+<p></p>
+
+
+
+    
+
+
+@code 
+
+{
+    [Parameter]
+    public int ID { get; set; }
+
+    bool IsRowAssigned = true;
+    List<RowData> DcRowPartialList = new List<RowData>();
+    private int _DcId;
+    //int DcId { get { return _DcId; } set { DcRoomPartialList = objDataService.ListRoomsOnSpecificDataCenter(value); } }
+    public int DcId { get => _DcId;  set { _DcId = value; DcRowPartialList = objRowService.ListRowsOnSpecificRoom(value); } }
+    //ListRoomsOnSpecificDataCenter
+
+    private int _RoomId;
+    //int DcId { get { return _DcId; } set { DcRoomPartialList = objDataService.ListRoomsOnSpecificDataCenter(value); } }
+    public int RoomId { get => _RoomId;  set { _RoomId = value; DcRowPartialList = objRowService.ListRowsOnSpecificRoom(value); } }
+    //ListRoomsOnSpecificDataCenter
+
+
+    // public bool IsInstalled { get; set; }
+
+    
+    RackData ChosenRack = new RackData ();
+    List<RowData> DcRowList = new List<RowData>();
+    List<RoomData> DcRoomList = new List<RoomData>();
+    List<DcData> DcSiteList = new List<DcData>();
+
+    string tempstring = "";
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        DcSiteList = await Task.Run(() => objSiteService.ListAllDcSites());
+        DcRoomList = await Task.Run(() => objRoomService.ListAllDcRooms());
+        DcRowList = await Task.Run(() => objRowService.ListAllDcRows());
+        ChosenRack = await Task.Run(() => objRackService.GetRackInfoById(Convert.ToInt32(ID))); 
+    }
+
+
+    void FormSubmitted(EditContext editContext)
+    {
+        bool formIsValid = editContext.Validate();
+        if (formIsValid) objRackService.UpdateRackInfo(ChosenRack);
+    }
+
+
+ 
+
+}

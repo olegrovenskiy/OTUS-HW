@@ -47,6 +47,13 @@ public class DcRowService
 
     }
 
+    public List<RowData> ListRowsOnSpecificRoom(int ID)
+    {
+        //List<RoomData>? RoomList = _db.Rooms?.ToList();
+        List<RowData>? SelectedRowList = _db.Rows.Where(s => s.RoomId == ID).ToList();
+        return SelectedRowList;
+    }
+
     public void UpdateRowInfo(RowData objDcRow)
     {
         _db.Rows?.Update(objDcRow);

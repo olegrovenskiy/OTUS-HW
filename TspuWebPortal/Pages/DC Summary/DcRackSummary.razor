@@ -1,0 +1,85 @@
+﻿@page "/rack_navigation"
+@using TspuWebPortal.Model
+@inject SiteDataService objDataService
+@inject DcSiteService objSiteService
+@inject DcRoomService objRoomService
+@inject DcRowService objRowService
+@inject DcRackService objRackService
+
+<h3>Добавление и Редактирование Стоек</h3>
+
+
+
+@if (!IsDisplayListDownloaded)
+{
+    <p><em>Список загружается...</em></p>
+}
+else
+{
+    <p>
+    <label>
+        <button class="btn btn-primary" @onclick="AddNewRack">Добавить Стойку</button>
+    </label>
+    </p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID стойки</th>
+                <th>Название стойки АСБИ</th>
+                <th>Название стойки ЦОД</th>
+                
+                <th>Высота стойки</th>
+                <th>Количество свободных серверомест</th>
+                <th>Планируется/установлено</th>
+                <th>Год установки</th>
+                <th>Тип (ИБ/серверная/другая)</th>                             
+                <th>Название ряда</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (RackData CurrentDcRack in DcRackList)
+            { 
+                    <tr>
+                    <td>@CurrentDcRack.RackId</td>
+                    <td>@CurrentDcRack.RackNameAsbi</td>
+                    <td>@CurrentDcRack.RackNameDataCenter</td>                    
+                    <td>@CurrentDcRack.RackHeight </td>
+                    <td>@CurrentDcRack.FreeServerSlotsQuantity</td>
+                    <td>@CurrentDcRack.IsInstalled </td>
+                    <td>@CurrentDcRack.InstallationYear</td>
+                    <td>@CurrentDcRack.RackType</td>
+                    <td>@CurrentDcRack.Row?.RowNameAsbi</td>
+                    <td><a href=@($"/rack_navigation/{CurrentDcRack.RackId}")>Редактировать</a></td>
+                    </tr>
+            }
+               
+        </tbody>
+    </table>    
+}
+
+@code 
+{
+    List<DcData> DcSiteList = new List<DcData>();
+    List<RoomData> DcRoomList = new List<RoomData>();
+    List<RowData> DcRowList = new List<RowData>();
+    List<RackData> DcRackList = new List<RackData>();
+    bool IsDisplayListDownloaded = false;
+    protected override async Task OnInitializedAsync()
+    {
+        DcSiteList = await Task.Run(() => objSiteService.ListAllDcSites());
+        DcRoomList = await Task.Run(() => objRoomService.ListAllDcRooms());
+        DcRowList = await Task.Run(() => objRowService.ListAllDcRows());
+        DcRackList = await Task.Run(() => objRackService.ListAllDcRacks());
+        IsDisplayListDownloaded = true;
+    } 
+    
+    async Task AddNewRack()
+    {
+        //objDataService.CreateRoom (new RoomData {RoomName = "не назначен", RoomCoordinates = "не назначен", DataCenterId = 0});
+        objRackService.CreateRack (new RackData ());
+        DcRackList = await Task.Run(() => objRackService.ListAllDcRacks());
+    }
+
+}
