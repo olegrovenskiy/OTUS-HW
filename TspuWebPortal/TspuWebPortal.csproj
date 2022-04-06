@@ -38,7 +38,6 @@
     <Folder Include="Migrations\" />
     <Folder Include="ORM\DC Service\" />
     <Folder Include="ORM\TSPU Service\" />
-    <Folder Include="Scripts\" />
   </ItemGroup>
 
 </Project>

@@ -60,7 +60,6 @@ else
     async Task AddNewEntityModel()
     {
         //objDataService.CreateRoom (new RoomData {RoomName = "не назначен", RoomCoordinates = "не назначен", DataCenterId = 0});
-        //objDataService.CreateRoom (new RoomData {RoomName = "не назначен", DataCenterId = 0});
         objEntityService.CreateEntityModel (new EntityModelData ());
         DcEntityModelList = await Task.Run(() => objEntityService.ListAllDcEntityModels());
     }
