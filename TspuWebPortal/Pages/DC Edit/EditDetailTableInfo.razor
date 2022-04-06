@@ -5,11 +5,10 @@
 @using TspuWebPortal.Model
 @using TspuWebPortal.ORM
 @using TspuWebPortal.Shared
+@using TspuWebPortal.Scripts
 @inherits OwningComponentBase<SiteDataService>
 
 <h3>Площадка @ChosenDetailTable.InitialDetailTableId. Редактирование таблицы деталей.</h3>
-
-
 
 <EditForm Model=@ChosenDetailTable OnSubmit=@FormSubmitted>
   <div class="row">
@@ -25,13 +24,48 @@
             }
         </InputSelect>
     </div>
-    <div class = "col-4">
-        <a>Дата привязки: @ChosenDetailTable.RegisterDate</a>
-    </div>
   </div>
   <br>
 <input type="submit" class="btn btn-primary" value="Сохранить"/>
 </EditForm>
+<p>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</p>
+<p></p>
+@if (ChosenDetailTable.TableFile != null)
+{
+    <p>Работаем с файлом @ChosenDetailTable.TableFile?.FileName</p>
+    <p>
+        <label>
+            <button class="btn btn-primary" @onclick="StartParseScript">Начать обработку</button>
+        </label>
+    </p>
+}
+
+<p>@ChosenDetailTable?.TableFile?.FilePath</p>
+
+@if (IsFileParsed)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Серийный номер</th>
+                <th>Номер п/п</th>
+                <th>ЦОД</th>
+                <th>Расположение</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (VedomostData CurrentRow in AllVedomostList)
+            { 
+                    <tr>
+                    <td>@CurrentRow.SerialNumber</td>
+                    <td>@CurrentRow.ItemNumber</td>
+                    <td>@CurrentRow.DataCenter</td>
+                    <td>@CurrentRow.Place</td>
+                    </tr>
+            }
+        </tbody>
+    </table>    
+}
 
 
 
@@ -43,12 +77,14 @@
     List<FileData> DcFileList = new List<FileData>();
     FileData UpdatedFile = new FileData();
 
-    bool? TestBool = false;
+    List<VedomostData> AllVedomostList = new List<VedomostData>();
+
+    bool IsFileParsed = false;
 
     private int _FileId;
     public int FileId { get => _FileId;
         set { _FileId = value; UpdatedFile = objFileService.GetFileDataInfoById(value); ChosenDetailTable.FileId = value; UpdatedFile.IsAppliedToTable = true; objFileService.UpdateFileInfo(UpdatedFile); } }
-    
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -56,25 +92,27 @@
         ChosenDetailTable = await Task.Run(() => objDetailTableService.GetDetailTableDataInfoById(Convert.ToInt32(ID)));
     }
 
-
-    //Убрать двойное появление названия файла в списке выборки.
-
-
-    //public int DcId { get => _DcId;  set { _DcId = value; DcRoomPartialList = objDataService.ListRoomsOnSpecificDataCenter(value); } }
-
-
     void FormSubmitted(EditContext editContext)
     {
         bool formIsValid = editContext.Validate();
         if (formIsValid)
         {
             objDetailTableService.UpdateDetailTableInfo(ChosenDetailTable);
-
-
-            //UpdatedFile = objFileService.GetFileDataInfoById(ChosenDetailTable.FileId);
-
         }
     }
+
+    void StartParseScript()
+    {
+        AllVedomostList = ParseVedomost.GetAllRecords(ChosenDetailTable?.TableFile?.FilePath);
+        IsFileParsed = true;
+        return;
+    }
+
+
+
+
+
+        //UpdatedFile = objFileService.GetFileDataInfoById(ChosenDetailTable.FileId);
         // <option value="@ChosenDetailTable.FileId">@ChosenDetailTable.TableFile?.FileName</option>
 
         //1. Для записи файла установить в true переменную IsApplied...
@@ -82,7 +120,8 @@
         //3. Добавить публикацию имени/пути файла.
 
         //FileInfoAppendedToDetailTable
-
         //UpdateEntityModelInfo
+        //Убрать двойное появление названия файла в списке выборки.
+    //public int DcId { get => _DcId;  set { _DcId = value; DcRoomPartialList = objDataService.ListRoomsOnSpecificDataCenter(value); } }
 
     }

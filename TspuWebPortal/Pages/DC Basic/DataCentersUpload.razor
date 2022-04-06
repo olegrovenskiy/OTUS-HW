@@ -7,12 +7,15 @@
 @using TspuWebPortal.ORM
 @using TspuWebPortal.Shared
 
-<h3>Загрузка файла ведомости</h3>
+<h3>Загрузка файла ведомости (только файлы .xlsx)</h3>
 <InputFile OnChange="@UploadExcel" />
+<br>
+<p style = "color:red;">@IncorrectFileTypeMessage</p>
+
 
 @if (IsFileUploaded)
 {
-    <a>Сохранено в @FilePath </a>
+    <p>Сохранено в @FilePath</p>
     <p>
         <label>
             <button class="btn btn-primary" @onclick="AddNewFile">Добавить в базу файлов</button>
@@ -37,6 +40,7 @@
     string ContentType = "";
 
     string FilePath = "";
+    string IncorrectFileTypeMessage = "";
 
     bool IsFileUploaded = false;
     bool IsFileAddedToTable = false;
@@ -49,13 +53,25 @@
         LastModifiedDate = DateOnly.FromDateTime(LoadedFile.LastModified.DateTime);
         FileSize = LoadedFile.Size.ToString();
         ContentType = LoadedFile.ContentType;
-        var trustedFileNameForFileStorage = Path.GetRandomFileName();
-        FilePath = Path.Combine(Environment.ContentRootPath,
-                        Environment.EnvironmentName, "unsafe_uploads",
-                        FileName);
+
+        FilePath = Path.Combine(Environment.ContentRootPath, Environment.EnvironmentName, "unsafe_uploads", FileName);
         await using FileStream fs = new(FilePath, FileMode.Create);
-        IsFileUploaded = true;
+        //IsFileUploaded = true;
         await LoadedFile.OpenReadStream().CopyToAsync(fs);
+
+        if (ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        {
+            IncorrectFileTypeMessage = "";
+            IsFileUploaded = true;
+        }
+        else
+        {
+            IsFileUploaded = false;
+            IsFileAddedToTable = false;
+            IncorrectFileTypeMessage = "Загружен не .xlsx";
+        }
+
+        
     }
 
     void AddNewFile()
@@ -65,4 +81,7 @@
         //DateTime test1 = LastModifiedDate.DateTime;
     }
 
+
+
+    //var trustedFileNameForFileStorage = Path.GetRandomFileName();
 }
