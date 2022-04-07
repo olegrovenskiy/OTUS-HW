@@ -42,20 +42,6 @@ public class ParseVedomost
                 DefinitionType = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 11]).Value),
                 Year = Convert.ToInt32(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 12]).Value),
                 DataCenter = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 13]).Value)
-                /*
-                ItemNumber = ((Excel.Range)xlWorksheet.Cells[intCurrentRow, 2]).Value,
-                Description = ((Excel.Range)xlWorksheet.Cells[intCurrentRow, 3]).Value,
-                Type = ((Excel.Range)xlWorksheet.Cells[intCurrentRow, 4]).Value,
-                FactoryNumber = ((Excel.Range)xlWorksheet.Cells[intCurrentRow, 5]).Value,
-                InventoryNumber = ((Excel.Range)xlWorksheet.Cells[intCurrentRow, 6]).Value,
-                Comments = ((Excel.Range)xlWorksheet.Cells[intCurrentRow, 7]).Value,
-                Rack = ((Excel.Range)xlWorksheet.Cells[intCurrentRow, 8]).Value,
-                Place = ((Excel.Range)xlWorksheet.Cells[intCurrentRow, 9]).Value,
-                Quantity = Convert.ToInt32(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 10]).Value),
-                DefinitionType = ((Excel.Range)xlWorksheet.Cells[intCurrentRow, 11]).Value,
-                Year = Convert.ToInt32(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 12]).Value),
-                DataCenter = ((Excel.Range)xlWorksheet.Cells[intCurrentRow, 13]).Value
-                */
             });
         }
 

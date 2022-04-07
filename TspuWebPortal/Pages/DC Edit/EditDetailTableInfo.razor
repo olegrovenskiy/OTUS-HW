@@ -105,6 +105,7 @@
     {
         AllVedomostList = ParseVedomost.GetAllRecords(ChosenDetailTable?.TableFile?.FilePath);
         IsFileParsed = true;
+        ChosenDetailTable.RegisterDate = DateOnly.FromDateTime(DateTime.Now);
         return;
     }
 
