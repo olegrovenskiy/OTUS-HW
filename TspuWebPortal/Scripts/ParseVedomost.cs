@@ -52,21 +52,5 @@ public class ParseVedomost
     }
 }
 
-/*
-        string SerialNumber { get; set; }
-        string Number { get; set; }
-        string Description { get; set; }
-        string Type { get; set; }
-        string FactoryNumber { get; set; }
-        string InventoryNumber { get; set; }
-        string Comments { get; set; }
-        string Rack { get; set; }
-        string Place { get; set; }
-        int Quantity { get; set; }
-        int DefinitionType { get; set; }
-        int Year { get; set; }
-        string DataCenter { get; set; }
- */
-
 
 

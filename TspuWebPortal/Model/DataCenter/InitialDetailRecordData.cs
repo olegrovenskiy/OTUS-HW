@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static TspuWebPortal.Model.ComponentEnums;
 
 namespace TspuWebPortal.Model
 {
@@ -7,21 +8,21 @@ namespace TspuWebPortal.Model
     {
         [Key]
         public int InitialDetailRecordId { get; set; }
-        public string DetailOrigin { get; set; } = string.Empty;        //enum
-        public int InitialDetailTableId { get; set; }
+        public Submitter? DetailOrigin { get; set; }        //enum
+        public int? InitialDetailTableId { get; set; }
         public InitialDetailTableData? InitialDetailTable { get; set; }
-        public string DocumentNumber { get; set; } = string.Empty;
-        public string ResponsiblePerson { get; set; } = string.Empty;
-        public string SerialNumber { get; set; } = string.Empty;
-        public string DetailOfficialName { get; set; } = string.Empty;
-        public int Quantity { get; set; }
-        public string Location { get; set; } = string.Empty;
-        public DateOnly DeliveryDate { get; set; }
-        public string Category { get; set; } = string.Empty; //string
-        public bool IsSplittable { get; set; }
-        public int OperationId { get; set; }
+        public string? DocumentNumber { get; set; } = string.Empty;
+        public string? ResponsiblePerson { get; set; } = string.Empty;
+        public string? SerialNumber { get; set; } = string.Empty;
+        public string? DetailOfficialName { get; set; } = string.Empty;
+        public int? Quantity { get; set; }
+        public string? Location { get; set; } = string.Empty;
+        public DateOnly? DeliveryDate { get; set; }
+        public string? Category { get; set; } = string.Empty; //string
+        public bool? IsSplittable { get; set; }
+        public int? OperationId { get; set; }
         public OperationData? Operation { get; set; }
-        public bool IsSuccessfullyUploaded { get; set; }
+        public bool? IsSuccessfullyUploaded { get; set; }
         public List<ChassisData>? Chassis { get; set; }
         public List<CardData>? Card { get; set; }
         public List<ModuleData>? Module { get; set; }
