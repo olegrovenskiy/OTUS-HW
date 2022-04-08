@@ -25,7 +25,7 @@ public class ParseVedomost
         Excel.Worksheet xlWorksheet = (Excel.Worksheet)xlWorkbook.Worksheets.get_Item(1);
         Excel.Range xlRange = xlWorksheet.UsedRange;
         List<VedomostData> ListAllRecords = new List<VedomostData>();
-        Console.WriteLine($"Строк: {xlRange.Rows.Count}");
+        //Console.WriteLine($"Строк: {xlRange.Rows.Count}");
         for (int intCurrentRow = 2; intCurrentRow <= xlRange.Rows.Count; intCurrentRow++)
         {
             ListAllRecords.Add(new VedomostData { 

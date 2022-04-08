@@ -7,6 +7,7 @@
 @using TspuWebPortal.Shared
 @using TspuWebPortal.Scripts
 @inherits OwningComponentBase<SiteDataService>
+@using static TspuWebPortal.Model.ComponentEnums
 
 <h3>Площадка @ChosenDetailTable.InitialDetailTableId. Редактирование таблицы деталей.</h3>
 
@@ -43,16 +44,8 @@
 <p>@ChosenDetailTable?.TableFile?.FilePath</p>
 
 
-
-@if (IsFileParsed)
+     @if (IsFileParsed)
 {
-    <p>Успешно считаны данные по @AllVedomostList.Count позициям.</p>
-    <p>Заполняем данные по поставке.</p>
-
-}
-
-   @if (IsFileParsed)
-    {
     <table class="table">
         <thead>
             <tr>
@@ -74,7 +67,28 @@
             }
         </tbody>
     </table>    
-    }
+}
+
+
+@if (IsFileParsed)
+{
+    <p>Успешно считаны данные по @AllVedomostList.Count позициям.</p>
+    <p>Заполняем данные по поставке.</p>
+
+  <EditForm Model=@ChosenDetailTable OnSubmit=@ChooseDataSource>
+  <div class="row">
+    <div class = "col-4">
+        <label for="EntityModelModelName">Модель</label>
+        <InputText @bind-Value=ContractName class="form-control" id="ModelName" />
+    </div>
+  </div>
+  <br>
+<input type="submit" class="btn btn-primary" value="Сохранить"/>
+</EditForm>
+<p>Контракт: @ContractName</p>
+<p>Флаг: @IsDataSourceChosen</p>
+}
+
 
 
 
@@ -87,8 +101,10 @@
     FileData UpdatedFile = new FileData();
     List<VedomostData> AllVedomostList = new List<VedomostData>();
     bool IsFileParsed = false;
-    enum Submitter { Person, Contract }
-
+    bool IsDataSourceChosen = false;
+    //enum Submitter { Person, Contract }
+    string DataSource = "";
+    string ContractName = "";
 
     private int _FileId;
     public int FileId { get => _FileId;
@@ -116,6 +132,12 @@
         ChosenDetailTable.RegisterDate = DateOnly.FromDateTime(DateTime.Now);
         IsFileParsed = true;
         return;
+    }
+
+
+    void ChooseDataSource()
+    {
+        IsDataSourceChosen = true;
     }
 
 
@@ -162,6 +184,63 @@
     </table>    
 }
      * 
+
+     <EditForm Model=@ChosenDetailTable OnSubmit=@FormSubmitted>
+  <div class="row">
+    <div class = "col-4">
+        <label for="RoomCoordinates">Название файла</label>
+        <InputSelect id="DataCenter" @bind-Value="FileId" class="form-control">
+            <option value=null>Надо выбрать</option>
+
+            @if (ChosenDetailTable.TableFile != null) {<option value="@ChosenDetailTable.FileId">@ChosenDetailTable.TableFile?.FileName</option>}
+            @foreach (var item in DcFileList)                                   //здесь надо добавить проверку, что не выбрана подсказка
+            {
+                <option value="@item.FileId">@item.FileName</option>
+            }
+        </InputSelect>
+    </div>
+    <div class = "col-4">
+        <label for="EntityModelModelName">Ответственный/контракт</label>
+        <InputText @bind-Value=ChosenEntityModel.ModelName class="form-control" id="ModelName" />
+    </div>
+  </div>
+  <br>
+<input type="submit" class="btn btn-primary" value="Сохранить"/>
+</EditForm>
+
+
+
+@if (IsFileParsed)
+{
+    <p>Успешно считаны данные по @AllVedomostList.Count позициям.</p>
+    <p>Заполняем данные по поставке.</p>
+
+  <EditForm Model=@ChosenDetailTable OnSubmit=@ChooseDataSource>
+  <div class="row">
+    <div class = "col-4">
+        <label for="RoomCoordinates">Название файла</label>
+        <InputRadioGroup @bind-Value="DataSource">
+        <br>
+        @foreach (var item in (Submitter[])Enum
+            .GetValues(typeof(Submitter)))
+        {
+            <InputRadio Value="@item" />
+            <text>&nbsp;</text>@item<br>
+        }
+        </InputRadioGroup>
+    </div>
+  </div>
+  <br>
+<input type="submit" class="btn btn-primary" value="Сохранить"/>
+</EditForm>
+<p>Источник: @DataSource</p>
+<p>Флаг: @IsDataSourceChosen</p>
+}
+
+
+
+
+
      */
 
 
