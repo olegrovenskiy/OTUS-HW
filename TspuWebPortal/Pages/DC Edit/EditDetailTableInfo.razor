@@ -2,6 +2,9 @@
 @inject SiteDataService objDataService
 @inject DcFileService objFileService
 @inject DcInitialDetailTableService objDetailTableService
+@inject DcInitialDetailRecordService objDetailRecordService
+@inject DcEntityService objEntityService
+@inject DcOperationService objOperationService
 @using TspuWebPortal.Model
 @using TspuWebPortal.ORM
 @using TspuWebPortal.Shared
@@ -53,9 +56,15 @@
     <p>
         <label>
             <button class="btn btn-primary" @onclick="StartCreateInitialRecords">Начать перенос данных в первичную таблицу</button>
-            <p>@StartedCreateInitialRecord</p>
+            @if (StartedCreateInitialRecord)
+            {
+                <p>Записи добавлены в таблицу первичных записей деталей.</p>
+            }
+
         </label>
     </p>
+
+
 }
 
 
@@ -70,11 +79,15 @@
     List<VedomostData> AllVedomostList = new List<VedomostData>();
     //List<EntityModelData> AllEntities = new List<EntityModelData>();
     List<InitialDetailRecordData> SingleRecord = new List<InitialDetailRecordData>();
+    List<string> LogEntityData = new List<string>();
     bool IsFileParsed = false;
     bool IsDataSourceChosen = false;
     bool StartedCreateInitialRecord = false;
     string DataSource = "";
     string ContractName = "";
+    EntityModelData UsedModel;
+    InitialDetailRecordData UsedInitialRecord;
+    OperationData UsedOperation;
 
     private int _FileId;
     public int FileId { get => _FileId;
@@ -108,11 +121,19 @@
     {
         foreach (VedomostData SingleVedomostRecord in AllVedomostList)
         {
-            
+            UsedModel = objEntityService.FindOrCreateEntityModelFromExcel(SingleVedomostRecord);            //добавить логирование операции
+            UsedOperation = new OperationData { OperationType = "Добавление первичной записи", OperationDate = DateOnly.FromDateTime(DateTime.Now)};
+            objOperationService.CreateOperationModel(UsedOperation);
+            UsedInitialRecord = new InitialDetailRecordData {
+                    DetailOrigin = 0, InitialDetailTableId = ChosenDetailTable.InitialDetailTableId,
+                    SerialNumber = SingleVedomostRecord.SerialNumber, DetailOfficialName = SingleVedomostRecord.Description,
+                    Quantity = SingleVedomostRecord.Quantity, Location = SingleVedomostRecord.Place,
+                    Category = UsedModel.ModelType, IsSplittable = false,
+                    EntityModelId = UsedModel.EntityModelId, OperationId = UsedOperation.OperationId
+        };
+            objDetailRecordService.CreateDetailRecordModel (UsedInitialRecord);
+            StartedCreateInitialRecord = true;
         }
-        StartedCreateInitialRecord = true;
-        //CreateDetailRecordModel
-
         return;
     }
 
@@ -129,11 +150,49 @@
         //FileInfoAppendedToDetailTable
         //UpdateEntityModelInfo
         //Убрать двойное появление названия файла в списке выборки.
-    //public int DcId { get => _DcId;  set { _DcId = value; DcRoomPartialList = objDataService.ListRoomsOnSpecificDataCenter(value); } }
+        //public int DcId { get => _DcId;  set { _DcId = value; DcRoomPartialList = objDataService.ListRoomsOnSpecificDataCenter(value); } }
 
 
 
     /*
+     * 
+     *     
+    public void CreateDetailRecordModel(InitialDetailRecordData objDetailRecordModel)
+    {
+        _db.DetailRecord?.Add(objDetailRecordModel);
+        _db.SaveChanges();
+        return;
+    }
+
+
+    public void CreateOperationModel(OperationData objOperation)
+    {
+        _db.Operations?.Add(objOperation);
+        _db.SaveChanges();
+        return;
+    }
+
+
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     *  public EntityModelData FindOrCreateEntityModelFromExcel(VedomostData ExcelObject)
+        {
+            EntityModelData? EntityModelInfo = _db.EntityModel?.FirstOrDefault(s => s.ModelName == ExcelObject.Description);
+            if (EntityModelInfo == null)
+            {
+                EntityModelData NewEntityModel = new EntityModelData { ModelName = ExcelObject.Description, ModelType = "chassis" };
+                return NewEntityModel;
+            }
+            else return EntityModelInfo;
+        }
+
+------------------------------------------------------------------------------------------------------------------------
+
      @if (IsFileParsed)
 {
     <table class="table">
@@ -210,6 +269,14 @@
 </EditForm>
 <p>Источник: @DataSource</p>
 <p>Флаг: @IsDataSourceChosen</p>
+
+                @foreach (VedomostData SingleVedomostRecord in AllVedomostList)
+                {
+                    <p>
+                        @SingleVedomostRecord.ItemNumber @objEntityService.FindOrCreateEntityModelFromExcel(SingleVedomostRecord).ModelName
+                    </p>
+                }
+
 }
 
 

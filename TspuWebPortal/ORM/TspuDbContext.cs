@@ -33,4 +33,5 @@ public class TspuDbContext : DbContext
         public DbSet<ModuleAData>? ModulesA { get; set; }
         public DbSet<ModuleBData>? ModulesB { get; set; }
         public DbSet<FileData>? FileData { get; set; }
+        public DbSet<OperationData>? Operations { get; set; }
 }

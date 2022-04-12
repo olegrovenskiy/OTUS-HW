@@ -18,5 +18,6 @@ namespace TspuWebPortal.Model
         public List<ModuleData>? Modules { get; set; }
         public List<CableData>? Cables { get; set; }
         public List<LicenseData>? Licenses { get; set; }
+        public List<InitialDetailRecordData>? InitialDetailRecords { get; set; }
     }
 }

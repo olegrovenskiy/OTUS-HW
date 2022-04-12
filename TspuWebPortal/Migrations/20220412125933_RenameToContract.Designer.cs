@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TspuWebPortal.ORM;
@@ -11,9 +12,10 @@ using TspuWebPortal.ORM;
 namespace TspuWebPortal.Migrations
 {
     [DbContext(typeof(TspuDbContext))]
-    partial class SiteDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220412125933_RenameToContract")]
+    partial class RenameToContract
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -371,9 +373,6 @@ namespace TspuWebPortal.Migrations
                     b.Property<int?>("DetailOrigin")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("EntityModelId")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("InitialDetailTableId")
                         .HasColumnType("integer");
 
@@ -399,8 +398,6 @@ namespace TspuWebPortal.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("InitialDetailRecordId");
-
-                    b.HasIndex("EntityModelId");
 
                     b.HasIndex("InitialDetailTableId");
 
@@ -709,13 +706,14 @@ namespace TspuWebPortal.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OperationId"));
 
-                    b.Property<int?>("AccountId")
+                    b.Property<int>("AccountId")
                         .HasColumnType("integer");
 
-                    b.Property<DateOnly?>("OperationDate")
+                    b.Property<DateOnly>("OperationDate")
                         .HasColumnType("date");
 
                     b.Property<string>("OperationType")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int?>("UserListAccountId")
@@ -725,7 +723,7 @@ namespace TspuWebPortal.Migrations
 
                     b.HasIndex("UserListAccountId");
 
-                    b.ToTable("Operations");
+                    b.ToTable("OperationData");
                 });
 
             modelBuilder.Entity("TspuWebPortal.Model.RackData", b =>
@@ -1124,10 +1122,6 @@ namespace TspuWebPortal.Migrations
 
             modelBuilder.Entity("TspuWebPortal.Model.InitialDetailRecordData", b =>
                 {
-                    b.HasOne("TspuWebPortal.Model.EntityModelData", "EntityModel")
-                        .WithMany("InitialDetailRecords")
-                        .HasForeignKey("EntityModelId");
-
                     b.HasOne("TspuWebPortal.Model.InitialDetailTableData", "InitialDetailTable")
                         .WithMany("InitialDetailRecords")
                         .HasForeignKey("InitialDetailTableId");
@@ -1135,8 +1129,6 @@ namespace TspuWebPortal.Migrations
                     b.HasOne("TspuWebPortal.Model.OperationData", "Operation")
                         .WithMany("InitialDetailRecord")
                         .HasForeignKey("OperationId");
-
-                    b.Navigation("EntityModel");
 
                     b.Navigation("InitialDetailTable");
 
@@ -1424,8 +1416,6 @@ namespace TspuWebPortal.Migrations
                     b.Navigation("Cards");
 
                     b.Navigation("Chassis");
-
-                    b.Navigation("InitialDetailRecords");
 
                     b.Navigation("Licenses");
 

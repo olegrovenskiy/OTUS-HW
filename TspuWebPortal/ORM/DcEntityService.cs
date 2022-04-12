@@ -63,7 +63,15 @@ public class DcEntityService
         EntityModelData? EntityModelInfo = _db.EntityModel?.FirstOrDefault(s => s.ModelName == ExcelObject.Description);
         if (EntityModelInfo == null)
         {
-            EntityModelData NewEntityModel = new EntityModelData { ModelName = ExcelObject.Description, ModelType = "chassis" };
+            string EntityType;
+            string EntityName = ExcelObject.Description;
+            string ItemNumber = ExcelObject.ItemNumber;
+            if (ItemNumber.IndexOf(".") == -1) EntityType = "Шасси";
+            else if (EntityName.IndexOf("Плата") > -1) EntityType = "Плата";
+            else if (EntityName.IndexOf("Кабель") > -1) EntityType = "Кабель";
+            else EntityType = "Модуль";
+            EntityModelData NewEntityModel = new EntityModelData { ModelName = EntityName, ModelType = EntityType };
+            CreateEntityModel(NewEntityModel);
             return NewEntityModel;
         }
         else return EntityModelInfo;
