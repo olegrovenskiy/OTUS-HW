@@ -56,5 +56,18 @@ public class DcEntityService
         _db.SaveChanges();
         return;
     }
+
+
+    public EntityModelData FindOrCreateEntityModelFromExcel(VedomostData ExcelObject)
+    {
+        EntityModelData? EntityModelInfo = _db.EntityModel?.FirstOrDefault(s => s.ModelName == ExcelObject.Description);
+        if (EntityModelInfo == null)
+        {
+            EntityModelData NewEntityModel = new EntityModelData { ModelName = ExcelObject.Description, ModelType = "chassis" };
+            return NewEntityModel;
+        }
+        else return EntityModelInfo;
+    }
+
 }
 

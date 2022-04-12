@@ -25,6 +25,10 @@
             }
         </InputSelect>
     </div>
+    <div class = "col-4">
+        <label for="ContractName">Номер Договора</label>
+        <InputText @bind-Value=ContractName class="form-control" id="ContractName" />
+    </div>
   </div>
   <br>
 <input type="submit" class="btn btn-primary" value="Сохранить"/>
@@ -41,54 +45,18 @@
     </p>
 }
 
-<p>@ChosenDetailTable?.TableFile?.FilePath</p>
-
-
-     @if (IsFileParsed)
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Серийный номер</th>
-                <th>Номер п/п</th>
-                <th>ЦОД</th>
-                <th>Расположение</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (VedomostData CurrentRow in AllVedomostList)
-            { 
-                    <tr>
-                    <td>@CurrentRow.SerialNumber</td>
-                    <td>@CurrentRow.ItemNumber</td>
-                    <td>@CurrentRow.DataCenter</td>
-                    <td>@CurrentRow.Place</td>
-                    </tr>
-            }
-        </tbody>
-    </table>    
-}
-
 
 @if (IsFileParsed)
 {
     <p>Успешно считаны данные по @AllVedomostList.Count позициям.</p>
-    <p>Заполняем данные по поставке.</p>
-
-  <EditForm Model=@ChosenDetailTable OnSubmit=@ChooseDataSource>
-  <div class="row">
-    <div class = "col-4">
-        <label for="EntityModelModelName">Модель</label>
-        <InputText @bind-Value=ContractName class="form-control" id="ModelName" />
-    </div>
-  </div>
-  <br>
-<input type="submit" class="btn btn-primary" value="Сохранить"/>
-</EditForm>
-<p>Контракт: @ContractName</p>
-<p>Флаг: @IsDataSourceChosen</p>
+    <p>Номер договора: @ContractName.</p>
+    <p>
+        <label>
+            <button class="btn btn-primary" @onclick="StartCreateInitialRecords">Начать перенос данных в первичную таблицу</button>
+            <p>@StartedCreateInitialRecord</p>
+        </label>
+    </p>
 }
-
 
 
 
@@ -100,9 +68,11 @@
     List<FileData> DcFileList = new List<FileData>();
     FileData UpdatedFile = new FileData();
     List<VedomostData> AllVedomostList = new List<VedomostData>();
+    //List<EntityModelData> AllEntities = new List<EntityModelData>();
+    List<InitialDetailRecordData> SingleRecord = new List<InitialDetailRecordData>();
     bool IsFileParsed = false;
     bool IsDataSourceChosen = false;
-    //enum Submitter { Person, Contract }
+    bool StartedCreateInitialRecord = false;
     string DataSource = "";
     string ContractName = "";
 
@@ -134,12 +104,17 @@
         return;
     }
 
-
-    void ChooseDataSource()
+    void StartCreateInitialRecords()
     {
-        IsDataSourceChosen = true;
-    }
+        foreach (VedomostData SingleVedomostRecord in AllVedomostList)
+        {
+            
+        }
+        StartedCreateInitialRecord = true;
+        //CreateDetailRecordModel
 
+        return;
+    }
 
 
 
@@ -246,4 +221,4 @@
 
 
 
-    }
+}
