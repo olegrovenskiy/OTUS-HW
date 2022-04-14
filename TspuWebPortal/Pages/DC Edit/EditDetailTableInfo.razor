@@ -5,6 +5,7 @@
 @inject DcInitialDetailRecordService objDetailRecordService
 @inject DcEntityService objEntityService
 @inject DcOperationService objOperationService
+@inject DcChassisService objChassisService
 @using TspuWebPortal.Model
 @using TspuWebPortal.ORM
 @using TspuWebPortal.Shared
@@ -58,6 +59,7 @@
             <button class="btn btn-primary" @onclick="StartCreateInitialRecords">Начать перенос данных в первичную таблицу</button>
             @if (StartedCreateInitialRecord)
             {
+                <p></p>
                 <p>Записи добавлены в таблицу первичных записей деталей.</p>
             }
 
@@ -85,9 +87,11 @@
     bool StartedCreateInitialRecord = false;
     string DataSource = "";
     string ContractName = "";
-    EntityModelData UsedModel;
-    InitialDetailRecordData UsedInitialRecord;
-    OperationData UsedOperation;
+    EntityModelData? UsedModel;
+    InitialDetailRecordData? UsedInitialRecord;
+    OperationData? UsedOperation;
+    int CurrentChassisId = 0;
+    ChassisData? ChassisObject;
 
     private int _FileId;
     public int FileId { get => _FileId;
@@ -121,19 +125,43 @@
     {
         foreach (VedomostData SingleVedomostRecord in AllVedomostList)
         {
-            UsedModel = objEntityService.FindOrCreateEntityModelFromExcel(SingleVedomostRecord);            //добавить логирование операции
-            UsedOperation = new OperationData { OperationType = "Добавление первичной записи", OperationDate = DateOnly.FromDateTime(DateTime.Now)};
-            objOperationService.CreateOperationModel(UsedOperation);
-            UsedInitialRecord = new InitialDetailRecordData {
-                    DetailOrigin = 0, InitialDetailTableId = ChosenDetailTable.InitialDetailTableId,
-                    SerialNumber = SingleVedomostRecord.SerialNumber, DetailOfficialName = SingleVedomostRecord.Description,
-                    Quantity = SingleVedomostRecord.Quantity, Location = SingleVedomostRecord.Place,
-                    Category = UsedModel.ModelType, IsSplittable = false,
-                    EntityModelId = UsedModel.EntityModelId, OperationId = UsedOperation.OperationId
-        };
-            objDetailRecordService.CreateDetailRecordModel (UsedInitialRecord);
-            StartedCreateInitialRecord = true;
+            if (SingleVedomostRecord.Quantity > 0)
+            {
+                UsedModel = objEntityService.FindOrCreateEntityModelFromExcel(SingleVedomostRecord);            //добавить логирование операции
+                UsedOperation = new OperationData { OperationType = "Добавление первичной записи", OperationDate = DateOnly.FromDateTime(DateTime.Now)};
+                objOperationService.CreateOperationModel(UsedOperation);
+                UsedInitialRecord = new InitialDetailRecordData
+                    {
+                        DetailOrigin = 0,
+                        InitialDetailTableId = ChosenDetailTable.InitialDetailTableId,
+                        SerialNumber = SingleVedomostRecord.SerialNumber,
+                        DetailOfficialName = SingleVedomostRecord.Description,
+                        Quantity = SingleVedomostRecord.Quantity,
+                        Location = SingleVedomostRecord.DataCenter,
+                        Category = UsedModel.ModelType,
+                        IsSplittable = false,
+                        EntityModelId = UsedModel.EntityModelId,
+                        OperationId = UsedOperation.OperationId
+                    };
+                objDetailRecordService.CreateDetailRecordModel (UsedInitialRecord);
+
+                if (UsedInitialRecord.Category == "Шасси")
+                {
+                    //  Добавляем объект в списке шасси.
+                    ChassisObject = new ChassisData
+                    {
+                          SnType = SingleVedomostRecord.DefinitionType, SerialNumber = SingleVedomostRecord.SerialNumber, 
+                          EntityModelId = UsedModel.EntityModelId, CurrentLocation = SingleVedomostRecord.DataCenter,
+                          IsInstalled = true, InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
+                          InventoryNumber = SingleVedomostRecord.InventoryNumber, DeliveryYear = SingleVedomostRecord.Year,
+                          Comments = SingleVedomostRecord.Comments
+                    };
+                    objChassisService.CreateChassisModel(ChassisObject);
+                    CurrentChassisId = ChassisObject.ChassisId;
+                }
+            };
         }
+        StartedCreateInitialRecord = true;
         return;
     }
 
@@ -155,6 +183,41 @@
 
 
     /*
+     * 
+     * 
+     * 
+     * 
+    public class ChassisData
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int ChassisId { get; set; }
+        public string? SnType { get; set; } = string.Empty;
+        public string? ChassisStatus { get; set; } = string.Empty;
+        public string? SerialNumber { get; set; } = string.Empty;
+        public int? EntityModelId { get; set; }
+        public string? Hostname { get; set; } = string.Empty;
+        public string? CurrentLocation { get; set; } = string.Empty;
+        public bool? IsInstalled { get; set; }
+        public int? InitialDetailRecordId { get; set; }
+        public int? DetailChangeId { get; set; }
+        public string? InventoryNumber { get; set; } = string.Empty;
+        public int? DeliveryYear { get; set; }
+        public string? Comments { get; set; } = string.Empty;
+        public string? Location { get; set; } = string.Empty;
+
+        [ForeignKey("EntityModelId")]
+        public EntityModelData? EntityModel { get; set; }
+        public List<UnitData>? Units { get; set; }
+        public List<CardData>? Cards { get; set; }
+        public List<ModuleData>? Modules { get; set; }
+
+        [ForeignKey("DetailChangeId")]
+        public ChangeApplicationData? DetailChange { get; set; }
+
+        [ForeignKey("InitialDetailRecordId")]
+        public InitialDetailRecordData? InitialDetailRecord { get; set; }
+    }
      * 
      *     
     public void CreateDetailRecordModel(InitialDetailRecordData objDetailRecordModel)

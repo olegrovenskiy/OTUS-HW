@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TspuWebPortal.ORM;
@@ -11,9 +12,10 @@ using TspuWebPortal.ORM;
 namespace TspuWebPortal.Migrations
 {
     [DbContext(typeof(TspuDbContext))]
-    partial class SiteDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220414111248_AddAutoKey_1")]
+    partial class AddAutoKey_1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -206,42 +208,50 @@ namespace TspuWebPortal.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ChassisId"));
 
                     b.Property<string>("ChassisStatus")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Comments")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("CurrentLocation")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("DeliveryYear")
+                    b.Property<int>("DeliveryYear")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("DetailChangeId")
+                    b.Property<int>("DetailChangeId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("EntityModelId")
+                    b.Property<int>("EntityModelId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Hostname")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("InitialDetailRecordId")
+                    b.Property<int>("InitialDetailRecordId")
                         .HasColumnType("integer");
 
                     b.Property<string>("InventoryNumber")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool?>("IsInstalled")
+                    b.Property<bool>("IsInstalled")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Location")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("SerialNumber")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("SnType")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("ChassisId");
@@ -1091,15 +1101,21 @@ namespace TspuWebPortal.Migrations
                 {
                     b.HasOne("TspuWebPortal.Model.ChangeApplicationData", "DetailChange")
                         .WithMany("Chassis")
-                        .HasForeignKey("DetailChangeId");
+                        .HasForeignKey("DetailChangeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TspuWebPortal.Model.EntityModelData", "EntityModel")
                         .WithMany("Chassis")
-                        .HasForeignKey("EntityModelId");
+                        .HasForeignKey("EntityModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TspuWebPortal.Model.InitialDetailRecordData", "InitialDetailRecord")
                         .WithMany("Chassis")
-                        .HasForeignKey("InitialDetailRecordId");
+                        .HasForeignKey("InitialDetailRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("DetailChange");
 

@@ -7,6 +7,7 @@ namespace TspuWebPortal.Model
     public class InitialDetailRecordData
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int InitialDetailRecordId { get; set; }
         public Submitter? DetailOrigin { get; set; }        //enum
         public int? InitialDetailTableId { get; set; }
