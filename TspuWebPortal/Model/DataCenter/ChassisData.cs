@@ -20,7 +20,9 @@ namespace TspuWebPortal.Model
         public string? InventoryNumber { get; set; } = string.Empty;
         public int? DeliveryYear { get; set; }
         public string? Comments { get; set; } = string.Empty;
-        public string? Location { get; set; } = string.Empty;
+
+
+        public string? PositionInUpperEntity { get; set; }
 
         [ForeignKey("EntityModelId")]
         public EntityModelData? EntityModel { get; set; }

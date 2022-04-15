@@ -27,7 +27,7 @@
   <ItemGroup>
     <Content Include="Model\TSPU_Classes\SiteData.cs" />
     <Content Include="ORM\SiteDataService.cs" />
-    <Content Include="ORM\TspuDbContext.cs" />
+    <Content Include="ORM\TSPU Service\TspuDbContext.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,7 +49,6 @@
   <ItemGroup>
     <Folder Include="Migrations\" />
     <Folder Include="ORM\DC Service\" />
-    <Folder Include="ORM\TSPU Service\" />
   </ItemGroup>
 
 </Project>

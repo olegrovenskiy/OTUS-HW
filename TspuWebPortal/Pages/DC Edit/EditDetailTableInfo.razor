@@ -6,6 +6,8 @@
 @inject DcEntityService objEntityService
 @inject DcOperationService objOperationService
 @inject DcChassisService objChassisService
+@inject DcCardService objCardService
+@inject DcModuleService objModuleService
 @using TspuWebPortal.Model
 @using TspuWebPortal.ORM
 @using TspuWebPortal.Shared
@@ -60,7 +62,7 @@
             @if (StartedCreateInitialRecord)
             {
                 <p></p>
-                <p>Записи добавлены в таблицу первичных записей деталей.</p>
+                <p>Записи добавлены в соответствующие таблицы.</p>
             }
 
         </label>
@@ -91,8 +93,10 @@
     InitialDetailRecordData? UsedInitialRecord;
     OperationData? UsedOperation;
     int CurrentChassisId = 0;
+    int CurrentCardId = 0;
     ChassisData? ChassisObject;
-
+    CardData? CardObject;
+    ModuleData? ModuleObject;
     private int _FileId;
     public int FileId { get => _FileId;
         set { _FileId = value; UpdatedFile = objFileService.GetFileDataInfoById(value); ChosenDetailTable.FileId = value; UpdatedFile.IsAppliedToTable = true; objFileService.UpdateFileInfo(UpdatedFile); } }
@@ -159,8 +163,37 @@
                     objChassisService.CreateChassisModel(ChassisObject);
                     CurrentChassisId = ChassisObject.ChassisId;
                 }
+                else if (UsedInitialRecord.Category == "Плата")
+                {
+                    //  Добавляем объект в списке плат.
+                    CardObject = new CardData
+                    {
+                          SnType = SingleVedomostRecord.DefinitionType, SerialNumber = SingleVedomostRecord.SerialNumber, 
+                          EntityModelId = UsedModel.EntityModelId, CurrentLocation = SingleVedomostRecord.DataCenter,
+                          IsInstalled = true, InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
+                          InventoryNumber = SingleVedomostRecord.InventoryNumber, DeliveryYear = SingleVedomostRecord.Year,
+                          Comments = SingleVedomostRecord.Comments, ChassisId = CurrentChassisId, PositionInUpperEntity = SingleVedomostRecord.Place
+                    };
+                    objCardService.CreateCardModel(CardObject);
+                    CurrentCardId = CardObject.CardId;
+                }
+                else if (UsedInitialRecord.Category == "Модуль")
+                {
+                    //  Добавляем объект в списке плат.
+                    ModuleObject = new ModuleData
+                    {
+                          SnType = SingleVedomostRecord.DefinitionType, SerialNumber = SingleVedomostRecord.SerialNumber, 
+                          EntityModelId = UsedModel.EntityModelId, CurrentLocation = SingleVedomostRecord.DataCenter,
+                          IsInstalled = true, InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
+                          InventoryNumber = SingleVedomostRecord.InventoryNumber, DeliveryYear = SingleVedomostRecord.Year,
+                          Comments = SingleVedomostRecord.Comments, ChassisId = CurrentChassisId, PositionInUpperEntity = SingleVedomostRecord.Place
+                    };
+                    objModuleService.CreateModuleModel(ModuleObject);
+                    //CurrentCardId = CardObject.CardId;
+                } 
+
             };
-        }
+        };
         StartedCreateInitialRecord = true;
         return;
     }

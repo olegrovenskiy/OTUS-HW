@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TspuWebPortal.ORM;
@@ -11,9 +12,10 @@ using TspuWebPortal.ORM;
 namespace TspuWebPortal.Migrations
 {
     [DbContext(typeof(TspuDbContext))]
-    partial class SiteDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220415123033_CardEdit")]
+    partial class CardEdit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,9 +118,6 @@ namespace TspuWebPortal.Migrations
 
                     b.Property<bool?>("IsInstalled")
                         .HasColumnType("boolean");
-
-                    b.Property<string>("PositionInUpperEntity")
-                        .HasColumnType("text");
 
                     b.Property<string>("SerialNumber")
                         .HasColumnType("text");
@@ -231,7 +230,7 @@ namespace TspuWebPortal.Migrations
                     b.Property<bool?>("IsInstalled")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("PositionInUpperEntity")
+                    b.Property<string>("Location")
                         .HasColumnType("text");
 
                     b.Property<string>("SerialNumber")
@@ -622,52 +621,56 @@ namespace TspuWebPortal.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ModuleId"));
 
-                    b.Property<int?>("CardId")
+                    b.Property<int>("CardId")
                         .HasColumnType("integer");
 
                     b.Property<string>("CardSlotInChassisOrCard")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("ChassisId")
+                    b.Property<int>("ChassisId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Comments")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("CurrentLocation")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("DeliveryYear")
+                    b.Property<int>("DeliveryYear")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("DetailChangeId")
+                    b.Property<int>("DetailChangeId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("EntityModelId")
+                    b.Property<int>("EntityModelId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("InitialDetailRecordId")
+                    b.Property<int>("InitialDetailRecordId")
                         .HasColumnType("integer");
 
                     b.Property<string>("InventoryNumber")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool?>("IsInstalled")
+                    b.Property<bool>("IsInstalled")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("ModuleStatus")
+                    b.Property<string>("Location")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("PositionInUpperEntity")
+                    b.Property<string>("ModuleStatus")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("SerialNumber")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("ServeroMesto")
+                    b.Property<int>("ServeroMesto")
                         .HasColumnType("integer");
 
                     b.Property<string>("SnType")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("ModuleId");
@@ -720,28 +723,31 @@ namespace TspuWebPortal.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RackId"));
 
-                    b.Property<int?>("FreeServerSlotsQuantity")
+                    b.Property<int>("FreeServerSlotsQuantity")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("InstallationYear")
+                    b.Property<int>("InstallationYear")
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsInstalled")
                         .HasColumnType("boolean");
 
-                    b.Property<int?>("RackHeight")
+                    b.Property<int>("RackHeight")
                         .HasColumnType("integer");
 
                     b.Property<string>("RackNameAsbi")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("RackNameDataCenter")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("RackType")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("RowId")
+                    b.Property<int>("RowId")
                         .HasColumnType("integer");
 
                     b.HasKey("RackId");
@@ -1219,23 +1225,33 @@ namespace TspuWebPortal.Migrations
                 {
                     b.HasOne("TspuWebPortal.Model.CardData", "Card")
                         .WithMany("Modules")
-                        .HasForeignKey("CardId");
+                        .HasForeignKey("CardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TspuWebPortal.Model.ChassisData", "Chassis")
                         .WithMany("Modules")
-                        .HasForeignKey("ChassisId");
+                        .HasForeignKey("ChassisId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TspuWebPortal.Model.ChangeApplicationData", "DetailChange")
                         .WithMany("Modules")
-                        .HasForeignKey("DetailChangeId");
+                        .HasForeignKey("DetailChangeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TspuWebPortal.Model.EntityModelData", "EntityModel")
                         .WithMany("Modules")
-                        .HasForeignKey("EntityModelId");
+                        .HasForeignKey("EntityModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TspuWebPortal.Model.InitialDetailRecordData", "InitialDetailRecord")
                         .WithMany("Module")
-                        .HasForeignKey("InitialDetailRecordId");
+                        .HasForeignKey("InitialDetailRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Card");
 
@@ -1261,7 +1277,9 @@ namespace TspuWebPortal.Migrations
                 {
                     b.HasOne("TspuWebPortal.Model.RowData", "Row")
                         .WithMany("Rows")
-                        .HasForeignKey("RowId");
+                        .HasForeignKey("RowId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Row");
                 });
