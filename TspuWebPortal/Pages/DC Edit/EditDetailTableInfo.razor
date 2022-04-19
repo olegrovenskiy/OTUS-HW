@@ -129,7 +129,7 @@
     {
         foreach (VedomostData SingleVedomostRecord in AllVedomostList)
         {
-            if (SingleVedomostRecord.Quantity > 0)
+            if (SingleVedomostRecord.Quantity > 0)                                                              //Как сделать обратное заполнение, если с нулевым количеством не работаем?
             {
                 UsedModel = objEntityService.FindOrCreateEntityModelFromExcel(SingleVedomostRecord);            //добавить логирование операции
                 UsedOperation = new OperationData { OperationType = "Добавление первичной записи", OperationDate = DateOnly.FromDateTime(DateTime.Now)};

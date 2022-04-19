@@ -28,13 +28,12 @@ else
                 <th>ID стойки</th>
                 <th>Название стойки АСБИ</th>
                 <th>Название стойки ЦОД</th>
-                
                 <th>Высота стойки</th>
-                <th>Количество свободных серверомест</th>
+                <th>Свободных серверомест</th>
                 <th>Планируется/установлено</th>
                 <th>Год установки</th>
-                <th>Тип (ИБ/серверная/другая)</th>                             
-                <th>Название ряда</th>
+                <th>Тип </th>                             
+                <th>Ряд</th>
                 <th></th>
             </tr>
         </thead>
@@ -50,11 +49,10 @@ else
                     <td>@CurrentDcRack.IsInstalled </td>
                     <td>@CurrentDcRack.InstallationYear</td>
                     <td>@CurrentDcRack.RackType</td>
-                    <td>@CurrentDcRack.Row?.RowNameAsbi</td>
+                    <td>@CurrentDcRack.Row?.RowNameDataCenter</td>
                     <td><a href=@($"/rack_navigation/{CurrentDcRack.RackId}")>Редактировать</a></td>
                     </tr>
             }
-               
         </tbody>
     </table>    
 }
