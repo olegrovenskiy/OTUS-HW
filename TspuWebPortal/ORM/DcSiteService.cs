@@ -48,6 +48,16 @@ using TspuWebPortal.Model;
 
         }
 
+
+        public DcData GetDcInfoByName(string DcName)
+        {
+            DcData? DcObject = _db.DataCenters?.FirstOrDefault(s => s.DataCenterName == DcName);
+            return DcObject;
+        }
+
+
+
+
         public void UpdateDcInfo(DcData objDcSite)
         {
             _db.DataCenters?.Update(objDcSite);

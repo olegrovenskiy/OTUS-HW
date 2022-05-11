@@ -8,6 +8,9 @@
 @inject DcChassisService objChassisService
 @inject DcCardService objCardService
 @inject DcModuleService objModuleService
+@inject DcSiteService objSiteService
+@inject DcUnitService objUnitService
+@using System.Diagnostics
 @using TspuWebPortal.Model
 @using TspuWebPortal.ORM
 @using TspuWebPortal.Shared
@@ -97,9 +100,25 @@
     ChassisData? ChassisObject;
     CardData? CardObject;
     ModuleData? ModuleObject;
+    DcData? CurrentDc;
+    RowData? CurrentRow;
+    UnitData? UsedUnitObject;
     private int _FileId;
+
+    string TempString = "";
+    string[]? SlotNumbers;
+    int FirstOccupiedSlot = 0;
+    int LastOccupiedSlot = 0;
+    string FirstOccupiedSlotString = "";
+    string LastOccupiedSlotString = "";
+
     public int FileId { get => _FileId;
         set { _FileId = value; UpdatedFile = objFileService.GetFileDataInfoById(value); ChosenDetailTable.FileId = value; UpdatedFile.IsAppliedToTable = true; objFileService.UpdateFileInfo(UpdatedFile); } }
+
+
+
+
+
 
 
     protected override async Task OnInitializedAsync()
@@ -152,16 +171,44 @@
                 if (UsedInitialRecord.Category == "Шасси")
                 {
                     //  Добавляем объект в списке шасси.
-                    ChassisObject = new ChassisData
+                    //Добавляем запись о занятых шасси слотах в таблицу слотов
+                    if (SingleVedomostRecord.Place.IndexOf("юниты ") > -1)
                     {
-                          SnType = SingleVedomostRecord.DefinitionType, SerialNumber = SingleVedomostRecord.SerialNumber, 
-                          EntityModelId = UsedModel.EntityModelId, CurrentLocation = SingleVedomostRecord.DataCenter,
-                          IsInstalled = true, InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
-                          InventoryNumber = SingleVedomostRecord.InventoryNumber, DeliveryYear = SingleVedomostRecord.Year,
-                          Comments = SingleVedomostRecord.Comments
-                    };
+                        TempString = SingleVedomostRecord.Place.Replace("юниты ", "");
+                        SlotNumbers = TempString.Split('-');
+                        FirstOccupiedSlot = Convert.ToInt32(SlotNumbers[0]);
+                        LastOccupiedSlot = Convert.ToInt32(SlotNumbers[1]);
+                    }
+                    else
+                    {
+                        TempString = SingleVedomostRecord.Place.Replace("юнит ", "").Trim();
+                        FirstOccupiedSlot = Convert.ToInt32(TempString);
+                        LastOccupiedSlot = FirstOccupiedSlot;
+                    }
+                    ChassisObject = new ChassisData
+                        {
+                            SnType = SingleVedomostRecord.DefinitionType, SerialNumber = SingleVedomostRecord.SerialNumber,
+                            EntityModelId = UsedModel.EntityModelId, CurrentLocation = SingleVedomostRecord.DataCenter,
+                            IsInstalled = true, InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
+                            InventoryNumber = SingleVedomostRecord.InventoryNumber, DeliveryYear = SingleVedomostRecord.Year,
+                            Comments = "Слоты с " + FirstOccupiedSlot + " по " + LastOccupiedSlot
+                            //Comments = Convert.ToString(objSiteService.GetDcInfoByName(SingleVedomostRecord.DataCenter).DataCenterId)
+                        };
                     objChassisService.CreateChassisModel(ChassisObject);
                     CurrentChassisId = ChassisObject.ChassisId;
+
+                    //Найти объект стойки по вводным: имя цода (из ведомости), имя помещения (постоянное), имя ряда (из формулы поиска ряда по номеру стойки), номер стойки (из ведомости).
+                    CurrentDc = objSiteService.GetDcInfoByName(SingleVedomostRecord.DataCenter);
+                    //public UnitData GetUnitByVedomostData(string DcName, string RoomName, string RowName, string RackId, int UnitId)
+                    for (int CurrentUnitInRack = FirstOccupiedSlot; CurrentUnitInRack <= LastOccupiedSlot; CurrentUnitInRack++)
+                    {
+                        UsedUnitObject = objUnitService.GetUnitByVedomostData
+                            (SingleVedomostRecord.DataCenter, SingleVedomostRecord.RoomName, SingleVedomostRecord.RowName, SingleVedomostRecord.Rack, CurrentUnitInRack);
+                        UsedUnitObject.Chassis = ChassisObject;
+                    }
+                    
+
+
                 }
                 else if (UsedInitialRecord.Category == "Плата")
                 {
@@ -175,6 +222,7 @@
                           Comments = SingleVedomostRecord.Comments, ChassisId = CurrentChassisId, PositionInUpperEntity = SingleVedomostRecord.Place
                     };
                     objCardService.CreateCardModel(CardObject);
+                    Debug.WriteLine("Hello, World");
                     CurrentCardId = CardObject.CardId;
                 }
                 else if (UsedInitialRecord.Category == "Модуль")
@@ -190,8 +238,7 @@
                     };
                     objModuleService.CreateModuleModel(ModuleObject);
                     //CurrentCardId = CardObject.CardId;
-                } 
-
+                }
             };
         };
         StartedCreateInitialRecord = true;

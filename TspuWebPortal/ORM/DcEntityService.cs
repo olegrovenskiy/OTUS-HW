@@ -1,7 +1,7 @@
 ﻿namespace TspuWebPortal.ORM;
 using System.Linq;
 using TspuWebPortal.Model;
-
+using Microsoft.EntityFrameworkCore;
 
 public class DcEntityService
 {

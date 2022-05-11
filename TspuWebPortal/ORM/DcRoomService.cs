@@ -60,5 +60,14 @@ public class DcRoomService
         _db.SaveChanges();
         return;
     }
+
+
+    public RoomData GetRoomInfoByName(string RoomName)
+    {
+        RoomData? RoomObject = _db.Rooms?.FirstOrDefault(s => s.RoomName == RoomName);
+        return RoomObject;
+    }
+
+
 }
 

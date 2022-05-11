@@ -3,6 +3,7 @@ namespace TspuWebPortal.ORM;
 using Microsoft.EntityFrameworkCore;
 using TspuWebPortal.Model;
 
+
 /* */
 public class TspuDbContext : DbContext
     {

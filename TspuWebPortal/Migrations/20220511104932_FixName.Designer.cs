@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TspuWebPortal.ORM;
@@ -11,9 +12,10 @@ using TspuWebPortal.ORM;
 namespace TspuWebPortal.Migrations
 {
     [DbContext(typeof(TspuDbContext))]
-    partial class SiteDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220511104932_FixName")]
+    partial class FixName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1314,7 +1316,7 @@ namespace TspuWebPortal.Migrations
                         .HasForeignKey("ChassisId");
 
                     b.HasOne("TspuWebPortal.Model.RackData", "Rack")
-                        .WithMany("Units")
+                        .WithMany("Rows")
                         .HasForeignKey("RackId");
 
                     b.HasOne("TspuWebPortal.Model.ServerSlotData", "ServerSlot")
@@ -1433,7 +1435,7 @@ namespace TspuWebPortal.Migrations
 
             modelBuilder.Entity("TspuWebPortal.Model.RackData", b =>
                 {
-                    b.Navigation("Units");
+                    b.Navigation("Rows");
                 });
 
             modelBuilder.Entity("TspuWebPortal.Model.RequestCompletionData", b =>

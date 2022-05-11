@@ -15,5 +15,7 @@
         public string DefinitionType { get; set; }
         public int Year { get; set; }
         public string DataCenter { get; set; }
+        public string RoomName { get; set; }
+        public string RowName { get; set; }
     }
 }

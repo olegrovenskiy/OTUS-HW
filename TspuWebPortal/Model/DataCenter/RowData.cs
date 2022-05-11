@@ -12,6 +12,6 @@ namespace TspuWebPortal.Model
         public string? RowNameDataCenter { get; set; } = string.Empty;
         public int? RoomId { get; set; }
         public virtual RoomData? Room { get; set; }
-        public List<RackData>? Rows { get; set; }
+        public List<RackData>? Racks { get; set; }
     }
 }

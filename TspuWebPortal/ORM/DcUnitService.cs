@@ -1,4 +1,6 @@
 ﻿namespace TspuWebPortal.ORM;
+
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using TspuWebPortal.Model;
 
@@ -57,4 +59,39 @@ public class DcUnitService
         return;
     }
 
+
+
+    public UnitData GetUnitByVedomostData(string DcName, string RoomName, string RowName, string RackId, int UnitInRackId)
+    {
+
+
+
+        var SelectedDataCenters = _db.DataCenters
+                    .Include(dc => dc.Rooms)
+                    .ThenInclude(room => room.Rows)
+                    .ThenInclude(row => row.Racks)
+                    .ThenInclude(rack => rack.Units)
+                    .ToList();
+
+
+        DcData SelectedDc = SelectedDataCenters.Single(p => p.DataCenterName == DcName);
+        RoomData SelectedRoom = SelectedDc.Rooms.Single(p => p.RoomName == RoomName);
+        RowData SelectedRow = SelectedRoom.Rows.Single(p => p.RowNameDataCenter == RowName);
+        RackData SelectrdRack = SelectedRow.Racks.Single(p => p.RackNameAsbi == RackId);
+        UnitData SelectedUnit = SelectrdRack.Units.Single(p => (p.UnitInRack == UnitInRackId) && (p.IsFront == true));
+
+        if (SelectedUnit == null) throw new Exception("Данные не найдены");
+        return SelectedUnit;
+    }
+
 }
+
+/*
+ * 
+         public DcData GetDcInfoByName(string DcName)
+        {
+            DcData? DcObject = _db.DataCenters?.FirstOrDefault(s => s.DataCenterName == DcName);
+            return DcObject;
+        }
+ 
+ */

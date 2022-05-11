@@ -41,7 +41,9 @@ public class ParseVedomost
                 Quantity = Convert.ToInt32(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 10]).Value),
                 DefinitionType = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 11]).Value),
                 Year = Convert.ToInt32(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 12]).Value),
-                DataCenter = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 13]).Value)
+                DataCenter = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 13]).Value),
+                RoomName = Convert.ToString(((Excel.Range) xlWorksheet.Cells[intCurrentRow, 14]).Value),
+                RowName = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 15]).Value),
             });
         }
 

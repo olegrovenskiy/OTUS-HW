@@ -20,6 +20,6 @@ namespace TspuWebPortal.Model
 
         [ForeignKey("RowId")]
         public RowData? Row { get; set; }
-        public List<UnitData>? Rows { get; set; }
+        public List<UnitData>? Units { get; set; }
     }
 }
