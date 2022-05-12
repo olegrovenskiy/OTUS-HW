@@ -13,7 +13,7 @@ namespace TspuWebPortal.Model
         public string? Comments { get; set; }
         public string? ModuleStatus { get; set; }
         public string? SerialNumber { get; set; }
-        public string? CardSlotInChassisOrCard { get; set; }
+        public string? ModuleSlotInChassisOrCard { get; set; }
         public string? CurrentLocation { get; set; }
         public int? InitialDetailRecordId { get; set; }
         public int? DetailChangeId { get; set; }
@@ -28,6 +28,7 @@ namespace TspuWebPortal.Model
         public CardData? Card { get; set; }
         public ChangeApplicationData? DetailChange { get; set; }
         public InitialDetailRecordData? InitialDetailRecord { get; set; }
+        public int? HydraEndNumber { get; set; }
 
         public string? PositionInUpperEntity { get; set; }
 

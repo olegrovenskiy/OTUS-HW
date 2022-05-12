@@ -8,6 +8,7 @@
 @inject DcChassisService objChassisService
 @inject DcCardService objCardService
 @inject DcModuleService objModuleService
+@inject DcCableService objCableService
 @inject DcSiteService objSiteService
 @inject DcUnitService objUnitService
 @using System.Diagnostics
@@ -100,10 +101,13 @@
     ChassisData? ChassisObject;
     CardData? CardObject;
     ModuleData? ModuleObject;
+    CableData? CableObject;
     DcData? CurrentDc;
     RowData? CurrentRow;
     UnitData? UsedUnitObject;
     private int _FileId;
+    bool IsOnFront = true;
+    int HydraNumber = 0;
 
     string TempString = "";
     string[]? SlotNumbers;
@@ -148,12 +152,12 @@
     {
         foreach (VedomostData SingleVedomostRecord in AllVedomostList)
         {
-            if (SingleVedomostRecord.Quantity > 0)                                                              //Как сделать обратное заполнение, если с нулевым количеством не работаем?
-            {
-                UsedModel = objEntityService.FindOrCreateEntityModelFromExcel(SingleVedomostRecord);            //добавить логирование операции
-                UsedOperation = new OperationData { OperationType = "Добавление первичной записи", OperationDate = DateOnly.FromDateTime(DateTime.Now)};
-                objOperationService.CreateOperationModel(UsedOperation);
-                UsedInitialRecord = new InitialDetailRecordData
+            //if (SingleVedomostRecord.Quantity > 0)                                                              //Как сделать обратное заполнение, если с нулевым количеством не работаем?
+            //{
+            UsedModel = objEntityService.FindOrCreateEntityModelFromExcel(SingleVedomostRecord);            //добавить логирование операции
+            UsedOperation = new OperationData { OperationType = "Добавление первичной записи", OperationDate = DateOnly.FromDateTime(DateTime.Now)};
+            objOperationService.CreateOperationModel(UsedOperation);
+            UsedInitialRecord = new InitialDetailRecordData
                     {
                         DetailOrigin = 0,
                         InitialDetailTableId = ChosenDetailTable.InitialDetailTableId,
@@ -166,26 +170,34 @@
                         EntityModelId = UsedModel.EntityModelId,
                         OperationId = UsedOperation.OperationId
                     };
-                objDetailRecordService.CreateDetailRecordModel (UsedInitialRecord);
+            objDetailRecordService.CreateDetailRecordModel (UsedInitialRecord);
 
-                if (UsedInitialRecord.Category == "Шасси")
+            if (UsedInitialRecord.Category == "Шасси")
+            {
+                //  Добавляем объект в списке шасси.
+                //Добавляем запись о занятых шасси слотах в таблицу слотов
+                if (SingleVedomostRecord.Place.IndexOf("(r)") > -1)
                 {
-                    //  Добавляем объект в списке шасси.
-                    //Добавляем запись о занятых шасси слотах в таблицу слотов
-                    if (SingleVedomostRecord.Place.IndexOf("юниты ") > -1)
-                    {
-                        TempString = SingleVedomostRecord.Place.Replace("юниты ", "");
-                        SlotNumbers = TempString.Split('-');
-                        FirstOccupiedSlot = Convert.ToInt32(SlotNumbers[0]);
-                        LastOccupiedSlot = Convert.ToInt32(SlotNumbers[1]);
-                    }
-                    else
-                    {
-                        TempString = SingleVedomostRecord.Place.Replace("юнит ", "").Trim();
-                        FirstOccupiedSlot = Convert.ToInt32(TempString);
-                        LastOccupiedSlot = FirstOccupiedSlot;
-                    }
-                    ChassisObject = new ChassisData
+                    SingleVedomostRecord.Place.Replace("(r)", "");
+                    IsOnFront = false;
+
+                }
+                else IsOnFront = true;
+
+                if (SingleVedomostRecord.Place.IndexOf("юниты ") > -1)
+                {
+                    TempString = SingleVedomostRecord.Place.Replace("юниты ", "");
+                    SlotNumbers = TempString.Split('-');
+                    FirstOccupiedSlot = Convert.ToInt32(SlotNumbers[0]);
+                    LastOccupiedSlot = Convert.ToInt32(SlotNumbers[1]);
+                }
+                else
+                {
+                    TempString = SingleVedomostRecord.Place.Replace("юнит ", "").Trim();
+                    FirstOccupiedSlot = Convert.ToInt32(TempString);
+                    LastOccupiedSlot = FirstOccupiedSlot;
+                }
+                ChassisObject = new ChassisData
                         {
                             SnType = SingleVedomostRecord.DefinitionType, SerialNumber = SingleVedomostRecord.SerialNumber,
                             EntityModelId = UsedModel.EntityModelId, CurrentLocation = SingleVedomostRecord.DataCenter,
@@ -194,53 +206,77 @@
                             Comments = "Слоты с " + FirstOccupiedSlot + " по " + LastOccupiedSlot
                             //Comments = Convert.ToString(objSiteService.GetDcInfoByName(SingleVedomostRecord.DataCenter).DataCenterId)
                         };
-                    objChassisService.CreateChassisModel(ChassisObject);
-                    CurrentChassisId = ChassisObject.ChassisId;
+                objChassisService.CreateChassisModel(ChassisObject);
+                CurrentChassisId = ChassisObject.ChassisId;
 
-                    //Найти объект стойки по вводным: имя цода (из ведомости), имя помещения (постоянное), имя ряда (из формулы поиска ряда по номеру стойки), номер стойки (из ведомости).
-                    CurrentDc = objSiteService.GetDcInfoByName(SingleVedomostRecord.DataCenter);
-                    //public UnitData GetUnitByVedomostData(string DcName, string RoomName, string RowName, string RackId, int UnitId)
-                    for (int CurrentUnitInRack = FirstOccupiedSlot; CurrentUnitInRack <= LastOccupiedSlot; CurrentUnitInRack++)
-                    {
-                        UsedUnitObject = objUnitService.GetUnitByVedomostData
-                            (SingleVedomostRecord.DataCenter, SingleVedomostRecord.RoomName, SingleVedomostRecord.RowName, SingleVedomostRecord.Rack, CurrentUnitInRack);
-                        UsedUnitObject.Chassis = ChassisObject;
-                    }
-                    
-
-
-                }
-                else if (UsedInitialRecord.Category == "Плата")
+                //Найти объект стойки по вводным: имя цода (из ведомости), имя помещения (постоянное), имя ряда (из формулы поиска ряда по номеру стойки), номер стойки (из ведомости).
+                CurrentDc = objSiteService.GetDcInfoByName(SingleVedomostRecord.DataCenter);
+                //public UnitData GetUnitByVedomostData(string DcName, string RoomName, string RowName, string RackId, int UnitId)
+                for (int CurrentUnitInRack = FirstOccupiedSlot; CurrentUnitInRack <= LastOccupiedSlot; CurrentUnitInRack++)
                 {
-                    //  Добавляем объект в списке плат.
-                    CardObject = new CardData
+                    UsedUnitObject = objUnitService.GetUnitByVedomostData
+                        (SingleVedomostRecord.DataCenter, SingleVedomostRecord.RoomName, SingleVedomostRecord.RowName, SingleVedomostRecord.Rack, CurrentUnitInRack, IsOnFront);
+                    UsedUnitObject.Chassis = ChassisObject;
+                }
+
+                UsedInitialRecord.IsSuccessfullyUploaded = true;
+
+            }
+            else if (UsedInitialRecord.Category == "Плата")
+            {
+                //  Добавляем объект в списке плат.
+                CardObject = new CardData
                     {
                           SnType = SingleVedomostRecord.DefinitionType, SerialNumber = SingleVedomostRecord.SerialNumber, 
                           EntityModelId = UsedModel.EntityModelId, CurrentLocation = SingleVedomostRecord.DataCenter,
                           IsInstalled = true, InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
                           InventoryNumber = SingleVedomostRecord.InventoryNumber, DeliveryYear = SingleVedomostRecord.Year,
+                          CardSlotInChassis = SingleVedomostRecord.Place,
                           Comments = SingleVedomostRecord.Comments, ChassisId = CurrentChassisId, PositionInUpperEntity = SingleVedomostRecord.Place
                     };
-                    objCardService.CreateCardModel(CardObject);
-                    Debug.WriteLine("Hello, World");
-                    CurrentCardId = CardObject.CardId;
-                }
-                else if (UsedInitialRecord.Category == "Модуль")
+                objCardService.CreateCardModel(CardObject);
+                Debug.WriteLine("Hello, World");
+                CurrentCardId = CardObject.CardId;
+                UsedInitialRecord.IsSuccessfullyUploaded = true;
+            }
+            //else if (UsedInitialRecord.Category == "Модуль")      //Добавляем модуль и для трансиверов и для гидр, которые проходят как кабели
+            else
+            {
+                //  Добавляем объект в списке модулей.
+                if (UsedInitialRecord.Category == "Кабель")
                 {
-                    //  Добавляем объект в списке плат.
-                    ModuleObject = new ModuleData
+                    if (SingleVedomostRecord.Quantity == 1) HydraNumber = 1;
+                    else HydraNumber = 2;
+                }
+                else HydraNumber = 0;
+                ModuleObject = new ModuleData
                     {
                           SnType = SingleVedomostRecord.DefinitionType, SerialNumber = SingleVedomostRecord.SerialNumber, 
                           EntityModelId = UsedModel.EntityModelId, CurrentLocation = SingleVedomostRecord.DataCenter,
                           IsInstalled = true, InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
                           InventoryNumber = SingleVedomostRecord.InventoryNumber, DeliveryYear = SingleVedomostRecord.Year,
-                          Comments = SingleVedomostRecord.Comments, ChassisId = CurrentChassisId, PositionInUpperEntity = SingleVedomostRecord.Place
+                          Comments = SingleVedomostRecord.Comments, ChassisId = CurrentChassisId, PositionInUpperEntity = SingleVedomostRecord.Place,
+                          HydraEndNumber = HydraNumber
                     };
-                    objModuleService.CreateModuleModel(ModuleObject);
-                    //CurrentCardId = CardObject.CardId;
-                }
-            };
+                objModuleService.CreateModuleModel(ModuleObject);
+                UsedInitialRecord.IsSuccessfullyUploaded = true;
+                //CurrentCardId = CardObject.CardId;
+            }
+            if (UsedInitialRecord.Category == "Кабель")
+            {
+                //  Добавляем объект в списке кабелей.
+                 CableObject = new CableData
+                    {
+                          SnType = SingleVedomostRecord.DefinitionType, SerialNumber = SingleVedomostRecord.SerialNumber, 
+                          EntityModelId = UsedModel.EntityModelId, CurrentLocation = SingleVedomostRecord.DataCenter,
+                          IsInstalled = true, InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
+                          InventoryNumber = SingleVedomostRecord.InventoryNumber, DeliveryYear = SingleVedomostRecord.Year,
+                          Comments = SingleVedomostRecord.Comments,
+                    };
+                objCableService.CreateCableModel(CableObject);
+            }
         };
+       // };
         StartedCreateInitialRecord = true;
         return;
     }

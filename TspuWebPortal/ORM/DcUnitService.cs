@@ -61,7 +61,7 @@ public class DcUnitService
 
 
 
-    public UnitData GetUnitByVedomostData(string DcName, string RoomName, string RowName, string RackId, int UnitInRackId)
+    public UnitData GetUnitByVedomostData(string DcName, string RoomName, string RowName, string RackId, int UnitInRackId, bool IsChassisOnFront)
     {
 
 
@@ -78,7 +78,7 @@ public class DcUnitService
         RoomData SelectedRoom = SelectedDc.Rooms.Single(p => p.RoomName == RoomName);
         RowData SelectedRow = SelectedRoom.Rows.Single(p => p.RowNameDataCenter == RowName);
         RackData SelectrdRack = SelectedRow.Racks.Single(p => p.RackNameAsbi == RackId);
-        UnitData SelectedUnit = SelectrdRack.Units.Single(p => (p.UnitInRack == UnitInRackId) && (p.IsFront == true));
+        UnitData SelectedUnit = SelectrdRack.Units.Single(p => (p.UnitInRack == UnitInRackId) && (p.IsFront == IsChassisOnFront));
 
         if (SelectedUnit == null) throw new Exception("Данные не найдены");
         return SelectedUnit;

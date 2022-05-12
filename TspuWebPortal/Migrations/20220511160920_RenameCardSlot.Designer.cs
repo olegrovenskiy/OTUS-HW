@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TspuWebPortal.ORM;
@@ -11,9 +12,10 @@ using TspuWebPortal.ORM;
 namespace TspuWebPortal.Migrations
 {
     [DbContext(typeof(TspuDbContext))]
-    partial class SiteDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220511160920_RenameCardSlot")]
+    partial class RenameCardSlot
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,33 +33,38 @@ namespace TspuWebPortal.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CableId"));
 
                     b.Property<string>("Comments")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("CurrentLocation")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("DeliveryYear")
+                    b.Property<int>("DeliveryYear")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("DetailChangeId")
+                    b.Property<int>("DetailChangeId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("EntityModelId")
+                    b.Property<int>("EntityModelId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("InitialDetailRecordId")
+                    b.Property<int>("InitialDetailRecordId")
                         .HasColumnType("integer");
 
                     b.Property<string>("InventoryNumber")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool?>("IsInstalled")
+                    b.Property<bool>("IsInstalled")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("SerialNumber")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("SnType")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("CableId");
@@ -638,9 +645,6 @@ namespace TspuWebPortal.Migrations
                     b.Property<int?>("EntityModelId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("HydraEndNumber")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("InitialDetailRecordId")
                         .HasColumnType("integer");
 
@@ -989,15 +993,21 @@ namespace TspuWebPortal.Migrations
                 {
                     b.HasOne("TspuWebPortal.Model.ChangeApplicationData", "DetailChange")
                         .WithMany("Cables")
-                        .HasForeignKey("DetailChangeId");
+                        .HasForeignKey("DetailChangeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TspuWebPortal.Model.EntityModelData", "EntityModel")
                         .WithMany("Cables")
-                        .HasForeignKey("EntityModelId");
+                        .HasForeignKey("EntityModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TspuWebPortal.Model.InitialDetailRecordData", "InitialDetailRecord")
                         .WithMany("Cables")
-                        .HasForeignKey("InitialDetailRecordId");
+                        .HasForeignKey("InitialDetailRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("DetailChange");
 

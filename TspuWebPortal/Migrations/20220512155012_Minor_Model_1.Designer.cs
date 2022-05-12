@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TspuWebPortal.ORM;
@@ -11,9 +12,10 @@ using TspuWebPortal.ORM;
 namespace TspuWebPortal.Migrations
 {
     [DbContext(typeof(TspuDbContext))]
-    partial class SiteDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220512155012_Minor_Model_1")]
+    partial class Minor_Model_1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,9 +35,6 @@ namespace TspuWebPortal.Migrations
                     b.Property<string>("Comments")
                         .HasColumnType("text");
 
-                    b.Property<string>("CurrentLocation")
-                        .HasColumnType("text");
-
                     b.Property<int?>("DeliveryYear")
                         .HasColumnType("integer");
 
@@ -53,6 +52,9 @@ namespace TspuWebPortal.Migrations
 
                     b.Property<bool?>("IsInstalled")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("text");
 
                     b.Property<string>("SerialNumber")
                         .HasColumnType("text");
@@ -638,14 +640,14 @@ namespace TspuWebPortal.Migrations
                     b.Property<int?>("EntityModelId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("HydraEndNumber")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("InitialDetailRecordId")
                         .HasColumnType("integer");
 
                     b.Property<string>("InventoryNumber")
                         .HasColumnType("text");
+
+                    b.Property<bool?>("IsHydraSideA")
+                        .HasColumnType("boolean");
 
                     b.Property<bool?>("IsInstalled")
                         .HasColumnType("boolean");
