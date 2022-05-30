@@ -152,48 +152,58 @@
     {
         foreach (VedomostData SingleVedomostRecord in AllVedomostList)
         {
-            //if (SingleVedomostRecord.Quantity > 0)                                                              //Как сделать обратное заполнение, если с нулевым количеством не работаем?
-            //{
+
+
+            // Добавить правило для кабелей. Добавлять как первичную запись только когда запись с таким серийником отсутствует.
+
             UsedModel = objEntityService.FindOrCreateEntityModelFromExcel(SingleVedomostRecord);            //добавить логирование операции
             UsedOperation = new OperationData { OperationType = "Добавление первичной записи", OperationDate = DateOnly.FromDateTime(DateTime.Now)};
             objOperationService.CreateOperationModel(UsedOperation);
+
             UsedInitialRecord = new InitialDetailRecordData
-                    {
-                        DetailOrigin = 0,
-                        InitialDetailTableId = ChosenDetailTable.InitialDetailTableId,
-                        SerialNumber = SingleVedomostRecord.SerialNumber,
-                        DetailOfficialName = SingleVedomostRecord.Description,
-                        Quantity = SingleVedomostRecord.Quantity,
-                        Location = SingleVedomostRecord.DataCenter,
-                        Category = UsedModel.ModelType,
-                        IsSplittable = false,
-                        EntityModelId = UsedModel.EntityModelId,
-                        OperationId = UsedOperation.OperationId
-                    };
+                        {
+                            DetailOrigin = 0,
+                            InitialDetailTableId = ChosenDetailTable.InitialDetailTableId,
+                            SerialNumber = SingleVedomostRecord.SerialNumber,
+                            DetailOfficialName = SingleVedomostRecord.Description,
+                            Quantity = SingleVedomostRecord.Quantity,
+                            Location = SingleVedomostRecord.DataCenter,
+                            Category = UsedModel.ModelType,
+                            IsSplittable = false,
+                            EntityModelId = UsedModel.EntityModelId,
+                            OperationId = UsedOperation.OperationId,
+                            IsVisibleInExcel = true
+                        };
             objDetailRecordService.CreateDetailRecordModel (UsedInitialRecord);
+
 
             if (UsedInitialRecord.Category == "Шасси")
             {
+
+                /**/
                 //  Добавляем объект в списке шасси.
                 //Добавляем запись о занятых шасси слотах в таблицу слотов
                 if (SingleVedomostRecord.Place.IndexOf("(r)") > -1)
                 {
-                    SingleVedomostRecord.Place.Replace("(r)", "");
+                    TempString = SingleVedomostRecord.Place.Replace("(r)", "");
                     IsOnFront = false;
 
                 }
-                else IsOnFront = true;
+                else { IsOnFront = true; TempString = SingleVedomostRecord.Place; }
 
-                if (SingleVedomostRecord.Place.IndexOf("юниты ") > -1)
+
+
+
+                if (TempString.IndexOf("юниты ") > -1)
                 {
-                    TempString = SingleVedomostRecord.Place.Replace("юниты ", "");
+                    TempString = TempString.Replace("юниты ", "");
                     SlotNumbers = TempString.Split('-');
                     FirstOccupiedSlot = Convert.ToInt32(SlotNumbers[0]);
                     LastOccupiedSlot = Convert.ToInt32(SlotNumbers[1]);
                 }
                 else
                 {
-                    TempString = SingleVedomostRecord.Place.Replace("юнит ", "").Trim();
+                    TempString = TempString.Replace("юнит ", "").Trim();
                     FirstOccupiedSlot = Convert.ToInt32(TempString);
                     LastOccupiedSlot = FirstOccupiedSlot;
                 }
@@ -276,7 +286,7 @@
                 objCableService.CreateCableModel(CableObject);
             }
         };
-       // };
+
         StartedCreateInitialRecord = true;
         return;
     }

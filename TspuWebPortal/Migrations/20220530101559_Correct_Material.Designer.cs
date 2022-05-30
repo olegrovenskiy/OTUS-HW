@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TspuWebPortal.ORM;
@@ -11,9 +12,10 @@ using TspuWebPortal.ORM;
 namespace TspuWebPortal.Migrations
 {
     [DbContext(typeof(TspuDbContext))]
-    partial class SiteDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220530101559_Correct_Material")]
+    partial class Correct_Material
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +23,21 @@ namespace TspuWebPortal.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("InitialMaterialTableDataMaterialStorageData", b =>
+                {
+                    b.Property<int>("MaterialStorageRecordsMaterialStorageItemId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MaterialTablesInitialMaterialTableId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("MaterialStorageRecordsMaterialStorageItemId", "MaterialTablesInitialMaterialTableId");
+
+                    b.HasIndex("MaterialTablesInitialMaterialTableId");
+
+                    b.ToTable("InitialMaterialTableDataMaterialStorageData");
+                });
 
             modelBuilder.Entity("TspuWebPortal.Model.CableData", b =>
                 {
@@ -587,22 +604,7 @@ namespace TspuWebPortal.Migrations
 
                     b.HasKey("MaterialStorageItemId");
 
-                    b.ToTable("StorageRecords");
-                });
-
-            modelBuilder.Entity("TspuWebPortal.Model.MaterialTableStorageLink", b =>
-                {
-                    b.Property<int>("InitialMaterialTableId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MaterialStorageItemId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("InitialMaterialTableId", "MaterialStorageItemId");
-
-                    b.HasIndex("MaterialStorageItemId");
-
-                    b.ToTable("MaterialTableStorageLink");
+                    b.ToTable("MaterialStorageData");
                 });
 
             modelBuilder.Entity("TspuWebPortal.Model.ModuleAData", b =>
@@ -1019,6 +1021,21 @@ namespace TspuWebPortal.Migrations
                     b.ToTable("UserAccounts");
                 });
 
+            modelBuilder.Entity("InitialMaterialTableDataMaterialStorageData", b =>
+                {
+                    b.HasOne("TspuWebPortal.Model.MaterialStorageData", null)
+                        .WithMany()
+                        .HasForeignKey("MaterialStorageRecordsMaterialStorageItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TspuWebPortal.Model.InitialMaterialTableData", null)
+                        .WithMany()
+                        .HasForeignKey("MaterialTablesInitialMaterialTableId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("TspuWebPortal.Model.CableData", b =>
                 {
                     b.HasOne("TspuWebPortal.Model.ChangeApplicationData", "DetailChange")
@@ -1205,25 +1222,6 @@ namespace TspuWebPortal.Migrations
                     b.Navigation("ModuleA");
 
                     b.Navigation("ModuleB");
-                });
-
-            modelBuilder.Entity("TspuWebPortal.Model.MaterialTableStorageLink", b =>
-                {
-                    b.HasOne("TspuWebPortal.Model.InitialMaterialTableData", "InitialMaterialTableData")
-                        .WithMany("TableStorageLinks")
-                        .HasForeignKey("MaterialStorageItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TspuWebPortal.Model.MaterialStorageData", "MaterialStorageData")
-                        .WithMany("TableStorageLinks")
-                        .HasForeignKey("MaterialStorageItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("InitialMaterialTableData");
-
-                    b.Navigation("MaterialStorageData");
                 });
 
             modelBuilder.Entity("TspuWebPortal.Model.ModuleAData", b =>
@@ -1439,16 +1437,9 @@ namespace TspuWebPortal.Migrations
                     b.Navigation("InitialDetailRecords");
                 });
 
-            modelBuilder.Entity("TspuWebPortal.Model.InitialMaterialTableData", b =>
-                {
-                    b.Navigation("TableStorageLinks");
-                });
-
             modelBuilder.Entity("TspuWebPortal.Model.MaterialStorageData", b =>
                 {
                     b.Navigation("InitialMaterialRecords");
-
-                    b.Navigation("TableStorageLinks");
                 });
 
             modelBuilder.Entity("TspuWebPortal.Model.ModuleAData", b =>

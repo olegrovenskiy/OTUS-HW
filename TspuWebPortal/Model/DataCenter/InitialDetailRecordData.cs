@@ -39,6 +39,8 @@ namespace TspuWebPortal.Model
         [ForeignKey("EntityModelId")]
         public EntityModelData? EntityModel { get; set; }
 
+        public bool IsVisibleInExcel { get; set; }
+
 
 
 

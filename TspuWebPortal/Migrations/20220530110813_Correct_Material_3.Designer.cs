@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TspuWebPortal.ORM;
@@ -11,9 +12,10 @@ using TspuWebPortal.ORM;
 namespace TspuWebPortal.Migrations
 {
     [DbContext(typeof(TspuDbContext))]
-    partial class SiteDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220530110813_Correct_Material_3")]
+    partial class Correct_Material_3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

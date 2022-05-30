@@ -45,6 +45,7 @@ public class ParseVedomost
                 RoomName = Convert.ToString(((Excel.Range) xlWorksheet.Cells[intCurrentRow, 14]).Value),
                 RowName = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 15]).Value),
             });
+            Console.WriteLine($"Строка: {intCurrentRow}");
         }
 
         // Закрываем эксель с шаблоном

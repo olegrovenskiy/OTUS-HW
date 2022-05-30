@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TspuWebPortal.ORM;
@@ -11,9 +12,10 @@ using TspuWebPortal.ORM;
 namespace TspuWebPortal.Migrations
 {
     [DbContext(typeof(TspuDbContext))]
-    partial class SiteDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220527100503_Add_Excel_Flag")]
+    partial class Add_Excel_Flag
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -424,30 +426,33 @@ namespace TspuWebPortal.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("InitialMaterialId"));
 
-                    b.Property<DateOnly?>("DeliveryDate")
+                    b.Property<DateOnly>("DeliveryDate")
                         .HasColumnType("date");
 
                     b.Property<string>("DocumentNumber")
+                        .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("InitialMaterialTableId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Location")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("MaterialOfficialName")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("MaterialStorageItemId")
+                    b.Property<int>("OperationId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("OperationId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("Quantity")
+                    b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
                     b.HasKey("InitialMaterialId");
 
-                    b.HasIndex("MaterialStorageItemId");
+                    b.HasIndex("InitialMaterialTableId");
 
                     b.HasIndex("OperationId");
 
@@ -462,12 +467,15 @@ namespace TspuWebPortal.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("InitialMaterialTableId"));
 
-                    b.Property<int?>("FileId")
+                    b.Property<int>("FileId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TableFileFileId")
                         .HasColumnType("integer");
 
                     b.HasKey("InitialMaterialTableId");
 
-                    b.HasIndex("FileId");
+                    b.HasIndex("TableFileFileId");
 
                     b.ToTable("MaterialTable");
                 });
@@ -566,43 +574,6 @@ namespace TspuWebPortal.Migrations
                         .IsUnique();
 
                     b.ToTable("Links");
-                });
-
-            modelBuilder.Entity("TspuWebPortal.Model.MaterialStorageData", b =>
-                {
-                    b.Property<int>("MaterialStorageItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("MaterialStorageItemId"));
-
-                    b.Property<int?>("CurrentQuantity")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ItemName")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("TakenQuantity")
-                        .HasColumnType("integer");
-
-                    b.HasKey("MaterialStorageItemId");
-
-                    b.ToTable("StorageRecords");
-                });
-
-            modelBuilder.Entity("TspuWebPortal.Model.MaterialTableStorageLink", b =>
-                {
-                    b.Property<int>("InitialMaterialTableId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MaterialStorageItemId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("InitialMaterialTableId", "MaterialStorageItemId");
-
-                    b.HasIndex("MaterialStorageItemId");
-
-                    b.ToTable("MaterialTableStorageLink");
                 });
 
             modelBuilder.Entity("TspuWebPortal.Model.ModuleAData", b =>
@@ -1139,15 +1110,19 @@ namespace TspuWebPortal.Migrations
 
             modelBuilder.Entity("TspuWebPortal.Model.InitialMaterialRecordData", b =>
                 {
-                    b.HasOne("TspuWebPortal.Model.MaterialStorageData", "MaterialStorageRecords")
+                    b.HasOne("TspuWebPortal.Model.InitialMaterialTableData", "InitialMaterialTable")
                         .WithMany("InitialMaterialRecords")
-                        .HasForeignKey("MaterialStorageItemId");
+                        .HasForeignKey("InitialMaterialTableId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TspuWebPortal.Model.OperationData", "Operation")
                         .WithMany("InitialMaterialRecord")
-                        .HasForeignKey("OperationId");
+                        .HasForeignKey("OperationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("MaterialStorageRecords");
+                    b.Navigation("InitialMaterialTable");
 
                     b.Navigation("Operation");
                 });
@@ -1156,7 +1131,7 @@ namespace TspuWebPortal.Migrations
                 {
                     b.HasOne("TspuWebPortal.Model.FileData", "TableFile")
                         .WithMany("InitialMaterialTables")
-                        .HasForeignKey("FileId");
+                        .HasForeignKey("TableFileFileId");
 
                     b.Navigation("TableFile");
                 });
@@ -1205,25 +1180,6 @@ namespace TspuWebPortal.Migrations
                     b.Navigation("ModuleA");
 
                     b.Navigation("ModuleB");
-                });
-
-            modelBuilder.Entity("TspuWebPortal.Model.MaterialTableStorageLink", b =>
-                {
-                    b.HasOne("TspuWebPortal.Model.InitialMaterialTableData", "InitialMaterialTableData")
-                        .WithMany("TableStorageLinks")
-                        .HasForeignKey("MaterialStorageItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TspuWebPortal.Model.MaterialStorageData", "MaterialStorageData")
-                        .WithMany("TableStorageLinks")
-                        .HasForeignKey("MaterialStorageItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("InitialMaterialTableData");
-
-                    b.Navigation("MaterialStorageData");
                 });
 
             modelBuilder.Entity("TspuWebPortal.Model.ModuleAData", b =>
@@ -1441,14 +1397,7 @@ namespace TspuWebPortal.Migrations
 
             modelBuilder.Entity("TspuWebPortal.Model.InitialMaterialTableData", b =>
                 {
-                    b.Navigation("TableStorageLinks");
-                });
-
-            modelBuilder.Entity("TspuWebPortal.Model.MaterialStorageData", b =>
-                {
                     b.Navigation("InitialMaterialRecords");
-
-                    b.Navigation("TableStorageLinks");
                 });
 
             modelBuilder.Entity("TspuWebPortal.Model.ModuleAData", b =>

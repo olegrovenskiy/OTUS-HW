@@ -35,4 +35,21 @@ public class TspuDbContext : DbContext
         public DbSet<ModuleBData>? ModulesB { get; set; }
         public DbSet<FileData>? FileData { get; set; }
         public DbSet<OperationData>? Operations { get; set; }
-}
+        
+        public DbSet<MaterialStorageData>? StorageRecords { get; set; }
+    //public DbSet<MaterialTableStorageLink> MaterialTableStorageLinks { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<MaterialTableStorageLink>()
+                .HasKey(ms => new {ms.InitialMaterialTableId, ms.MaterialStorageItemId});
+            modelBuilder.Entity<MaterialTableStorageLink>()
+                .HasOne (ms => ms.InitialMaterialTableData)
+                .WithMany(ms => ms.TableStorageLinks)
+                .HasForeignKey(ms => ms.MaterialStorageItemId);
+            modelBuilder.Entity<MaterialTableStorageLink>()
+                .HasOne(ms => ms.InitialMaterialTableData)
+                .WithMany(ms => ms.TableStorageLinks);
+        }
+
+    }

@@ -77,9 +77,10 @@ public class DcUnitService
         DcData SelectedDc = SelectedDataCenters.Single(p => p.DataCenterName == DcName);
         RoomData SelectedRoom = SelectedDc.Rooms.Single(p => p.RoomName == RoomName);
         RowData SelectedRow = SelectedRoom.Rows.Single(p => p.RowNameDataCenter == RowName);
-        RackData SelectrdRack = SelectedRow.Racks.Single(p => p.RackNameAsbi == RackId);
+         RackData SelectrdRack = SelectedRow.Racks.Single(p => p.RackNameAsbi == RackId);
         UnitData SelectedUnit = SelectrdRack.Units.Single(p => (p.UnitInRack == UnitInRackId) && (p.IsFront == IsChassisOnFront));
-
+        //UnitData SelectedUnit = SelectrdRack.Units.Single(p => (p.UnitInRack == UnitInRackId) && (p.IsFront == true));
+        //UnitData SelectedUnit = SelectrdRack.Units.Single(p => (p.UnitInRack == UnitInRackId));
         if (SelectedUnit == null) throw new Exception("Данные не найдены");
         return SelectedUnit;
     }
