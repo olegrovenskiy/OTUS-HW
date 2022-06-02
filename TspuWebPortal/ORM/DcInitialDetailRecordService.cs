@@ -43,6 +43,9 @@ public class DcInitialDetailRecordService
 
     }
 
+
+
+
     public void UpdateDetailRecordInfo(InitialDetailRecordData objDetailRecordModel)
     {
 

@@ -63,29 +63,45 @@ public class DcUnitService
 
     public UnitData GetUnitByVedomostData(string DcName, string RoomName, string RowName, string RackId, int UnitInRackId, bool IsChassisOnFront)
     {
-
-
-
-        var SelectedDataCenters = _db.DataCenters
-                    .Include(dc => dc.Rooms)
-                    .ThenInclude(room => room.Rows)
-                    .ThenInclude(row => row.Racks)
-                    .ThenInclude(rack => rack.Units)
-                    .ToList();
-
+        var SelectedDataCenters = DownloadWholeStructure();
 
         DcData SelectedDc = SelectedDataCenters.Single(p => p.DataCenterName == DcName);
         RoomData SelectedRoom = SelectedDc.Rooms.Single(p => p.RoomName == RoomName);
         RowData SelectedRow = SelectedRoom.Rows.Single(p => p.RowNameDataCenter == RowName);
-         RackData SelectrdRack = SelectedRow.Racks.Single(p => p.RackNameAsbi == RackId);
+        RackData SelectrdRack = SelectedRow.Racks.Single(p => p.RackNameAsbi == RackId);
         UnitData SelectedUnit = SelectrdRack.Units.Single(p => (p.UnitInRack == UnitInRackId) && (p.IsFront == IsChassisOnFront));
-        //UnitData SelectedUnit = SelectrdRack.Units.Single(p => (p.UnitInRack == UnitInRackId) && (p.IsFront == true));
-        //UnitData SelectedUnit = SelectrdRack.Units.Single(p => (p.UnitInRack == UnitInRackId));
         if (SelectedUnit == null) throw new Exception("Данные не найдены");
         return SelectedUnit;
     }
 
+    public List<DcData> DownloadWholeStructure()
+    {
+        var SelectedDataCenters = _db.DataCenters
+            .Include(dc => dc.Rooms)
+            .ThenInclude(room => room.Rows)
+            .ThenInclude(row => row.Racks)
+            .ThenInclude(rack => rack.Units)
+            .ToList();
+
+        return SelectedDataCenters;
+        //List<DcData> WholeSiteList = _db.DataCenters
+        //return WholeSiteList;
+    }
+
+    public List<RackData> GetAllRacksInDc(string DcName)
+    {
+        var SelectedDataCenters = DownloadWholeStructure();
+        List<RackData> AllRacks = _db.Racks.Where(p => p.Row.Room.DataCenter.DataCenterName == DcName).ToList();
+        return AllRacks;
+    }
+
+
+
+
+
+
 }
+
 
 /*
  * 

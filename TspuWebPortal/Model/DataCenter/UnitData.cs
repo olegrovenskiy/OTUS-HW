@@ -15,6 +15,7 @@ namespace TspuWebPortal.Model
         [ForeignKey("ChassisId")]
         public ChassisData? Chassis { get; set; }
 
+        public bool? IsChassisLowerUnit { get; set; }
         
         public int? ServerSlotId { get; set; }
         [ForeignKey("ServerSlotId")]

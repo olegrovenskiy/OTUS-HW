@@ -227,6 +227,7 @@
                     UsedUnitObject = objUnitService.GetUnitByVedomostData
                         (SingleVedomostRecord.DataCenter, SingleVedomostRecord.RoomName, SingleVedomostRecord.RowName, SingleVedomostRecord.Rack, CurrentUnitInRack, IsOnFront);
                     UsedUnitObject.Chassis = ChassisObject;
+                    if (CurrentUnitInRack == FirstOccupiedSlot) UsedUnitObject.IsChassisLowerUnit = true;
                 }
 
                 UsedInitialRecord.IsSuccessfullyUploaded = true;
@@ -245,7 +246,7 @@
                           Comments = SingleVedomostRecord.Comments, ChassisId = CurrentChassisId, PositionInUpperEntity = SingleVedomostRecord.Place
                     };
                 objCardService.CreateCardModel(CardObject);
-                Debug.WriteLine("Hello, World");
+                //Debug.WriteLine("Hello, World");
                 CurrentCardId = CardObject.CardId;
                 UsedInitialRecord.IsSuccessfullyUploaded = true;
             }

@@ -22,7 +22,9 @@ using TspuWebPortal.Model;
         }
 
 
-        public void CreateDc(DcData objDc)
+
+
+    public void CreateDc(DcData objDc)
         {
             _db.DataCenters?.Add(objDc);
             _db.SaveChanges();

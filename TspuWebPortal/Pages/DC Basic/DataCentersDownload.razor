@@ -1,0 +1,57 @@
+﻿@page "/dc_download"
+@using System.Threading.Tasks;
+@inject IWebHostEnvironment Environment
+@inject SiteDataService objDataService
+@inject DcFileService objFileService
+@inject DcUnitService objUnitService
+@inject DcChassisService objChassisService
+@inject DcInitialDetailRecordService objInitialDetailRecordService
+@using TspuWebPortal.Model
+@using TspuWebPortal.ORM
+@using TspuWebPortal.Shared
+
+
+<h3>Генерация файла ведомости</h3>
+
+<button class="btn btn-primary" @onclick="StartGenerationProcedure">Начать генерацию</button>
+<p></p>
+@if (IsFileGenerationStarted)
+{
+    <p>Данные по всем стойкам загружены.</p>
+    <p>----------------------------------</p>
+    @foreach (string CurrentDetailName in AllChassisInRack)
+    {
+        <p>@CurrentDetailName</p>
+    }
+}
+
+@code 
+{
+    bool IsFileGenerationStarted = false;
+    List<RackData> AllRacksInDc = new List<RackData>();
+    List<UnitData> AllUnitsInRack = new List<UnitData>();
+    List<string> AllChassisInRack = new List<string>();
+    ChassisData UsedChassis;
+    InitialDetailRecordData UsedInitialRecord;
+    int CurrentChassisId;
+    int CurrentInitialRecordId;
+
+    void StartGenerationProcedure()
+    {
+        //AllRacksInDc = objUnitService.GetAllRacksInDc("ЦОД-1");   //Получение списка всех стоек в цоде.
+        AllUnitsInRack = objUnitService.ListAllUnitsInRack(18);     //RackId = 18 - захардкожено для тестов. ЦОД-1, стойка 1.
+        foreach (UnitData CurrentUnit in AllUnitsInRack)
+        {
+            if ((CurrentUnit.ChassisId != null) && (CurrentUnit.IsChassisLowerUnit == true))
+            {
+                CurrentChassisId = CurrentUnit.ChassisId ?? default(int);
+                UsedChassis = objChassisService.GetChassisDataInfoById(CurrentChassisId);
+                CurrentInitialRecordId = UsedChassis.InitialDetailRecordId ?? default(int);
+                UsedInitialRecord = objInitialDetailRecordService.GetDetailRecordDataInfoById(CurrentInitialRecordId);
+                AllChassisInRack.Add(UsedInitialRecord.DetailOfficialName);
+            }
+        }
+        IsFileGenerationStarted = true;
+    }
+
+}

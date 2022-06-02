@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ORM\DC Service\**" />
+    <Content Remove="ORM\DC Service\**" />
+    <EmbeddedResource Remove="ORM\DC Service\**" />
+    <None Remove="ORM\DC Service\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="wwwroot\files\WeatherForecast.cs" />
     <Compile Include="wwwroot\files\WeatherForecastService.cs" />
   </ItemGroup>
@@ -48,7 +55,6 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="ORM\DC Service\" />
   </ItemGroup>
 
 </Project>
