@@ -6,6 +6,8 @@
 @inject DcUnitService objUnitService
 @inject DcChassisService objChassisService
 @inject DcInitialDetailRecordService objInitialDetailRecordService
+@inject DcEntityService objEntityService
+@inject IWebHostEnvironment Environment
 @using TspuWebPortal.Model
 @using TspuWebPortal.ORM
 @using TspuWebPortal.Shared
@@ -31,26 +33,44 @@
     List<RackData> AllRacksInDc = new List<RackData>();
     List<UnitData> AllUnitsInRack = new List<UnitData>();
     List<string> AllChassisInRack = new List<string>();
+    List<OuterChassisData> OutputVedomostList = new List<OuterChassisData>();
     ChassisData UsedChassis;
     InitialDetailRecordData UsedInitialRecord;
+    //EntityModelData CurrentModel;
     int CurrentChassisId;
     int CurrentInitialRecordId;
 
+
     void StartGenerationProcedure()
     {
+        //string FilePath = Path.Combine(Environment.ContentRootPath, Environment.EnvironmentName, "unsafe_uploads", $"OutputVedomost.xlsx");
+        string FilePath = Path.Combine(Environment.ContentRootPath, Environment.EnvironmentName, "unsafe_uploads", $"OutputVedomost_{DateTime.Now.ToLongDateString()}.xlsx");
         //AllRacksInDc = objUnitService.GetAllRacksInDc("ЦОД-1");   //Получение списка всех стоек в цоде.
         AllUnitsInRack = objUnitService.ListAllUnitsInRack(18);     //RackId = 18 - захардкожено для тестов. ЦОД-1, стойка 1.
         foreach (UnitData CurrentUnit in AllUnitsInRack)
         {
             if ((CurrentUnit.ChassisId != null) && (CurrentUnit.IsChassisLowerUnit == true))
             {
+                //Console.WriteLine(DateTime.Today);
+                //DateTime someDate = new DateTime(now);
                 CurrentChassisId = CurrentUnit.ChassisId ?? default(int);
                 UsedChassis = objChassisService.GetChassisDataInfoById(CurrentChassisId);
                 CurrentInitialRecordId = UsedChassis.InitialDetailRecordId ?? default(int);
                 UsedInitialRecord = objInitialDetailRecordService.GetDetailRecordDataInfoById(CurrentInitialRecordId);
                 AllChassisInRack.Add(UsedInitialRecord.DetailOfficialName);
+                //CurrentModel = objEntityService.GetEntityModelInfoById((int)UsedInitialRecord.EntityModelId);
+                //Загрузка всех Entity Models, присутствующих в стойке
+                OutputVedomostList.Add(new OuterChassisData
+                    {
+                        SerialNumber = UsedInitialRecord.SerialNumber, Description = UsedInitialRecord.DetailOfficialName, LowerUnit = (int)CurrentUnit.UnitInRack, 
+                         Rack = CurrentUnit.Rack.RackNameAsbi, RowName = CurrentUnit.Rack.Row.RowNameDataCenter,
+                         RoomName = CurrentUnit.Rack.Row.Room.RoomName, DataCenter = CurrentUnit.Rack.Row.Room.DataCenter.DataCenterName,
+                         ChassisHeight = (int)CurrentUnit.Chassis.EntityModel.ChassisHeightInUnits,
+                    });
             }
         }
+
+        ParseVedomost.GenerateVedomost(OutputVedomostList, FilePath);
         IsFileGenerationStarted = true;
     }
 

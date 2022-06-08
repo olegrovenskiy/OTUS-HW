@@ -1,5 +1,6 @@
 ﻿using TspuWebPortal.Model;
 using Excel = Microsoft.Office.Interop.Excel;
+using System.Collections;
 namespace TspuWebPortal.Scripts;
 
 public class ParseVedomost
@@ -53,6 +54,52 @@ public class ParseVedomost
         xlApp.Quit();
         return ListAllRecords;
     }
+
+
+    public static void GenerateVedomost(List<OuterChassisData> OutputList, string FilePath)
+    {
+        Excel.Application xlApp = new Excel.Application();
+        Excel.Workbook xlWorkbook = xlApp.Workbooks.Add(Type.Missing);
+        Excel.Worksheet xlWorksheet = (Excel.Worksheet)xlWorkbook.Worksheets.get_Item(1);
+
+        xlWorksheet.get_Range("a1", "h1").Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightSeaGreen);
+
+        xlWorksheet.Cells[1, 1] = "Серийный номер";
+        xlWorksheet.Cells[1, 2] = "Описание";
+        xlWorksheet.Cells[1, 3] = "Нижний юнит";
+        xlWorksheet.Cells[1, 4] = "Высота шасси";
+        xlWorksheet.Cells[1, 5] = "Стойка";
+        xlWorksheet.Cells[1, 6] = "Ряд";
+        xlWorksheet.Cells[1, 7] = "Помещение";
+        xlWorksheet.Cells[1, 8] = "ЦОД";
+
+        int intCurrentRow = 1;
+        foreach (OuterChassisData CurrentChassis in OutputList)
+        {
+            intCurrentRow++;
+            xlWorksheet.Cells[intCurrentRow, 1] = CurrentChassis.SerialNumber;
+            xlWorksheet.Cells[intCurrentRow, 2] = CurrentChassis.Description;
+            xlWorksheet.Cells[intCurrentRow, 3] = CurrentChassis.LowerUnit;
+            xlWorksheet.Cells[intCurrentRow, 4] = CurrentChassis.ChassisHeight;
+            xlWorksheet.Cells[intCurrentRow, 5] = CurrentChassis.Rack;
+            xlWorksheet.Cells[intCurrentRow, 6] = CurrentChassis.RowName;
+            xlWorksheet.Cells[intCurrentRow, 7] = CurrentChassis.RoomName;
+            xlWorksheet.Cells[intCurrentRow, 8] = CurrentChassis.DataCenter;
+        }
+
+        
+        xlWorksheet.UsedRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+        xlWorksheet.UsedRange.Borders.Weight = 2;
+        xlWorksheet.UsedRange.Columns.AutoFit();
+
+        xlWorkbook.SaveAs(FilePath);
+        xlWorkbook.Close();
+        xlApp.Quit();
+        return;
+    }
+
+
+
 }
 
 

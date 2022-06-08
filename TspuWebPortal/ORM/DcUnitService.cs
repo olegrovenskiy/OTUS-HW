@@ -24,7 +24,14 @@ public class DcUnitService
 
     public List<UnitData> ListAllUnitsInRack(int RackId)
     {
-        List<UnitData>? UnitDataList = _db.Units?.Where(s => s.RackId == RackId).ToList();
+        List<UnitData>? UnitDataList = _db.Units?.Where(s => s.RackId == RackId)
+            .Include(unit => unit.Rack)
+            .ThenInclude(rack => rack.Row)
+            .ThenInclude(row => row.Room)
+            .ThenInclude(room => room.DataCenter)
+            .Include(unit => unit.Chassis)
+            .ThenInclude(chassis => chassis.EntityModel)
+            .ToList();
         return UnitDataList;
     }
 
@@ -73,6 +80,9 @@ public class DcUnitService
         if (SelectedUnit == null) throw new Exception("Данные не найдены");
         return SelectedUnit;
     }
+
+
+    //public UnitData DownloadAllUnitInfo ()
 
     public List<DcData> DownloadWholeStructure()
     {
