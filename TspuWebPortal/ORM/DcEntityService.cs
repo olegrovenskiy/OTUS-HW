@@ -66,12 +66,13 @@ public class DcEntityService
             string EntityType;
             string EntityName = ExcelObject.Description;
             string ItemNumber = ExcelObject.ItemNumber;
+            string FactoryNumber = ExcelObject.FactoryNumber;
             if (ItemNumber.IndexOf(".") == -1) EntityType = "Шасси";
             else if ((EntityName.IndexOf("Плата") > -1) || (EntityName.IndexOf("Memory") > -1) || (EntityName.IndexOf("Модуль питания") > -1) || (EntityName.IndexOf("linecard") > -1)) EntityType = "Плата";
             //else if ((EntityName.IndexOf("Плата") > -1) || (EntityName.IndexOf("Memory") > -1)) EntityType = "Плата";
             else if (EntityName.IndexOf("Кабель") > -1) EntityType = "Кабель";
             else EntityType = "Модуль";
-            EntityModelData NewEntityModel = new EntityModelData { ModelName = EntityName, ModelType = EntityType };
+            EntityModelData NewEntityModel = new EntityModelData { ModelName = EntityName, ModelType = EntityType, PartNumber = FactoryNumber };
             CreateEntityModel(NewEntityModel);
             return NewEntityModel;
         }

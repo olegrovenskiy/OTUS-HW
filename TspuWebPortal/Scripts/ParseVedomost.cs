@@ -62,29 +62,43 @@ public class ParseVedomost
         Excel.Workbook xlWorkbook = xlApp.Workbooks.Add(Type.Missing);
         Excel.Worksheet xlWorksheet = (Excel.Worksheet)xlWorkbook.Worksheets.get_Item(1);
 
-        xlWorksheet.get_Range("a1", "h1").Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightSeaGreen);
+        xlWorksheet.get_Range("a1", "o1").Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightYellow);
 
         xlWorksheet.Cells[1, 1] = "Серийный номер";
-        xlWorksheet.Cells[1, 2] = "Описание";
-        xlWorksheet.Cells[1, 3] = "Нижний юнит";
-        xlWorksheet.Cells[1, 4] = "Высота шасси";
-        xlWorksheet.Cells[1, 5] = "Стойка";
-        xlWorksheet.Cells[1, 6] = "Ряд";
-        xlWorksheet.Cells[1, 7] = "Помещение";
-        xlWorksheet.Cells[1, 8] = "ЦОД";
+        xlWorksheet.Cells[1, 2] = "№ п/п";
+        xlWorksheet.Cells[1, 3] = "Категория детали";
+        xlWorksheet.Cells[1, 4] = "Описание";
+        xlWorksheet.Cells[1, 5] = "Маркировка производителя";
+        xlWorksheet.Cells[1, 6] = "Маркировка АСБИ";
+        xlWorksheet.Cells[1, 7] = "Инвентарный номер";
+        xlWorksheet.Cells[1, 8] = "Метод определения SN";
+        xlWorksheet.Cells[1, 9] = "Нижний юнит";
+        xlWorksheet.Cells[1, 10] = "Высота шасси";
+        xlWorksheet.Cells[1, 11] = "Стойка";
+        xlWorksheet.Cells[1, 12] = "Ряд";
+        xlWorksheet.Cells[1, 13] = "Помещение";
+        xlWorksheet.Cells[1, 14] = "ЦОД";
+        xlWorksheet.Cells[1, 15] = "Год поставки";
 
         int intCurrentRow = 1;
         foreach (OuterChassisData CurrentChassis in OutputList)
         {
             intCurrentRow++;
             xlWorksheet.Cells[intCurrentRow, 1] = CurrentChassis.SerialNumber;
-            xlWorksheet.Cells[intCurrentRow, 2] = CurrentChassis.Description;
-            xlWorksheet.Cells[intCurrentRow, 3] = CurrentChassis.LowerUnit;
-            xlWorksheet.Cells[intCurrentRow, 4] = CurrentChassis.ChassisHeight;
-            xlWorksheet.Cells[intCurrentRow, 5] = CurrentChassis.Rack;
-            xlWorksheet.Cells[intCurrentRow, 6] = CurrentChassis.RowName;
-            xlWorksheet.Cells[intCurrentRow, 7] = CurrentChassis.RoomName;
-            xlWorksheet.Cells[intCurrentRow, 8] = CurrentChassis.DataCenter;
+            xlWorksheet.Cells[intCurrentRow, 2] = CurrentChassis.ItemNumber;
+            xlWorksheet.Cells[intCurrentRow, 3] = CurrentChassis.Type;
+            xlWorksheet.Cells[intCurrentRow, 4] = CurrentChassis.Description;
+            xlWorksheet.Cells[intCurrentRow, 5] = CurrentChassis.FactoryNumber;
+            xlWorksheet.Cells[intCurrentRow, 6] = CurrentChassis.Hostname;
+            xlWorksheet.Cells[intCurrentRow, 7] = CurrentChassis.InventoryNumber;
+            xlWorksheet.Cells[intCurrentRow, 8] = CurrentChassis.DefinitionType;
+            xlWorksheet.Cells[intCurrentRow, 9] = CurrentChassis.LowerUnit;
+            xlWorksheet.Cells[intCurrentRow, 10] = CurrentChassis.ChassisHeight;
+            xlWorksheet.Cells[intCurrentRow, 11] = CurrentChassis.Rack;
+            xlWorksheet.Cells[intCurrentRow, 12] = CurrentChassis.RowName;
+            xlWorksheet.Cells[intCurrentRow, 13] = CurrentChassis.RoomName;
+            xlWorksheet.Cells[intCurrentRow, 14] = CurrentChassis.DataCenter;
+            xlWorksheet.Cells[intCurrentRow, 15] = CurrentChassis.Year;
         }
 
         

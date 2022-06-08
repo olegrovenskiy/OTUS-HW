@@ -165,14 +165,18 @@
                             DetailOrigin = 0,
                             InitialDetailTableId = ChosenDetailTable.InitialDetailTableId,
                             SerialNumber = SingleVedomostRecord.SerialNumber,
+                            SnType = SingleVedomostRecord.DefinitionType,
                             DetailOfficialName = SingleVedomostRecord.Description,
+                            FactoryName = SingleVedomostRecord.FactoryNumber,
+                            InventoryNumber = SingleVedomostRecord.InventoryNumber,
                             Quantity = SingleVedomostRecord.Quantity,
                             Location = SingleVedomostRecord.DataCenter,
                             Category = UsedModel.ModelType,
                             IsSplittable = false,
                             EntityModelId = UsedModel.EntityModelId,
                             OperationId = UsedOperation.OperationId,
-                            IsVisibleInExcel = true
+                            IsVisibleInExcel = true,
+                            DeliveryYear = SingleVedomostRecord.Year
                         };
             objDetailRecordService.CreateDetailRecordModel (UsedInitialRecord);
 

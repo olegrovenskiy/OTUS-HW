@@ -17,7 +17,10 @@ namespace TspuWebPortal.Model
         public string? ContractNumber { get; set; } = string.Empty;
         public string? ResponsiblePerson { get; set; } = string.Empty;
         public string? SerialNumber { get; set; } = string.Empty;
+        public string? SnType { get; set; }
         public string? DetailOfficialName { get; set; } = string.Empty;
+        public string? InventoryNumber { get; set; }
+        public string? FactoryName { get; set; }
         public int? Quantity { get; set; }
         public string? Location { get; set; } = string.Empty;
         public DateOnly? DeliveryDate { get; set; }
@@ -41,8 +44,7 @@ namespace TspuWebPortal.Model
 
         public bool IsVisibleInExcel { get; set; }
 
-
-
+        public int? DeliveryYear { get; set; }
 
     }
 }

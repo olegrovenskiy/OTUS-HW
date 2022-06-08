@@ -39,6 +39,7 @@
     //EntityModelData CurrentModel;
     int CurrentChassisId;
     int CurrentInitialRecordId;
+    int CurrentItemNumber = 0;
 
 
     void StartGenerationProcedure()
@@ -60,12 +61,21 @@
                 AllChassisInRack.Add(UsedInitialRecord.DetailOfficialName);
                 //CurrentModel = objEntityService.GetEntityModelInfoById((int)UsedInitialRecord.EntityModelId);
                 //Загрузка всех Entity Models, присутствующих в стойке
+                CurrentItemNumber++;
                 OutputVedomostList.Add(new OuterChassisData
                     {
-                        SerialNumber = UsedInitialRecord.SerialNumber, Description = UsedInitialRecord.DetailOfficialName, LowerUnit = (int)CurrentUnit.UnitInRack, 
-                         Rack = CurrentUnit.Rack.RackNameAsbi, RowName = CurrentUnit.Rack.Row.RowNameDataCenter,
-                         RoomName = CurrentUnit.Rack.Row.Room.RoomName, DataCenter = CurrentUnit.Rack.Row.Room.DataCenter.DataCenterName,
-                         ChassisHeight = (int)CurrentUnit.Chassis.EntityModel.ChassisHeightInUnits,
+                        SerialNumber = UsedInitialRecord.SerialNumber,
+                        //DefinitionType = UsedInitialRecord.SnType ?? "не задано",
+                        DefinitionType = CurrentUnit.Chassis.SnType ?? "не задано",
+                        Description = UsedInitialRecord.DetailOfficialName, LowerUnit = (int)CurrentUnit.UnitInRack, 
+                        Rack = CurrentUnit.Rack.RackNameAsbi, RowName = CurrentUnit.Rack.Row.RowNameDataCenter,
+                        RoomName = CurrentUnit.Rack.Row.Room.RoomName, DataCenter = CurrentUnit.Rack.Row.Room.DataCenter.DataCenterName,
+                        ChassisHeight = (int)CurrentUnit.Chassis.EntityModel.ChassisHeightInUnits, ItemNumber = CurrentItemNumber, Type = "Шасси",
+                        InventoryNumber = CurrentUnit.Chassis.InventoryNumber,                           //после переделки брать данные из первичной записи, а не из шасси
+                        FactoryNumber = CurrentUnit.Chassis.EntityModel.PartNumber ?? "не задано",
+                        Hostname = CurrentUnit.Chassis.Hostname ?? "не задано",
+                        Year = CurrentUnit.Chassis.DeliveryYear ?? 0                //Год поставки переместить в первичные записи
+
                     });
             }
         }
