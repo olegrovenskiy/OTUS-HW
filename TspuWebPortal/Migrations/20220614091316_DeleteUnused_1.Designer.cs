@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TspuWebPortal.ORM;
@@ -11,9 +12,10 @@ using TspuWebPortal.ORM;
 namespace TspuWebPortal.Migrations
 {
     [DbContext(typeof(TspuDbContext))]
-    partial class SiteDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220614091316_DeleteUnused_1")]
+    partial class DeleteUnused_1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,21 +33,25 @@ namespace TspuWebPortal.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CableId"));
 
                     b.Property<string>("Comments")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int?>("DetailChangeId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("InitialDetailRecordId")
+                    b.Property<int?>("EntityModelDataEntityModelId")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("IsInstalled")
+                    b.Property<int?>("InitialDetailRecordId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool?>("IsInstalled")
                         .HasColumnType("boolean");
 
                     b.HasKey("CableId");
 
                     b.HasIndex("DetailChangeId");
+
+                    b.HasIndex("EntityModelDataEntityModelId");
 
                     b.HasIndex("InitialDetailRecordId");
 
@@ -60,24 +66,25 @@ namespace TspuWebPortal.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CardId"));
 
-                    b.Property<int>("ChassisId")
+                    b.Property<int?>("ChassisId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Comments")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int?>("DetailChangeId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("InitialDetailRecordId")
+                    b.Property<int?>("EntityModelId")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("IsInstalled")
+                    b.Property<int?>("InitialDetailRecordId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool?>("IsInstalled")
                         .HasColumnType("boolean");
 
                     b.Property<string>("PositionInUpperEntity")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("CardId");
@@ -85,6 +92,8 @@ namespace TspuWebPortal.Migrations
                     b.HasIndex("ChassisId");
 
                     b.HasIndex("DetailChangeId");
+
+                    b.HasIndex("EntityModelId");
 
                     b.HasIndex("InitialDetailRecordId");
 
@@ -164,6 +173,9 @@ namespace TspuWebPortal.Migrations
                     b.Property<int?>("DetailChangeId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("EntityModelId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Hostname")
                         .IsRequired()
                         .HasColumnType("text");
@@ -177,6 +189,8 @@ namespace TspuWebPortal.Migrations
                     b.HasKey("ChassisId");
 
                     b.HasIndex("DetailChangeId");
+
+                    b.HasIndex("EntityModelId");
 
                     b.HasIndex("InitialDetailRecordId");
 
@@ -212,6 +226,10 @@ namespace TspuWebPortal.Migrations
 
                     b.Property<int?>("ChassisHeightInUnits")
                         .HasColumnType("integer");
+
+                    b.Property<string>("FactoryName")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int?>("MaximalPower")
                         .HasColumnType("integer");
@@ -310,6 +328,10 @@ namespace TspuWebPortal.Migrations
                     b.Property<int>("EntityModelId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("FactoryName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int>("InitialDetailTableId")
                         .HasColumnType("integer");
 
@@ -340,6 +362,10 @@ namespace TspuWebPortal.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("SerialNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("SnDefinitionType")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -446,6 +472,9 @@ namespace TspuWebPortal.Migrations
                     b.Property<int>("DeliveryYear")
                         .HasColumnType("integer");
 
+                    b.Property<int>("EntityModelId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("InitialDetailRecordId")
                         .HasColumnType("integer");
 
@@ -462,6 +491,8 @@ namespace TspuWebPortal.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("LicenseId");
+
+                    b.HasIndex("EntityModelId");
 
                     b.HasIndex("InitialDetailRecordId");
 
@@ -612,23 +643,24 @@ namespace TspuWebPortal.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Comments")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int?>("DetailChangeId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("HydraEndNumber")
+                    b.Property<int?>("EntityModelDataEntityModelId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("InitialDetailRecordId")
+                    b.Property<int?>("HydraEndNumber")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("IsInstalled")
+                    b.Property<int?>("InitialDetailRecordId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool?>("IsInstalled")
                         .HasColumnType("boolean");
 
                     b.Property<string>("PositionInUpperEntity")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("ModuleId");
@@ -638,6 +670,8 @@ namespace TspuWebPortal.Migrations
                     b.HasIndex("ChassisId");
 
                     b.HasIndex("DetailChangeId");
+
+                    b.HasIndex("EntityModelDataEntityModelId");
 
                     b.HasIndex("InitialDetailRecordId");
 
@@ -955,11 +989,13 @@ namespace TspuWebPortal.Migrations
                         .WithMany("Cables")
                         .HasForeignKey("DetailChangeId");
 
+                    b.HasOne("TspuWebPortal.Model.EntityModelData", null)
+                        .WithMany("Cables")
+                        .HasForeignKey("EntityModelDataEntityModelId");
+
                     b.HasOne("TspuWebPortal.Model.InitialDetailRecordData", "InitialDetailRecord")
                         .WithMany("Cables")
-                        .HasForeignKey("InitialDetailRecordId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("InitialDetailRecordId");
 
                     b.Navigation("DetailChange");
 
@@ -970,23 +1006,25 @@ namespace TspuWebPortal.Migrations
                 {
                     b.HasOne("TspuWebPortal.Model.ChassisData", "Chassis")
                         .WithMany("Cards")
-                        .HasForeignKey("ChassisId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ChassisId");
 
                     b.HasOne("TspuWebPortal.Model.ChangeApplicationData", "DetailChange")
                         .WithMany("Cards")
                         .HasForeignKey("DetailChangeId");
 
+                    b.HasOne("TspuWebPortal.Model.EntityModelData", "EntityModel")
+                        .WithMany("Cards")
+                        .HasForeignKey("EntityModelId");
+
                     b.HasOne("TspuWebPortal.Model.InitialDetailRecordData", "InitialDetailRecord")
                         .WithMany("Card")
-                        .HasForeignKey("InitialDetailRecordId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("InitialDetailRecordId");
 
                     b.Navigation("Chassis");
 
                     b.Navigation("DetailChange");
+
+                    b.Navigation("EntityModel");
 
                     b.Navigation("InitialDetailRecord");
                 });
@@ -1016,6 +1054,10 @@ namespace TspuWebPortal.Migrations
                         .WithMany("Chassis")
                         .HasForeignKey("DetailChangeId");
 
+                    b.HasOne("TspuWebPortal.Model.EntityModelData", "EntityModel")
+                        .WithMany("Chassis")
+                        .HasForeignKey("EntityModelId");
+
                     b.HasOne("TspuWebPortal.Model.InitialDetailRecordData", "InitialDetailRecord")
                         .WithMany("Chassis")
                         .HasForeignKey("InitialDetailRecordId")
@@ -1023,6 +1065,8 @@ namespace TspuWebPortal.Migrations
                         .IsRequired();
 
                     b.Navigation("DetailChange");
+
+                    b.Navigation("EntityModel");
 
                     b.Navigation("InitialDetailRecord");
                 });
@@ -1089,11 +1133,19 @@ namespace TspuWebPortal.Migrations
 
             modelBuilder.Entity("TspuWebPortal.Model.LicenseData", b =>
                 {
+                    b.HasOne("TspuWebPortal.Model.EntityModelData", "EntityModel")
+                        .WithMany("Licenses")
+                        .HasForeignKey("EntityModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("TspuWebPortal.Model.InitialDetailRecordData", "InitialDetailRecord")
                         .WithMany("Licenses")
                         .HasForeignKey("InitialDetailRecordId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("EntityModel");
 
                     b.Navigation("InitialDetailRecord");
                 });
@@ -1180,11 +1232,13 @@ namespace TspuWebPortal.Migrations
                         .WithMany("Modules")
                         .HasForeignKey("DetailChangeId");
 
+                    b.HasOne("TspuWebPortal.Model.EntityModelData", null)
+                        .WithMany("Modules")
+                        .HasForeignKey("EntityModelDataEntityModelId");
+
                     b.HasOne("TspuWebPortal.Model.InitialDetailRecordData", "InitialDetailRecord")
                         .WithMany("Module")
-                        .HasForeignKey("InitialDetailRecordId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("InitialDetailRecordId");
 
                     b.Navigation("Card");
 
@@ -1315,7 +1369,17 @@ namespace TspuWebPortal.Migrations
 
             modelBuilder.Entity("TspuWebPortal.Model.EntityModelData", b =>
                 {
+                    b.Navigation("Cables");
+
+                    b.Navigation("Cards");
+
+                    b.Navigation("Chassis");
+
                     b.Navigation("InitialDetailRecords");
+
+                    b.Navigation("Licenses");
+
+                    b.Navigation("Modules");
                 });
 
             modelBuilder.Entity("TspuWebPortal.Model.FileData", b =>

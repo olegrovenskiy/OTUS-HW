@@ -51,4 +51,13 @@ public class DcModuleService
         return;
     }
 
+
+    public List<ModuleData> ListAllModulesOnChassis(int InputChassisId)
+    {
+        List<ModuleData> AllModules = _db.Modules?.Where(s => s.ChassisId == InputChassisId).ToList();
+
+        return AllModules;
+    }
+
+
 }

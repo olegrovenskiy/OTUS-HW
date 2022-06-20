@@ -142,7 +142,7 @@
 
     void StartParseScript()
     {
-        AllVedomostList = ParseVedomost.GetAllRecords(ChosenDetailTable?.TableFile?.FilePath);
+        AllVedomostList = ParseVedomost.GetAllRecords(ChosenDetailTable?.TableFile?.FilePath);          //Убрать возможность нуля.
         ChosenDetailTable.RegisterDate = DateOnly.FromDateTime(DateTime.Now);
         IsFileParsed = true;
         return;
@@ -152,9 +152,7 @@
     {
         foreach (VedomostData SingleVedomostRecord in AllVedomostList)
         {
-
-
-            // Добавить правило для кабелей. Добавлять как первичную запись только когда запись с таким серийником отсутствует.
+            // Проход по всему считанному из ведомости.
 
             UsedModel = objEntityService.FindOrCreateEntityModelFromExcel(SingleVedomostRecord);            //добавить логирование операции
             UsedOperation = new OperationData { OperationType = "Добавление первичной записи", OperationDate = DateOnly.FromDateTime(DateTime.Now)};
@@ -165,10 +163,10 @@
                             DetailOrigin = 0,
                             InitialDetailTableId = ChosenDetailTable.InitialDetailTableId,
                             SerialNumber = SingleVedomostRecord.SerialNumber,
-                            SnType = SingleVedomostRecord.DefinitionType,
-                            DetailOfficialName = SingleVedomostRecord.Description,
-                            FactoryName = SingleVedomostRecord.FactoryNumber,
-                            InventoryNumber = SingleVedomostRecord.InventoryNumber,
+                            //SnType = SingleVedomostRecord.DefinitionType,                       //перенести в модель
+                            DetailOfficialName = SingleVedomostRecord.FullDetailName,
+                            //FactoryName = SingleVedomostRecord.FactoryNumber,                   //перенести в модель
+                            InventoryNumber = SingleVedomostRecord.InventoryNumber ?? "не применимо",
                             Quantity = SingleVedomostRecord.Quantity,
                             Location = SingleVedomostRecord.DataCenter,
                             Category = UsedModel.ModelType,
@@ -213,11 +211,18 @@
                 }
                 ChassisObject = new ChassisData
                         {
-                            SnType = SingleVedomostRecord.DefinitionType, SerialNumber = SingleVedomostRecord.SerialNumber,
-                            EntityModelId = UsedModel.EntityModelId, CurrentLocation = SingleVedomostRecord.DataCenter,
-                            IsInstalled = true, InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
-                            InventoryNumber = SingleVedomostRecord.InventoryNumber, DeliveryYear = SingleVedomostRecord.Year,
-                            Comments = "Слоты с " + FirstOccupiedSlot + " по " + LastOccupiedSlot
+                            IsInstalled = true,
+                            ChassisStatus = "в работе",
+                            InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
+                            Hostname = SingleVedomostRecord.AsbiHostname,
+                            Comments = SingleVedomostRecord.Comments ?? ""
+                            //SnType = SingleVedomostRecord.DefinitionType,
+                            //SerialNumber = SingleVedomostRecord.SerialNumber,
+                            //EntityModelId = UsedModel.EntityModelId,
+                            //CurrentLocation = SingleVedomostRecord.DataCenter,
+                            //InventoryNumber = SingleVedomostRecord.InventoryNumber,
+                            //
+                            // DeliveryYear = SingleVedomostRecord.Year,
                             //Comments = Convert.ToString(objSiteService.GetDcInfoByName(SingleVedomostRecord.DataCenter).DataCenterId)
                         };
                 objChassisService.CreateChassisModel(ChassisObject);
@@ -242,15 +247,20 @@
                 //  Добавляем объект в списке плат.
                 CardObject = new CardData
                     {
-                          SnType = SingleVedomostRecord.DefinitionType, SerialNumber = SingleVedomostRecord.SerialNumber, 
-                          EntityModelId = UsedModel.EntityModelId, CurrentLocation = SingleVedomostRecord.DataCenter,
-                          IsInstalled = true, InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
-                          InventoryNumber = SingleVedomostRecord.InventoryNumber, DeliveryYear = SingleVedomostRecord.Year,
-                          CardSlotInChassis = SingleVedomostRecord.Place,
-                          Comments = SingleVedomostRecord.Comments, ChassisId = CurrentChassisId, PositionInUpperEntity = SingleVedomostRecord.Place
+                          //SnType = SingleVedomostRecord.DefinitionType,
+                          //SerialNumber = SingleVedomostRecord.SerialNumber, 
+                          //EntityModelId = UsedModel.EntityModelId,
+                          //CurrentLocation = SingleVedomostRecord.DataCenter,
+                          IsInstalled = true,
+                          InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
+                          //InventoryNumber = SingleVedomostRecord.InventoryNumber,
+                          //DeliveryYear = SingleVedomostRecord.Year,
+                          //CardSlotInChassis = SingleVedomostRecord.Place,
+                          Comments = SingleVedomostRecord.Comments  ?? "",
+                          ChassisId = CurrentChassisId,
+                          PositionInUpperEntity = SingleVedomostRecord.Place
                     };
                 objCardService.CreateCardModel(CardObject);
-                //Debug.WriteLine("Hello, World");
                 CurrentCardId = CardObject.CardId;
                 UsedInitialRecord.IsSuccessfullyUploaded = true;
             }
@@ -266,11 +276,17 @@
                 else HydraNumber = 0;
                 ModuleObject = new ModuleData
                     {
-                          SnType = SingleVedomostRecord.DefinitionType, SerialNumber = SingleVedomostRecord.SerialNumber, 
-                          EntityModelId = UsedModel.EntityModelId, CurrentLocation = SingleVedomostRecord.DataCenter,
-                          IsInstalled = true, InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
-                          InventoryNumber = SingleVedomostRecord.InventoryNumber, DeliveryYear = SingleVedomostRecord.Year,
-                          Comments = SingleVedomostRecord.Comments, ChassisId = CurrentChassisId, PositionInUpperEntity = SingleVedomostRecord.Place,
+                          //SnType = SingleVedomostRecord.DefinitionType,
+                          //SerialNumber = SingleVedomostRecord.SerialNumber, 
+                          //EntityModelId = UsedModel.EntityModelId,
+                          //CurrentLocation = SingleVedomostRecord.DataCenter,
+                          IsInstalled = true,
+                          InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
+                          //InventoryNumber = SingleVedomostRecord.InventoryNumber,
+                          //DeliveryYear = SingleVedomostRecord.Year,
+                          Comments = SingleVedomostRecord.Comments ?? "",
+                          ChassisId = CurrentChassisId,
+                          PositionInUpperEntity = SingleVedomostRecord.Place,
                           HydraEndNumber = HydraNumber
                     };
                 objModuleService.CreateModuleModel(ModuleObject);
@@ -282,11 +298,15 @@
                 //  Добавляем объект в списке кабелей.
                  CableObject = new CableData
                     {
-                          SnType = SingleVedomostRecord.DefinitionType, SerialNumber = SingleVedomostRecord.SerialNumber, 
-                          EntityModelId = UsedModel.EntityModelId, CurrentLocation = SingleVedomostRecord.DataCenter,
-                          IsInstalled = true, InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
-                          InventoryNumber = SingleVedomostRecord.InventoryNumber, DeliveryYear = SingleVedomostRecord.Year,
-                          Comments = SingleVedomostRecord.Comments,
+                          //SnType = SingleVedomostRecord.DefinitionType,
+                          //SerialNumber = SingleVedomostRecord.SerialNumber, 
+                          //EntityModelId = UsedModel.EntityModelId,
+                          //CurrentLocation = SingleVedomostRecord.DataCenter,
+                          IsInstalled = true,
+                          InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
+                          //InventoryNumber = SingleVedomostRecord.InventoryNumber,
+                          //DeliveryYear = SingleVedomostRecord.Year,
+                          Comments = SingleVedomostRecord.Comments  ?? "",
                     };
                 objCableService.CreateCableModel(CableObject);
             }

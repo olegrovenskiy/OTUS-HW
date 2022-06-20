@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TspuWebPortal.ORM;
@@ -11,9 +12,10 @@ using TspuWebPortal.ORM;
 namespace TspuWebPortal.Migrations
 {
     [DbContext(typeof(TspuDbContext))]
-    partial class SiteDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220614103009_DeleteUnused_6")]
+    partial class DeleteUnused_6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -212,6 +214,10 @@ namespace TspuWebPortal.Migrations
 
                     b.Property<int?>("ChassisHeightInUnits")
                         .HasColumnType("integer");
+
+                    b.Property<string>("FactoryName")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int?>("MaximalPower")
                         .HasColumnType("integer");

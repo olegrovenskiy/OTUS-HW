@@ -30,7 +30,8 @@ public class DcUnitService
             .ThenInclude(row => row.Room)
             .ThenInclude(room => room.DataCenter)
             .Include(unit => unit.Chassis)
-            .ThenInclude(chassis => chassis.EntityModel)
+            .ThenInclude(chassis => chassis.InitialDetailRecord)
+            .ThenInclude(initrecord => initrecord.EntityModel)
             .ToList();
         return UnitDataList;
     }
@@ -94,8 +95,6 @@ public class DcUnitService
             .ToList();
 
         return SelectedDataCenters;
-        //List<DcData> WholeSiteList = _db.DataCenters
-        //return WholeSiteList;
     }
 
     public List<RackData> GetAllRacksInDc(string DcName)
