@@ -11,5 +11,7 @@
         public string Comments { get; set; }
         public string DefinitionType { get; set; }
         public int Year { get; set; }
+        public int QuantityCount { get; set; }
+        public string PositionInUpperEntity { get; set; }
     }
 }

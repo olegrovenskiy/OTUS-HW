@@ -51,4 +51,13 @@ public class DcCardService
         return;
     }
 
+
+    public List<CardData> ListAllCardsOnChassis(int InputChassisId)
+    {
+        List<CardData> AllCards = _db.Cards?.Where(s => s.ChassisId == InputChassisId).ToList();
+
+        return AllCards;
+    }
+
+
 }
