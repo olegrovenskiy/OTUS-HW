@@ -13,5 +13,6 @@
         public int Year { get; set; }
         public int QuantityCount { get; set; }
         public string PositionInUpperEntity { get; set; }
+        public bool IsExcludedFromPrint { get; set; }
     }
 }

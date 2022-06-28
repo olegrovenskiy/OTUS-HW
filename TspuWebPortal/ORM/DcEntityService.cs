@@ -71,7 +71,10 @@ public class DcEntityService
             string DefinitionType = ExcelObject.DefinitionType;
             if (DefinitionType == "" || DefinitionType == null) DefinitionType = "не определено";
             if (ItemNumber.IndexOf(".") == -1) EntityType = "Шасси";
-            else if ((EntityName.IndexOf("Плата") > -1) || (EntityName.IndexOf("Memory") > -1) || (EntityName.IndexOf("Модуль питания") > -1) || (EntityName.IndexOf("linecard") > -1)) EntityType = "Плата";
+            else if ((EntityName.IndexOf("Плата") > -1) ||                                                                      //перетащить в enum
+                (EntityName.IndexOf("Memory") > -1) || (EntityName.IndexOf("Модуль питания") > -1) ||
+                (EntityName.IndexOf("Сетевая карта") > -1) || (EntityName.IndexOf("Модуль управляющий") > -1) ||
+                (EntityName.IndexOf("SSD") > -1) || (EntityName.IndexOf("linecard") > -1)) EntityType = "Плата";
             else if (EntityName.IndexOf("Кабель") > -1) EntityType = "Кабель";
             else EntityType = "Модуль";
             EntityModelData NewEntityModel = new EntityModelData { ModelName = EntityName, ModelType = EntityType, PartNumber = FactoryNumber, SnDefinitionType = DefinitionType };

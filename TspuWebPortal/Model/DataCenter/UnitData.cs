@@ -8,8 +8,8 @@ namespace TspuWebPortal.Model
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UnitId { get; set; }
-        public int? UnitInRack { get; set; }
-        public bool? IsFront { get; set; }
+        public int UnitInRack { get; set; }
+        public bool IsFront { get; set; }
 
         public int? ChassisId { get; set; }
         [ForeignKey("ChassisId")]
@@ -21,7 +21,7 @@ namespace TspuWebPortal.Model
         [ForeignKey("ServerSlotId")]
         public ServerSlotData? ServerSlot { get; set; }
 
-        public int? RackId { get; set; }
+        public int RackId { get; set; }
         [ForeignKey("RackId")]
         public RackData? Rack { get; set; }
 

@@ -19,6 +19,7 @@
         public string DataCenter { get; set; }
         public string RoomName { get; set; }
         public string RowName { get; set; }
+        public bool IsOnFront { get; set; }
         public List<InnerChassisData>? InnerChassisDataList { get; set; }
     }
 }

@@ -39,6 +39,9 @@
     List<InnerChassisData> InnerDetailList = new List<InnerChassisData>();
     List<ModuleData> AllModulesInChassis = new List<ModuleData>();
     List<CardData> AllCardsInChassis = new List<CardData>();
+    AllRacksInDcData AllRacksVedomostList= new AllRacksInDcData();
+    List<AllRacksInDcData> AllRacksForVedomost = new List<AllRacksInDcData>();
+
     ChassisData? UsedChassis;
     InitialDetailRecordData? UsedInitialRecord;
     InitialDetailRecordData? UsedInternalDetailRecord;
@@ -48,36 +51,128 @@
     int CurrentChassisNumber = 0;
     int CurrentDetailInChassisNumber = 0;
     int CurrentRackId;
-    string CurrentRackNumber;
+    //string CurrentRackNumber;
 
     void StartGenerationProcedure()
     {
-        //string FilePath = Path.Combine(Environment.ContentRootPath, Environment.EnvironmentName, "unsafe_uploads", $"OutputVedomost.xlsx");
         string FilePath = Path.Combine(Environment.ContentRootPath, Environment.EnvironmentName, "unsafe_uploads", $"OutputVedomost_{DateTime.Now.ToLongDateString()}.xlsx");
-        
+
         /*
         AllRacksInDc = objUnitService.GetAllRacksInDc("ЦОД-1");   //Получение списка всех стоек в цоде.
         foreach (RackData UsedRack in AllRacksInDc)
         {
             CurrentRackId = UsedRack.RackId;
-            CurrentRackNumber = UsedRack.RackNameAsbi;
+            //CurrentRackNumber = UsedRack.RackNameAsbi;
+            AllUnitsInRack = objUnitService.ListAllUnitsInRack(UsedRack.RackId);
+            foreach (UnitData CurrentUnit in AllUnitsInRack)
+            {
+                if ((CurrentUnit.ChassisId != null) && (CurrentUnit.IsChassisLowerUnit == true))
+                {
+                    CurrentChassisId = CurrentUnit.ChassisId ?? default(int);
+                    UsedChassis = objChassisService.GetChassisDataInfoById(CurrentChassisId);
+                    CurrentInitialRecordId = UsedChassis.InitialDetailRecordId;
+                    UsedInitialRecord = objInitialDetailRecordService.GetDetailRecordDataInfoById(CurrentInitialRecordId);
+                    CurrentChassisNumber++;
+
+                    //Проход по модулям внутри шасси
+                    AllModulesInChassis = objModuleService.ListAllModulesOnChassis(CurrentChassisId);
+                    foreach (ModuleData UsedModule in AllModulesInChassis)
+                    {
+                        CurrentDetailInChassisNumber++;
+                        CurrentInitialRecordId = UsedModule.InitialDetailRecordId;
+                        UsedInternalDetailRecord = objInitialDetailRecordService.GetDetailRecordDataInfoById(CurrentInitialRecordId);
+                        InnerDetailList.Add(new InnerChassisData
+                            {
+                                SerialNumber = UsedInternalDetailRecord?.SerialNumber ?? "",
+                                Description = UsedInternalDetailRecord?.DetailOfficialName ?? "",
+                                Type = "Модуль", 
+                                FactoryNumber = UsedInternalDetailRecord?.EntityModel?.PartNumber ?? "",
+                                InventoryNumber = UsedInternalDetailRecord?.InventoryNumber ?? "",
+                                Comments = UsedModule.Comments,
+                                DefinitionType = UsedInternalDetailRecord?.EntityModel?.SnDefinitionType ?? "",
+                                Year = UsedInternalDetailRecord?.DeliveryYear ?? 0,
+                                PositionInUpperEntity = UsedModule.PositionInUpperEntity,
+                                QuantityCount = UsedInternalDetailRecord.IsVisibleInExcel ? 1 : 0 
+                            });
+                    }
+
+                    //Проход по картам внутри шасси
+                    AllCardsInChassis = objCardService.ListAllCardsOnChassis(CurrentChassisId);
+                    foreach (CardData UsedCard in AllCardsInChassis)
+                    {
+                        CurrentDetailInChassisNumber++;
+                        CurrentInitialRecordId = UsedCard.InitialDetailRecordId;
+                        UsedInternalDetailRecord = objInitialDetailRecordService.GetDetailRecordDataInfoById(CurrentInitialRecordId);
+                        InnerDetailList.Add(new InnerChassisData
+                            {
+                                SerialNumber = UsedInternalDetailRecord?.SerialNumber ?? "",
+                                Description = UsedInternalDetailRecord?.DetailOfficialName ?? "",
+                                Type = "Карта", 
+                                FactoryNumber = UsedInternalDetailRecord?.EntityModel?.PartNumber ?? "",
+                                InventoryNumber = UsedInternalDetailRecord?.InventoryNumber ?? "",
+                                Comments = UsedCard.Comments,
+                                DefinitionType = UsedInternalDetailRecord?.EntityModel?.SnDefinitionType ?? "",
+                                Year = UsedInternalDetailRecord?.DeliveryYear ?? 0,
+                                PositionInUpperEntity = UsedCard.PositionInUpperEntity,
+                                QuantityCount = UsedInternalDetailRecord.IsVisibleInExcel ? 1 : 0 
+                            });
+                    }
+
+                    Console.WriteLine($"Шасси: {UsedInitialRecord?.DetailOfficialName}");
+                    OutputVedomostList.Add(new OuterChassisData
+                        {
+                            SerialNumber = UsedInitialRecord?.SerialNumber ?? "",
+                            //DefinitionType = CurrentUnit.Chassis.SnType ?? "не задано",
+                            DefinitionType = UsedInitialRecord?.EntityModel?.SnDefinitionType ?? "не назначено",
+                            Description = UsedInitialRecord?.DetailOfficialName ?? "не назначено",
+                            LowerUnit = CurrentUnit.UnitInRack ?? 0, 
+                            Rack = CurrentUnit?.Rack?.RackNameAsbi ?? "не назначено",
+                            RowName = CurrentUnit?.Rack?.Row?.RowNameDataCenter ?? "не назначено",
+                            RoomName = CurrentUnit?.Rack?.Row?.Room?.RoomName ?? "не назначено",
+                            DataCenter = CurrentUnit?.Rack?.Row?.Room?.DataCenter?.DataCenterName ?? "не назначено",
+                            ChassisHeight = UsedInitialRecord?.EntityModel?.ChassisHeightInUnits ?? 1,
+                            Comments = UsedChassis.Comments,
+                            Type = "Шасси",
+                            InventoryNumber = UsedInitialRecord?.InventoryNumber  ?? "не назначено",
+                            FactoryNumber = UsedInitialRecord?.EntityModel?.PartNumber ?? "не задано",
+                            Hostname = CurrentUnit?.Chassis?.Hostname ?? "не задано",
+                            Year = UsedInitialRecord?.DeliveryYear ?? 0,
+                            InnerChassisDataList = new List<InnerChassisData>(InnerDetailList),
+                        });
+                    InnerDetailList.Clear();
+                }
+            }
+            SortedVedomostList = (from item in OutputVedomostList orderby item.LowerUnit select item).ToList();
+            AllRacksForVedomost.Add(new AllRacksInDcData
+            {
+                FullSingleRackData = SortedVedomostList,
+                RackAsbiName = UsedRack.RackNameAsbi,
+                RackDcName = UsedRack.RackNameDataCenter,
+            });
         }
+
+
+        ParseVedomost.GenerateFullVedomost(AllRacksForVedomost, FilePath);
+        IsFileGenerationStarted = true;
+
         */
 
-        AllUnitsInRack = objUnitService.ListAllUnitsInRack(18);     //RackId = 18 - захардкожено для тестов. ЦОД-1, стойка 1.
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+        /**/                                                        //20 - стойка 6, 21 - стойка 7, 22 - стойка 8, 24..28 - стойки 9..13
+        AllUnitsInRack = objUnitService.ListAllUnitsInRack(18);     //18 - стойка 1,   39 - стойка 2,  40 - стойка 3, 41 - стойка 4, 19 - стойка 5.
         foreach (UnitData CurrentUnit in AllUnitsInRack)
         {
             if ((CurrentUnit.ChassisId != null) && (CurrentUnit.IsChassisLowerUnit == true))
             {
-                //Console.WriteLine(DateTime.Today);
-                //DateTime someDate = new DateTime(now);
                 CurrentChassisId = CurrentUnit.ChassisId ?? default(int);
                 UsedChassis = objChassisService.GetChassisDataInfoById(CurrentChassisId);
                 CurrentInitialRecordId = UsedChassis.InitialDetailRecordId;
                 UsedInitialRecord = objInitialDetailRecordService.GetDetailRecordDataInfoById(CurrentInitialRecordId);
-                //AllChassisInRack.Add(UsedInitialRecord.DetailOfficialName);
-                //CurrentModel = objEntityService.GetEntityModelInfoById((int)UsedInitialRecord.EntityModelId);
-                //Загрузка всех Entity Models, присутствующих в стойке
                 CurrentChassisNumber++;
 
                 //Проход по модулям внутри шасси
@@ -91,14 +186,15 @@
                         {
                             SerialNumber = UsedInternalDetailRecord?.SerialNumber ?? "",
                             Description = UsedInternalDetailRecord?.DetailOfficialName ?? "",
-                            Type = "Модуль", 
+                            Type = UsedInternalDetailRecord?.DetailOfficialName.IndexOf("Кабель") > -1 ? "Кабель" : "Модуль", 
                             FactoryNumber = UsedInternalDetailRecord?.EntityModel?.PartNumber ?? "",
                             InventoryNumber = UsedInternalDetailRecord?.InventoryNumber ?? "",
-                            Comments = UsedModule.Comments,
+                            Comments = UsedModule.Comments == "пусто" ? "" : UsedModule.Comments,
                             DefinitionType = UsedInternalDetailRecord?.EntityModel?.SnDefinitionType ?? "",
                             Year = UsedInternalDetailRecord?.DeliveryYear ?? 0,
                             PositionInUpperEntity = UsedModule.PositionInUpperEntity,
-                            QuantityCount = UsedInternalDetailRecord.IsVisibleInExcel ? 1 : 0 
+                            QuantityCount = UsedInternalDetailRecord.IsVisibleInExcel ? 1 : 0,
+                            IsExcludedFromPrint = UsedInternalDetailRecord.IsExcludedFromPrint
                         });
                 }
 
@@ -116,28 +212,31 @@
                             Type = "Карта", 
                             FactoryNumber = UsedInternalDetailRecord?.EntityModel?.PartNumber ?? "",
                             InventoryNumber = UsedInternalDetailRecord?.InventoryNumber ?? "",
-                            Comments = UsedCard.Comments,
+                            Comments = UsedCard.Comments == "пусто" ? "" : UsedCard.Comments,
                             DefinitionType = UsedInternalDetailRecord?.EntityModel?.SnDefinitionType ?? "",
                             Year = UsedInternalDetailRecord?.DeliveryYear ?? 0,
                             PositionInUpperEntity = UsedCard.PositionInUpperEntity,
-                            QuantityCount = UsedInternalDetailRecord.IsVisibleInExcel ? 1 : 0 
+                            QuantityCount = UsedInternalDetailRecord.IsVisibleInExcel ? 1 : 0, 
+                            IsExcludedFromPrint = UsedInternalDetailRecord.IsExcludedFromPrint
                         });
                 }
 
                 Console.WriteLine($"Шасси: {UsedInitialRecord?.DetailOfficialName}");
+                //Console.WriteLine($"Перед: {CurrentUnit.IsFront}");
                 OutputVedomostList.Add(new OuterChassisData
                     {
                         SerialNumber = UsedInitialRecord?.SerialNumber ?? "",
                         //DefinitionType = CurrentUnit.Chassis.SnType ?? "не задано",
                         DefinitionType = UsedInitialRecord?.EntityModel?.SnDefinitionType ?? "не назначено",
                         Description = UsedInitialRecord?.DetailOfficialName ?? "не назначено",
-                        LowerUnit = CurrentUnit.UnitInRack ?? 0, 
+                        LowerUnit = CurrentUnit.UnitInRack,
+                        IsOnFront = CurrentUnit.IsFront,
                         Rack = CurrentUnit?.Rack?.RackNameAsbi ?? "не назначено",
                         RowName = CurrentUnit?.Rack?.Row?.RowNameDataCenter ?? "не назначено",
                         RoomName = CurrentUnit?.Rack?.Row?.Room?.RoomName ?? "не назначено",
                         DataCenter = CurrentUnit?.Rack?.Row?.Room?.DataCenter?.DataCenterName ?? "не назначено",
                         ChassisHeight = UsedInitialRecord?.EntityModel?.ChassisHeightInUnits ?? 1,
-                        Comments = UsedChassis.Comments,
+                        Comments = UsedChassis.Comments == "пусто" ? "" : UsedChassis.Comments,
                         Type = "Шасси",
                         InventoryNumber = UsedInitialRecord?.InventoryNumber  ?? "не назначено",
                         FactoryNumber = UsedInitialRecord?.EntityModel?.PartNumber ?? "не задано",
@@ -152,6 +251,9 @@
         SortedVedomostList = (from item in OutputVedomostList orderby item.LowerUnit select item).ToList();
         ParseVedomost.GenerateVedomost(SortedVedomostList, FilePath);
         IsFileGenerationStarted = true;
+
+        
+
     }
 
 }

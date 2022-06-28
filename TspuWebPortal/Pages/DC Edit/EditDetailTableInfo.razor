@@ -165,7 +165,7 @@
                             SerialNumber = SingleVedomostRecord.SerialNumber,
                             DetailOfficialName = SingleVedomostRecord.FullDetailName,
                             InventoryNumber = SingleVedomostRecord.InventoryNumber ?? "не применимо",
-                            Quantity = SingleVedomostRecord.Quantity,
+                            //Quantity = SingleVedomostRecord.Quantity,
                             Location = SingleVedomostRecord.DataCenter,
                             Category = UsedModel.ModelType,
                             IsSplittable = false,
@@ -185,7 +185,7 @@
                 //Добавляем запись о занятых шасси слотах в таблицу слотов
                 if (SingleVedomostRecord.Place.IndexOf("(r)") > -1)
                 {
-                    TempString = SingleVedomostRecord.Place.Replace("(r)", "");
+                    TempString = SingleVedomostRecord.Place.Replace(" (r)", "");
                     IsOnFront = false;
 
                 }
@@ -207,13 +207,15 @@
                     FirstOccupiedSlot = Convert.ToInt32(TempString);
                     LastOccupiedSlot = FirstOccupiedSlot;
                 }
+                UsedModel.ChassisHeightInUnits = LastOccupiedSlot - FirstOccupiedSlot + 1;          //Записать изменения в БД.
+                objEntityService.UpdateEntityModelInfo(UsedModel);
                 ChassisObject = new ChassisData
                         {
                             IsInstalled = true,
                             ChassisStatus = "в работе",
                             InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
                             Hostname = SingleVedomostRecord.AsbiHostname,
-                            Comments = SingleVedomostRecord.Comments ?? ""
+                            Comments = SingleVedomostRecord.Comments ?? "пусто"
                         };
                 objChassisService.CreateChassisModel(ChassisObject);
                 CurrentChassisId = ChassisObject.ChassisId;
@@ -238,9 +240,9 @@
                     {
                           IsInstalled = true,
                           InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
-                          Comments = SingleVedomostRecord.Comments  ?? "",
+                          Comments = SingleVedomostRecord.Comments  ?? "пусто",
                           ChassisId = CurrentChassisId,
-                          PositionInUpperEntity = SingleVedomostRecord.Place
+                          PositionInUpperEntity = SingleVedomostRecord.Place ?? "пусто"
                     };
                 objCardService.CreateCardModel(CardObject);
                 CurrentCardId = CardObject.CardId;
@@ -259,9 +261,9 @@
                     {
                           IsInstalled = true,
                           InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
-                          Comments = SingleVedomostRecord.Comments ?? "",
+                          Comments = SingleVedomostRecord.Comments ?? "пусто",
                           ChassisId = CurrentChassisId,
-                          PositionInUpperEntity = SingleVedomostRecord.Place,
+                          PositionInUpperEntity = SingleVedomostRecord.Place ?? "пусто",
                           HydraEndNumber = HydraNumber
                     };
                 objModuleService.CreateModuleModel(ModuleObject);
@@ -274,7 +276,7 @@
                     {
                           IsInstalled = true,
                           InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
-                          Comments = SingleVedomostRecord.Comments  ?? "",
+                          Comments = SingleVedomostRecord.Comments  ?? "пусто",
                     };
                 objCableService.CreateCableModel(CableObject);
             }

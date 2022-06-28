@@ -24,7 +24,7 @@ namespace TspuWebPortal.Model
         public string DetailOfficialName { get; set; } = string.Empty;
         public string InventoryNumber { get; set; } = string.Empty;
         //public string FactoryName { get; set; } = string.Empty;                // Уходит в описание модели.
-        public int Quantity { get; set; }                                        // Не нужен. Используем IsVisibleInExcel.
+        //public int Quantity { get; set; }                                        // Не нужен. Используем IsVisibleInExcel.
         public string Location { get; set; } = string.Empty;
         public DateOnly DeliveryDate { get; set; }
         public string Category { get; set; } = string.Empty; //string
@@ -49,6 +49,8 @@ namespace TspuWebPortal.Model
         public bool IsVisibleInExcel { get; set; } = true;
 
         public int DeliveryYear { get; set; } = 2020;
+
+        public bool IsExcludedFromPrint { get; set; }
 
     }
 }

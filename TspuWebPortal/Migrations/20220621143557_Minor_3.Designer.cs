@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TspuWebPortal.ORM;
@@ -11,9 +12,10 @@ using TspuWebPortal.ORM;
 namespace TspuWebPortal.Migrations
 {
     [DbContext(typeof(TspuDbContext))]
-    partial class SiteDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220621143557_Minor_3")]
+    partial class Minor_3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -316,9 +318,6 @@ namespace TspuWebPortal.Migrations
                     b.Property<string>("InventoryNumber")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<bool>("IsExcludedFromPrint")
-                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsSplittable")
                         .HasColumnType("boolean");
@@ -897,16 +896,16 @@ namespace TspuWebPortal.Migrations
                     b.Property<bool?>("IsChassisLowerUnit")
                         .HasColumnType("boolean");
 
-                    b.Property<bool>("IsFront")
+                    b.Property<bool?>("IsFront")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("RackId")
+                    b.Property<int?>("RackId")
                         .HasColumnType("integer");
 
                     b.Property<int?>("ServerSlotId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UnitInRack")
+                    b.Property<int?>("UnitInRack")
                         .HasColumnType("integer");
 
                     b.HasKey("UnitId");
@@ -1270,9 +1269,7 @@ namespace TspuWebPortal.Migrations
 
                     b.HasOne("TspuWebPortal.Model.RackData", "Rack")
                         .WithMany("Units")
-                        .HasForeignKey("RackId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RackId");
 
                     b.HasOne("TspuWebPortal.Model.ServerSlotData", "ServerSlot")
                         .WithMany("Units")
