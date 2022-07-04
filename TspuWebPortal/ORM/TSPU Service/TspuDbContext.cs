@@ -37,9 +37,11 @@ public class TspuDbContext : DbContext
         public DbSet<OperationData>? Operations { get; set; }
         
         public DbSet<MaterialStorageData>? StorageRecords { get; set; }
+        public DbSet<SpecDetailData>? SpecificationRecords { get; set; }
+
     //public DbSet<MaterialTableStorageLink> MaterialTableStorageLinks { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MaterialTableStorageLink>()
                 .HasKey(ms => new {ms.InitialMaterialTableId, ms.MaterialStorageItemId});

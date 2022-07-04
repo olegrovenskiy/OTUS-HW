@@ -164,8 +164,8 @@
 
 
         /**/                                                        //20 - стойка 6, 21 - стойка 7, 22 - стойка 8, 24..28 - стойки 9..13
-        AllUnitsInRack = objUnitService.ListAllUnitsInRack(18);     //18 - стойка 1,   39 - стойка 2,  40 - стойка 3, 41 - стойка 4, 19 - стойка 5.
-        foreach (UnitData CurrentUnit in AllUnitsInRack)
+        AllUnitsInRack = objUnitService.ListAllUnitsInRack(31);     //18 - стойка 1,   39 - стойка 2,  40 - стойка 3, 41 - стойка 4, 19 - стойка 5.
+        foreach (UnitData CurrentUnit in AllUnitsInRack)            //ЦОД-2: 29 - стойка 1, 30 - стойка 2,
         {
             if ((CurrentUnit.ChassisId != null) && (CurrentUnit.IsChassisLowerUnit == true))
             {
@@ -187,10 +187,10 @@
                             SerialNumber = UsedInternalDetailRecord?.SerialNumber ?? "",
                             Description = UsedInternalDetailRecord?.DetailOfficialName ?? "",
                             Type = UsedInternalDetailRecord?.DetailOfficialName.IndexOf("Кабель") > -1 ? "Кабель" : "Модуль", 
-                            FactoryNumber = UsedInternalDetailRecord?.EntityModel?.PartNumber ?? "",
+                            FactoryNumber = UsedInternalDetailRecord?.SpecDetail?.EntityModel?.PartNumber ?? "",
                             InventoryNumber = UsedInternalDetailRecord?.InventoryNumber ?? "",
                             Comments = UsedModule.Comments == "пусто" ? "" : UsedModule.Comments,
-                            DefinitionType = UsedInternalDetailRecord?.EntityModel?.SnDefinitionType ?? "",
+                            DefinitionType = UsedInternalDetailRecord?.SpecDetail?.EntityModel?.SnDefinitionType ?? "",
                             Year = UsedInternalDetailRecord?.DeliveryYear ?? 0,
                             PositionInUpperEntity = UsedModule.PositionInUpperEntity,
                             QuantityCount = UsedInternalDetailRecord.IsVisibleInExcel ? 1 : 0,
@@ -209,11 +209,12 @@
                         {
                             SerialNumber = UsedInternalDetailRecord?.SerialNumber ?? "",
                             Description = UsedInternalDetailRecord?.DetailOfficialName ?? "",
-                            Type = "Карта", 
-                            FactoryNumber = UsedInternalDetailRecord?.EntityModel?.PartNumber ?? "",
+                            //Type = UsedInternalDetailRecord?.DetailOfficialName.IndexOf("ПАК") > -1 ? "Софт" : "Карта", 
+                            Type = "Плата", 
+                            FactoryNumber = UsedInternalDetailRecord?.SpecDetail?.EntityModel?.PartNumber ?? "",
                             InventoryNumber = UsedInternalDetailRecord?.InventoryNumber ?? "",
                             Comments = UsedCard.Comments == "пусто" ? "" : UsedCard.Comments,
-                            DefinitionType = UsedInternalDetailRecord?.EntityModel?.SnDefinitionType ?? "",
+                            DefinitionType = UsedInternalDetailRecord?.SpecDetail?.EntityModel?.SnDefinitionType ?? "",
                             Year = UsedInternalDetailRecord?.DeliveryYear ?? 0,
                             PositionInUpperEntity = UsedCard.PositionInUpperEntity,
                             QuantityCount = UsedInternalDetailRecord.IsVisibleInExcel ? 1 : 0, 
@@ -227,7 +228,7 @@
                     {
                         SerialNumber = UsedInitialRecord?.SerialNumber ?? "",
                         //DefinitionType = CurrentUnit.Chassis.SnType ?? "не задано",
-                        DefinitionType = UsedInitialRecord?.EntityModel?.SnDefinitionType ?? "не назначено",
+                        DefinitionType = UsedInitialRecord?.SpecDetail?.EntityModel?.SnDefinitionType ?? "не назначено",
                         Description = UsedInitialRecord?.DetailOfficialName ?? "не назначено",
                         LowerUnit = CurrentUnit.UnitInRack,
                         IsOnFront = CurrentUnit.IsFront,
@@ -235,11 +236,11 @@
                         RowName = CurrentUnit?.Rack?.Row?.RowNameDataCenter ?? "не назначено",
                         RoomName = CurrentUnit?.Rack?.Row?.Room?.RoomName ?? "не назначено",
                         DataCenter = CurrentUnit?.Rack?.Row?.Room?.DataCenter?.DataCenterName ?? "не назначено",
-                        ChassisHeight = UsedInitialRecord?.EntityModel?.ChassisHeightInUnits ?? 1,
+                        ChassisHeight = UsedInitialRecord?.SpecDetail?.EntityModel?.ChassisHeightInUnits ?? 1,
                         Comments = UsedChassis.Comments == "пусто" ? "" : UsedChassis.Comments,
                         Type = "Шасси",
                         InventoryNumber = UsedInitialRecord?.InventoryNumber  ?? "не назначено",
-                        FactoryNumber = UsedInitialRecord?.EntityModel?.PartNumber ?? "не задано",
+                        FactoryNumber = UsedInitialRecord?.SpecDetail?.EntityModel?.PartNumber ?? "не задано",
                         Hostname = CurrentUnit?.Chassis?.Hostname ?? "не задано",
                         Year = UsedInitialRecord?.DeliveryYear ?? 0,
                         InnerChassisDataList = new List<InnerChassisData>(InnerDetailList),

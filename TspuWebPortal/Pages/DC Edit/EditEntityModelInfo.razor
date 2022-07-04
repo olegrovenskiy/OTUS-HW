@@ -7,7 +7,7 @@
 @using TspuWebPortal.Shared
 @inherits OwningComponentBase<SiteDataService>
 
-<h3>Сужность @ChosenEntityModel.EntityModelId. Редактирование данных сущности.</h3>
+<h3>Сущность @ChosenEntityModel.EntityModelId. Редактирование данных сущности.</h3>
 
 
 
@@ -15,7 +15,7 @@
   <div class="row">
     <div class = "col-2">
         <label for="EntityModelVendor">Вендор</label>
-        <InputText @bind-Value=ChosenEntityModel.Vendor class="form-control" id="Vendor"  Size="20" />
+        <InputText @bind-Value=ChosenEntityModel.Manufacturer class="form-control" id="Vendor"  Size="20" />
     </div>
     <div class = "col-2">
         <label for="EntityModelModelType">Тип</label>

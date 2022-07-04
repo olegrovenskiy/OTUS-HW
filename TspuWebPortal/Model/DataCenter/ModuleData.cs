@@ -28,8 +28,8 @@ namespace TspuWebPortal.Model
         public int? CardId { get; set; }
         public CardData? Card { get; set; }
 
-        public int? DetailChangeId { get; set; }
-        public ChangeApplicationData? DetailChange { get; set; }
+        //public int? DetailChangeId { get; set; }
+        //public ChangeApplicationData? DetailChange { get; set; }              //Связь в обратном направлении. Один модуль - несколько операций замены.
 
         public int InitialDetailRecordId { get; set; }
         public InitialDetailRecordData? InitialDetailRecord { get; set; }

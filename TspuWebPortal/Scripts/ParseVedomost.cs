@@ -85,7 +85,7 @@ public class ParseVedomost
         xlWorksheet.Cells[1, 16] = "Год поставки";
         xlWorksheet.Cells[1, 17] = "Коментарии";
         xlWorksheet.Cells[1, 18] = "Учёт количества";
-        xlWorksheet.Cells[1, 19] = "Показать в РД";
+        xlWorksheet.Cells[1, 19] = "Исключить из РД";
 
         int intCurrentRow = 1;
         int CurrentChassisItem = 0;
@@ -207,7 +207,6 @@ public class ParseVedomost
                 xlWorksheet.Cells[intCurrentRow, 8] = CurrentChassis.DefinitionType;
 
                 xlWorksheet.Cells[intCurrentRow, 10] = CurrentChassis.IsOnFront ? CurrentChassis.LowerUnit : $"{CurrentChassis.LowerUnit} (тыл)";
-                //xlWorksheet.Cells[intCurrentRow, 10] = "Zhopa";
                 xlWorksheet.Cells[intCurrentRow, 11] = CurrentChassis.ChassisHeight;
                 xlWorksheet.Cells[intCurrentRow, 12] = CurrentChassis.Rack;
                 xlWorksheet.Cells[intCurrentRow, 13] = CurrentChassis.RowName;

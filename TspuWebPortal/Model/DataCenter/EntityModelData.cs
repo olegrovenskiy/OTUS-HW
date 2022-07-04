@@ -13,7 +13,7 @@ namespace TspuWebPortal.Model
 
         public string PartNumber { get; set; } = string.Empty;
         public string ModelType { get; set; } = string.Empty;          //Изменить на enum
-        public string Vendor { get; set; } = string.Empty;
+        public string Manufacturer { get; set; } = string.Empty;
         public string SnDefinitionType { get; set; } = string.Empty;
         public int? NominalPower { get; set; }
         public int? MaximalPower { get; set; }
@@ -24,6 +24,8 @@ namespace TspuWebPortal.Model
         //public List<CableData>? Cables { get; set; }
         //public List<LicenseData>? Licenses { get; set; }
 
-        public List<InitialDetailRecordData>? InitialDetailRecords { get; set; }
+        public List<SpecDetailData>? SpecificationRecords { get; set; }
+
+        //public List<InitialDetailRecordData>? InitialDetailRecords { get; set; }
     }
 }

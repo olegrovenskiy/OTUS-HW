@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TspuWebPortal.ORM;
@@ -11,9 +12,10 @@ using TspuWebPortal.ORM;
 namespace TspuWebPortal.Migrations
 {
     [DbContext(typeof(TspuDbContext))]
-    partial class SiteDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220704134931_Minor_10")]
+    partial class Minor_10
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -315,7 +317,7 @@ namespace TspuWebPortal.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("SpecDetailId")
+                    b.Property<int>("SpecItemId")
                         .HasColumnType("integer");
 
                     b.HasKey("InitialDetailRecordId");
@@ -324,7 +326,7 @@ namespace TspuWebPortal.Migrations
 
                     b.HasIndex("OperationId");
 
-                    b.HasIndex("SpecDetailId");
+                    b.HasIndex("SpecItemId");
 
                     b.ToTable("DetailRecord");
                 });
@@ -855,11 +857,11 @@ namespace TspuWebPortal.Migrations
 
             modelBuilder.Entity("TspuWebPortal.Model.SpecDetailData", b =>
                 {
-                    b.Property<int>("SpecDetailId")
+                    b.Property<int>("SpecItemId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SpecDetailId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SpecItemId"));
 
                     b.Property<int>("DeliveryYear")
                         .HasColumnType("integer");
@@ -879,7 +881,7 @@ namespace TspuWebPortal.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("SpecDetailId");
+                    b.HasKey("SpecItemId");
 
                     b.HasIndex("EntityModelId");
 
@@ -1026,9 +1028,9 @@ namespace TspuWebPortal.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TspuWebPortal.Model.SpecDetailData", "SpecDetail")
+                    b.HasOne("TspuWebPortal.Model.SpecDetailData", "SpecaModel")
                         .WithMany("InitialDetailRecords")
-                        .HasForeignKey("SpecDetailId")
+                        .HasForeignKey("SpecItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1036,7 +1038,7 @@ namespace TspuWebPortal.Migrations
 
                     b.Navigation("Operation");
 
-                    b.Navigation("SpecDetail");
+                    b.Navigation("SpecaModel");
                 });
 
             modelBuilder.Entity("TspuWebPortal.Model.InitialDetailTableData", b =>

@@ -20,9 +20,9 @@ namespace TspuWebPortal.Model
         //[ForeignKey("EntityModelId")]
         //public EntityModelData? EntityModel { get; set; }
 
-        public int? DetailChangeId { get; set; }
-        [ForeignKey("DetailChangeId")]
-        public ChangeApplicationData? DetailChange { get; set; }
+        //public int? DetailChangeId { get; set; }                      //В обратном направлении связь.
+        //[ForeignKey("DetailChangeId")]
+        //public ChangeApplicationData? DetailChange { get; set; }
 
         public int InitialDetailRecordId { get; set; }
         [ForeignKey("InitialDetailRecordId")]

@@ -31,7 +31,8 @@ public class DcUnitService
             .ThenInclude(room => room.DataCenter)
             .Include(unit => unit.Chassis)
             .ThenInclude(chassis => chassis.InitialDetailRecord)
-            .ThenInclude(initrecord => initrecord.EntityModel)
+            .ThenInclude(initrecord => initrecord.SpecDetail)
+            .ThenInclude(speca => speca.EntityModel)
             .ToList();
         return UnitDataList;
     }

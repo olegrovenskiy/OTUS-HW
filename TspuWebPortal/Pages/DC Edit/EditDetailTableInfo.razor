@@ -93,7 +93,8 @@
     bool StartedCreateInitialRecord = false;
     string DataSource = "";
     string ContractName = "";
-    EntityModelData? UsedModel;
+    //EntityModelData? UsedModel;
+    SpecDetailData? UsedSpecaRecord;
     InitialDetailRecordData? UsedInitialRecord;
     OperationData? UsedOperation;
     int CurrentChassisId = 0;
@@ -154,30 +155,35 @@
         {
             // Проход по всему считанному из ведомости.
 
-            UsedModel = objEntityService.FindOrCreateEntityModelFromExcel(SingleVedomostRecord);            //добавить логирование операции
+            // Получение и модели и записи в спеке
+
+            UsedSpecaRecord = objEntityService.FindOrCreateSpecaRecordFromExcel(SingleVedomostRecord);
+            //UsedModel = objEntityService.FindOrCreateEntityModelFromExcel(SingleVedomostRecord);            //добавить логирование операции
             UsedOperation = new OperationData { OperationType = "Добавление первичной записи", OperationDate = DateOnly.FromDateTime(DateTime.Now)};
             objOperationService.CreateOperationModel(UsedOperation);
 
             UsedInitialRecord = new InitialDetailRecordData
                         {
+                            SpecDetailId = UsedSpecaRecord.SpecDetailId,
                             DetailOrigin = 0,
                             InitialDetailTableId = ChosenDetailTable.InitialDetailTableId,
                             SerialNumber = SingleVedomostRecord.SerialNumber,
-                            DetailOfficialName = SingleVedomostRecord.FullDetailName,
                             InventoryNumber = SingleVedomostRecord.InventoryNumber ?? "не применимо",
-                            //Quantity = SingleVedomostRecord.Quantity,
                             Location = SingleVedomostRecord.DataCenter,
-                            Category = UsedModel.ModelType,
                             IsSplittable = false,
-                            EntityModelId = UsedModel.EntityModelId,
                             OperationId = UsedOperation.OperationId,
                             IsVisibleInExcel = SingleVedomostRecord.Quantity == 1 ? true : false,
-                            DeliveryYear = SingleVedomostRecord.Year
+                            IsExcludedFromPrint = false
+                            //DetailOfficialName = SingleVedomostRecord.FullDetailName,
+                            //Quantity = SingleVedomostRecord.Quantity,
+                            //Category = UsedModel.ModelType,
+                            //EntityModelId = UsedModel.EntityModelId,
+                            //DeliveryYear = SingleVedomostRecord.Year
                         };
             objDetailRecordService.CreateDetailRecordModel (UsedInitialRecord);
 
 
-            if (UsedInitialRecord.Category == "Шасси")
+            if (UsedSpecaRecord.EntityModel.ModelType == "Шасси")
             {
 
                 /**/
@@ -207,11 +213,11 @@
                     FirstOccupiedSlot = Convert.ToInt32(TempString);
                     LastOccupiedSlot = FirstOccupiedSlot;
                 }
-                UsedModel.ChassisHeightInUnits = LastOccupiedSlot - FirstOccupiedSlot + 1;          //Записать изменения в БД.
-                objEntityService.UpdateEntityModelInfo(UsedModel);
+                UsedSpecaRecord.EntityModel.ChassisHeightInUnits = LastOccupiedSlot - FirstOccupiedSlot + 1;          //Записать изменения в БД.
+                objEntityService.UpdateEntityModelInfo(UsedSpecaRecord.EntityModel);
                 ChassisObject = new ChassisData
                         {
-                            IsInstalled = true,
+                            //IsInstalled = true,
                             ChassisStatus = "в работе",
                             InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
                             Hostname = SingleVedomostRecord.AsbiHostname,
@@ -233,7 +239,7 @@
                 UsedInitialRecord.IsSuccessfullyUploaded = true;
 
             }
-            else if (UsedInitialRecord.Category == "Плата")
+            else if (UsedSpecaRecord.EntityModel.ModelType == "Плата")
             {
                 //  Добавляем объект в списке плат.
                 CardObject = new CardData
@@ -251,7 +257,7 @@
             else
             {
                 //  Добавляем объект в списке модулей.
-                if (UsedInitialRecord.Category == "Кабель")
+                if (UsedSpecaRecord.EntityModel.ModelType == "Кабель")
                 {
                     if (SingleVedomostRecord.Quantity == 1) HydraNumber = 1;
                     else HydraNumber = 2;
@@ -269,7 +275,7 @@
                 objModuleService.CreateModuleModel(ModuleObject);
                 UsedInitialRecord.IsSuccessfullyUploaded = true;
             }
-            if (UsedInitialRecord.Category == "Кабель")
+            if (UsedSpecaRecord.EntityModel.ModelType == "Кабель")
             {
                 //  Добавляем объект в списке кабелей.
                  CableObject = new CableData

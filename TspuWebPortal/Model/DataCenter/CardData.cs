@@ -33,9 +33,9 @@ namespace TspuWebPortal.Model
         [ForeignKey("ChassisId")]
         public ChassisData? Chassis { get; set; }
 
-        public int? DetailChangeId { get; set; }
-        [ForeignKey("DetailChangeId")]
-        public ChangeApplicationData? DetailChange { get; set; }
+        //public int? DetailChangeId { get; set; }
+        //[ForeignKey("DetailChangeId")]
+        //public ChangeApplicationData? DetailChange { get; set; }                  //Связку в обратном направлении
 
         public int InitialDetailRecordId { get; set; }
         [ForeignKey("InitialDetailRecordId")]

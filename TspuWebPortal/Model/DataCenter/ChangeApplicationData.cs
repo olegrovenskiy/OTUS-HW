@@ -15,10 +15,10 @@ namespace TspuWebPortal.Model
         public string ApplicationStatus { get; set; } = string.Empty;
         public DateOnly CompleteChangeDate { get; set; }
         public bool IsInstalled { get; set; }
-        public List<CableData>? Cables { get; set; }
-        public List<CardData>? Cards { get; set; }
-        public List<ChassisData>? Chassis { get; set; }
-        public List<ModuleData>? Modules { get; set; }
+        //public List<CableData>? Cables { get; set; }
+        //public List<CardData>? Cards { get; set; }
+        //public List<ChassisData>? Chassis { get; set; }
+        //public List<ModuleData>? Modules { get; set; }
         public RequestCreationData? RequestCreation { get; set; }
         public RequestCompletionData? RequestCompletion { get; set; }
         public int RequestCreationId { get; set; }

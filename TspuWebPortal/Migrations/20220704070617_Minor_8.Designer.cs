@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TspuWebPortal.ORM;
@@ -11,9 +12,10 @@ using TspuWebPortal.ORM;
 namespace TspuWebPortal.Migrations
 {
     [DbContext(typeof(TspuDbContext))]
-    partial class SiteDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220704070617_Minor_8")]
+    partial class Minor_8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -265,12 +267,19 @@ namespace TspuWebPortal.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("InitialDetailRecordId"));
 
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Comments")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("ContractNumber")
                         .HasColumnType("text");
+
+                    b.Property<DateOnly>("DeliveryDate")
+                        .HasColumnType("date");
 
                     b.Property<int>("DeliveryYear")
                         .HasColumnType("integer");
@@ -280,6 +289,9 @@ namespace TspuWebPortal.Migrations
                         .HasColumnType("text");
 
                     b.Property<int>("DetailOrigin")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("EntityModelId")
                         .HasColumnType("integer");
 
                     b.Property<int>("InitialDetailTableId")
@@ -315,16 +327,13 @@ namespace TspuWebPortal.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("SpecDetailId")
-                        .HasColumnType("integer");
-
                     b.HasKey("InitialDetailRecordId");
+
+                    b.HasIndex("EntityModelId");
 
                     b.HasIndex("InitialDetailTableId");
 
                     b.HasIndex("OperationId");
-
-                    b.HasIndex("SpecDetailId");
 
                     b.ToTable("DetailRecord");
                 });
@@ -855,11 +864,11 @@ namespace TspuWebPortal.Migrations
 
             modelBuilder.Entity("TspuWebPortal.Model.SpecDetailData", b =>
                 {
-                    b.Property<int>("SpecDetailId")
+                    b.Property<int>("SpecItemId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SpecDetailId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SpecItemId"));
 
                     b.Property<int>("DeliveryYear")
                         .HasColumnType("integer");
@@ -879,7 +888,7 @@ namespace TspuWebPortal.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("SpecDetailId");
+                    b.HasKey("SpecItemId");
 
                     b.HasIndex("EntityModelId");
 
@@ -1014,6 +1023,12 @@ namespace TspuWebPortal.Migrations
 
             modelBuilder.Entity("TspuWebPortal.Model.InitialDetailRecordData", b =>
                 {
+                    b.HasOne("TspuWebPortal.Model.EntityModelData", "EntityModel")
+                        .WithMany("InitialDetailRecords")
+                        .HasForeignKey("EntityModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("TspuWebPortal.Model.InitialDetailTableData", "InitialDetailTable")
                         .WithMany("InitialDetailRecords")
                         .HasForeignKey("InitialDetailTableId")
@@ -1026,17 +1041,11 @@ namespace TspuWebPortal.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TspuWebPortal.Model.SpecDetailData", "SpecDetail")
-                        .WithMany("InitialDetailRecords")
-                        .HasForeignKey("SpecDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("EntityModel");
 
                     b.Navigation("InitialDetailTable");
 
                     b.Navigation("Operation");
-
-                    b.Navigation("SpecDetail");
                 });
 
             modelBuilder.Entity("TspuWebPortal.Model.InitialDetailTableData", b =>
@@ -1244,7 +1253,7 @@ namespace TspuWebPortal.Migrations
             modelBuilder.Entity("TspuWebPortal.Model.SpecDetailData", b =>
                 {
                     b.HasOne("TspuWebPortal.Model.EntityModelData", "EntityModel")
-                        .WithMany("SpecificationRecords")
+                        .WithMany()
                         .HasForeignKey("EntityModelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1296,7 +1305,7 @@ namespace TspuWebPortal.Migrations
 
             modelBuilder.Entity("TspuWebPortal.Model.EntityModelData", b =>
                 {
-                    b.Navigation("SpecificationRecords");
+                    b.Navigation("InitialDetailRecords");
                 });
 
             modelBuilder.Entity("TspuWebPortal.Model.FileData", b =>
@@ -1394,11 +1403,6 @@ namespace TspuWebPortal.Migrations
                     b.Navigation("ServerLinks");
 
                     b.Navigation("Units");
-                });
-
-            modelBuilder.Entity("TspuWebPortal.Model.SpecDetailData", b =>
-                {
-                    b.Navigation("InitialDetailRecords");
                 });
 
             modelBuilder.Entity("TspuWebPortal.Model.UserListData", b =>

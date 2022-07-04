@@ -14,7 +14,7 @@ namespace TspuWebPortal.Model
 
         public string Hostname { get; set; } = string.Empty;
         //public string? CurrentLocation { get; set; } = string.Empty;                //Тут не нужно, только в первичных записях
-        public bool IsInstalled { get; set; }
+        //public bool IsInstalled { get; set; }                                          //Убрать
 
         
         //public string? InventoryNumber { get; set; } = string.Empty;                //Тут не нужно, только в первичных записях
@@ -33,9 +33,9 @@ namespace TspuWebPortal.Model
         public List<CardData>? Cards { get; set; }
         public List<ModuleData>? Modules { get; set; }
 
-        public int? DetailChangeId { get; set; }                                    //Возможно, тоже только для первичных
-        [ForeignKey("DetailChangeId")]
-        public ChangeApplicationData? DetailChange { get; set; }
+       // public int? DetailChangeId { get; set; }                                    //Связку в обратном направлении
+       // [ForeignKey("DetailChangeId")]
+       // public ChangeApplicationData? DetailChange { get; set; }
 
         public int InitialDetailRecordId { get; set; }
         [ForeignKey("InitialDetailRecordId")]
