@@ -32,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Model\DataCenter\DetailRecordData.cs" />
     <Content Include="Model\TSPU_Classes\SiteData.cs" />
     <Content Include="ORM\SiteDataService.cs" />
     <Content Include="ORM\TSPU Service\TspuDbContext.cs" />

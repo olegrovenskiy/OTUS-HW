@@ -1,18 +1,19 @@
 ﻿namespace TspuWebPortal.ORM;
 using System.Linq;
 using TspuWebPortal.Model;
+using Microsoft.EntityFrameworkCore;
 
-public class DcInitialDetailRecordService
+public class DcDetailRecordService
 {
     //~~~~~~~~~~~~~~~~~~~~~~~~~~    Базовые настройки   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     private readonly TspuDbContext _db;
 
-    public DcInitialDetailRecordService(TspuDbContext db)
+    public DcDetailRecordService(TspuDbContext db)
     {
         _db = db;
     }
 
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    Таблицы деталей    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    Записи деталей    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     public List<DetailRecordData> ListAllDetailRecordData()
     {
@@ -29,8 +30,12 @@ public class DcInitialDetailRecordService
 
     public DetailRecordData GetDetailRecordDataInfoById(int ID)
     {
+        //var AllDetailRecords = _db.DetailRecords.
 
-        DetailRecordData? DetailRecordDataInfo = _db.DetailRecords?.FirstOrDefault(s => s.DetailRecordId == ID);
+
+        DetailRecordData? DetailRecordDataInfo = _db.DetailRecords?.Include(record => record.SpecDetail)
+            .ThenInclude(spec => spec.EntityModel).
+            FirstOrDefault(s => s.DetailRecordId == ID);
 
         if (DetailRecordDataInfo == null)
         {
@@ -45,13 +50,31 @@ public class DcInitialDetailRecordService
 
 
 
-
     public void UpdateDetailRecordInfo(DetailRecordData objDetailRecordModel)
     {
 
         _db.DetailRecords?.Update(objDetailRecordModel);
         _db.SaveChanges();
         return;
+    }
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    Записи спецификации    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    public SpecDetailData GetSpecaDataInfoById(int ID)
+    {
+
+
+        SpecDetailData? DetailSpecaInfo = _db.SpecificationRecords?.FirstOrDefault(s => s.SpecDetailId == ID);
+
+        if (DetailSpecaInfo == null)
+        {
+            SpecDetailData DefaultDetailSpecaInfo = new SpecDetailData();
+            DefaultDetailSpecaInfo.SpecDetailId = ID;
+            return DefaultDetailSpecaInfo;
+        }
+
+        else return DetailSpecaInfo;
+
     }
 
 }

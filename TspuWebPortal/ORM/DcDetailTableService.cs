@@ -2,12 +2,12 @@
 using System.Linq;
 using TspuWebPortal.Model;
 
-    public class DcInitialDetailTableService
+    public class DcDetailTableService
     {
         //~~~~~~~~~~~~~~~~~~~~~~~~~~    Базовые настройки   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         private readonly TspuDbContext _db;
 
-        public DcInitialDetailTableService(TspuDbContext db)
+        public DcDetailTableService(TspuDbContext db)
         {
             _db = db;
         }

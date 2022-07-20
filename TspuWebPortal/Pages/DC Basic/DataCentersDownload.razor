@@ -5,7 +5,7 @@
 @inject DcFileService objFileService
 @inject DcUnitService objUnitService
 @inject DcChassisService objChassisService
-@inject DcInitialDetailRecordService objInitialDetailRecordService
+@inject DcDetailRecordService objInitialDetailRecordService
 @inject DcEntityService objEntityService
 @inject DcModuleService objModuleService
 @inject DcCardService objCardService
@@ -173,7 +173,7 @@
                 UsedChassis = objChassisService.GetChassisDataInfoById(CurrentChassisId);
                 CurrentInitialRecordId = UsedChassis.InitialDetailRecordId;
                 UsedInitialRecord = objInitialDetailRecordService.GetDetailRecordDataInfoById(CurrentInitialRecordId);
-                CurrentChassisNumber++;
+                //CurrentChassisNumber++;
 
                 //Проход по модулям внутри шасси
                 AllModulesInChassis = objModuleService.ListAllModulesOnChassis(CurrentChassisId);
@@ -182,11 +182,12 @@
                     CurrentDetailInChassisNumber++;
                     CurrentInitialRecordId = UsedModule.InitialDetailRecordId;
                     UsedInternalDetailRecord = objInitialDetailRecordService.GetDetailRecordDataInfoById(CurrentInitialRecordId);
+                    
                     InnerDetailList.Add(new InnerChassisData
                         {
                             SerialNumber = UsedInternalDetailRecord?.SerialNumber ?? "",
-                            Description = UsedInternalDetailRecord?.DetailOfficialName ?? "",
-                            Type = UsedInternalDetailRecord?.DetailOfficialName.IndexOf("Кабель") > -1 ? "Кабель" : "Модуль", 
+                            Description = UsedInternalDetailRecord?.SpecDetail?.SpecItemFullName ?? "",
+                            Type = UsedInternalDetailRecord?.SpecDetail?.SpecItemFullName.IndexOf("Кабель") > -1 ? "Кабель" : "Модуль", 
                             FactoryNumber = UsedInternalDetailRecord?.SpecDetail?.EntityModel?.PartNumber ?? "",
                             InventoryNumber = UsedInternalDetailRecord?.InventoryNumber ?? "",
                             Comments = UsedModule.Comments == "пусто" ? "" : UsedModule.Comments,
@@ -208,7 +209,8 @@
                     InnerDetailList.Add(new InnerChassisData
                         {
                             SerialNumber = UsedInternalDetailRecord?.SerialNumber ?? "",
-                            Description = UsedInternalDetailRecord?.DetailOfficialName ?? "",
+                            //Description = UsedInternalDetailRecord?.DetailOfficialName ?? "",
+                            Description = UsedInternalDetailRecord?.SpecDetail?.SpecItemFullName ?? "",
                             //Type = UsedInternalDetailRecord?.DetailOfficialName.IndexOf("ПАК") > -1 ? "Софт" : "Карта", 
                             Type = "Плата", 
                             FactoryNumber = UsedInternalDetailRecord?.SpecDetail?.EntityModel?.PartNumber ?? "",
@@ -222,14 +224,15 @@
                         });
                 }
 
-                Console.WriteLine($"Шасси: {UsedInitialRecord?.DetailOfficialName}");
+                //Console.WriteLine($"Шасси: {UsedInitialRecord?.DetailOfficialName}");
                 //Console.WriteLine($"Перед: {CurrentUnit.IsFront}");
                 OutputVedomostList.Add(new OuterChassisData
                     {
                         SerialNumber = UsedInitialRecord?.SerialNumber ?? "",
                         //DefinitionType = CurrentUnit.Chassis.SnType ?? "не задано",
                         DefinitionType = UsedInitialRecord?.SpecDetail?.EntityModel?.SnDefinitionType ?? "не назначено",
-                        Description = UsedInitialRecord?.DetailOfficialName ?? "не назначено",
+                        //Description = UsedInitialRecord?.DetailOfficialName ?? "не назначено",
+                        Description = UsedInitialRecord?.SpecDetail?.SpecItemFullName ?? "не назначено",
                         LowerUnit = CurrentUnit.UnitInRack,
                         IsOnFront = CurrentUnit.IsFront,
                         Rack = CurrentUnit?.Rack?.RackNameAsbi ?? "не назначено",
