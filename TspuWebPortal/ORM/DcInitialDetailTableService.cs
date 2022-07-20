@@ -14,27 +14,27 @@ using TspuWebPortal.Model;
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    Таблицы деталей    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        public List<InitialDetailTableData> ListAllDetailTableData()
+        public List<DetailTableData> ListAllDetailTableData()
         {
-            List<InitialDetailTableData>? DetailTableDataList = _db.DetailTable?.ToList();
+            List<DetailTableData>? DetailTableDataList = _db.DetailTables?.ToList();
             return DetailTableDataList;
         }
 
-        public void CreateDetailTableModel(InitialDetailTableData objDetailTableModel)
+        public void CreateDetailTableModel(DetailTableData objDetailTableModel)
         {
-            _db.DetailTable?.Add(objDetailTableModel);
+            _db.DetailTables?.Add(objDetailTableModel);
             _db.SaveChanges();
             return;
         }
 
-        public InitialDetailTableData GetDetailTableDataInfoById(int ID)
+        public DetailTableData GetDetailTableDataInfoById(int ID)
         {
 
-            InitialDetailTableData? DetailTableDataInfo = _db.DetailTable?.FirstOrDefault(s => s.InitialDetailTableId == ID);
+            DetailTableData? DetailTableDataInfo = _db.DetailTables?.FirstOrDefault(s => s.InitialDetailTableId == ID);
 
             if (DetailTableDataInfo == null)
             {
-                InitialDetailTableData DetailTableDataDefaultInfo = new InitialDetailTableData();
+                DetailTableData DetailTableDataDefaultInfo = new DetailTableData();
                 DetailTableDataInfo.InitialDetailTableId = ID;
                 return DetailTableDataDefaultInfo;
             }
@@ -43,10 +43,10 @@ using TspuWebPortal.Model;
 
         }
 
-        public void UpdateDetailTableInfo(InitialDetailTableData objDetailTableModel)
+        public void UpdateDetailTableInfo(DetailTableData objDetailTableModel)
         {
 
-            _db.DetailTable?.Update(objDetailTableModel);
+            _db.DetailTables?.Update(objDetailTableModel);
             _db.SaveChanges();
             return;
         }

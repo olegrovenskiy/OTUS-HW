@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TspuWebPortal.Model
 {
-    public class InitialDetailTableData
+    public class DetailTableData
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -13,6 +13,6 @@ namespace TspuWebPortal.Model
         [ForeignKey("FileId")]
         public FileData? TableFile { get; set; }
         public DateOnly? RegisterDate { get; set; }
-        public List<InitialDetailRecordData>? InitialDetailRecords { get; set; }
+        public List<DetailRecordData>? InitialDetailRecords { get; set; }
     }
 }

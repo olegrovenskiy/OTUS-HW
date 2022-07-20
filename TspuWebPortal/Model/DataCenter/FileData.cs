@@ -14,7 +14,7 @@ namespace TspuWebPortal.Model
         public string? FilePath { get; set; }        //enum
         public string? FileCategory { get; set; }
         public bool? IsAppliedToTable { get; set; }
-        public List<InitialDetailTableData>? InitialDetailTables { get; set; }
-        public List<InitialMaterialTableData>? InitialMaterialTables { get; set; }
+        public List<DetailTableData>? InitialDetailTables { get; set; }
+        public List<MaterialTableData>? InitialMaterialTables { get; set; }
     }
 }

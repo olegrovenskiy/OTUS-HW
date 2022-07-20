@@ -30,7 +30,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (EntityModelData CurrentDcEntityModel in DcEntityModelList)
+            @foreach (DetailModelData CurrentDcEntityModel in DcEntityModelList)
             { 
                     <tr>
                     <td>@CurrentDcEntityModel.EntityModelId</td>
@@ -49,7 +49,7 @@ else
 
 @code 
 {
-    List<EntityModelData> DcEntityModelList = new List<EntityModelData>();
+    List<DetailModelData> DcEntityModelList = new List<DetailModelData>();
     bool IsDisplayListDownloaded = false;
     protected override async Task OnInitializedAsync()
     {
@@ -60,7 +60,7 @@ else
     async Task AddNewEntityModel()
     {
         //objDataService.CreateRoom (new RoomData {RoomName = "не назначен", RoomCoordinates = "не назначен", DataCenterId = 0});
-        objEntityService.CreateEntityModel (new EntityModelData ());
+        objEntityService.CreateEntityModel (new DetailModelData ());
         DcEntityModelList = await Task.Run(() => objEntityService.ListAllDcEntityModels());
     }
 

@@ -18,6 +18,6 @@ namespace TspuWebPortal.Model
         //public EntityModelData? EntityModel { get; set; }
         
         public int InitialDetailRecordId { get; set; }
-        public InitialDetailRecordData? InitialDetailRecord { get; set; }
+        public DetailRecordData? InitialDetailRecord { get; set; }
     }
 }

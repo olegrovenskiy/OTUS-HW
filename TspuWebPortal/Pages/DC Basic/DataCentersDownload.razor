@@ -43,8 +43,8 @@
     List<AllRacksInDcData> AllRacksForVedomost = new List<AllRacksInDcData>();
 
     ChassisData? UsedChassis;
-    InitialDetailRecordData? UsedInitialRecord;
-    InitialDetailRecordData? UsedInternalDetailRecord;
+    DetailRecordData? UsedInitialRecord;
+    DetailRecordData? UsedInternalDetailRecord;
     //EntityModelData CurrentModel;
     int CurrentChassisId;
     int CurrentInitialRecordId;
@@ -164,7 +164,7 @@
 
 
         /**/                                                        //20 - стойка 6, 21 - стойка 7, 22 - стойка 8, 24..28 - стойки 9..13
-        AllUnitsInRack = objUnitService.ListAllUnitsInRack(31);     //18 - стойка 1,   39 - стойка 2,  40 - стойка 3, 41 - стойка 4, 19 - стойка 5.
+        AllUnitsInRack = objUnitService.ListAllUnitsInRack(18);     //18 - стойка 1,   39 - стойка 2,  40 - стойка 3, 41 - стойка 4, 19 - стойка 5.
         foreach (UnitData CurrentUnit in AllUnitsInRack)            //ЦОД-2: 29 - стойка 1, 30 - стойка 2,
         {
             if ((CurrentUnit.ChassisId != null) && (CurrentUnit.IsChassisLowerUnit == true))

@@ -39,7 +39,7 @@ namespace TspuWebPortal.Model
 
         public int InitialDetailRecordId { get; set; }
         [ForeignKey("InitialDetailRecordId")]
-        public InitialDetailRecordData? InitialDetailRecord { get; set; }
+        public DetailRecordData? InitialDetailRecord { get; set; }
 
         public List<ModuleData>? Modules { get; set; }
     }

@@ -15,27 +15,27 @@ public class DcEntityService
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    Сущности    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    public List<EntityModelData> ListAllDcEntityModels()
+    public List<DetailModelData> ListAllDcEntityModels()
     {
-        List<EntityModelData>? EntityModelList = _db.EntityModel?.ToList();
+        List<DetailModelData>? EntityModelList = _db.EntityModel?.ToList();
         return EntityModelList;
     }
 
-    public void CreateEntityModel(EntityModelData objEntityModel)
+    public void CreateEntityModel(DetailModelData objEntityModel)
     {
         _db.EntityModel?.Add(objEntityModel);
         _db.SaveChanges();
         return;
     }
 
-    public EntityModelData GetEntityModelInfoById(int ID)
+    public DetailModelData GetEntityModelInfoById(int ID)
     {
 
-        EntityModelData? EntityModelInfo = _db.EntityModel?.FirstOrDefault(s => s.EntityModelId == ID);
+        DetailModelData? EntityModelInfo = _db.EntityModel?.FirstOrDefault(s => s.EntityModelId == ID);
 
         if (EntityModelInfo == null)
         {
-            EntityModelData EntityModelDefaultInfo = new EntityModelData();
+            DetailModelData EntityModelDefaultInfo = new DetailModelData();
             EntityModelDefaultInfo.EntityModelId = ID;
             EntityModelDefaultInfo.Manufacturer = "Не создан";
             EntityModelDefaultInfo.ModelType = "Не создан";
@@ -54,7 +54,7 @@ public class DcEntityService
 
 
 
-    public void UpdateEntityModelInfo(EntityModelData objDcEntityModel)
+    public void UpdateEntityModelInfo(DetailModelData objDcEntityModel)
     {
         _db.EntityModel?.Update(objDcEntityModel);
         _db.SaveChanges();
@@ -99,7 +99,7 @@ public class DcEntityService
             string Type = "не назначено";
             int Year = ExcelObject.Year;
             string FactoryNumber = ExcelObject.FactoryNumber;
-            EntityModelData EntityModel = FindOrCreateEntityModelFromExcel(ExcelObject);
+            DetailModelData EntityModel = FindOrCreateEntityModelFromExcel(ExcelObject);
             //int EntityModelId = EntityModel.EntityModelId;
             SpecDetailData NewSpecaInfo = new SpecDetailData
             {
@@ -115,7 +115,7 @@ public class DcEntityService
         }
         else
         {
-            EntityModelData? EntityModelInfo = GetEntityModelInfoById(SpecaInfo.EntityModelId);
+            DetailModelData? EntityModelInfo = GetEntityModelInfoById(SpecaInfo.EntityModelId);
             return SpecaInfo;
         }    
     }
@@ -124,9 +124,9 @@ public class DcEntityService
 
 
 
-    public EntityModelData FindOrCreateEntityModelFromExcel(VedomostData ExcelObject)
+    public DetailModelData FindOrCreateEntityModelFromExcel(VedomostData ExcelObject)
     {
-        EntityModelData? EntityModelInfo = _db.EntityModel?.FirstOrDefault(s => s.PartNumber == ExcelObject.FactoryNumber);
+        DetailModelData? EntityModelInfo = _db.EntityModel?.FirstOrDefault(s => s.PartNumber == ExcelObject.FactoryNumber);
         if (EntityModelInfo == null)
         {
             string EntityType;
@@ -145,7 +145,7 @@ public class DcEntityService
                 EntityType = "Плата";
             else if (EntityName.IndexOf("Кабель") > -1) EntityType = "Кабель";
             else EntityType = "Модуль";
-            EntityModelData NewEntityModel = new EntityModelData { ModelName = EntityName, ModelType = EntityType, PartNumber = FactoryNumber, SnDefinitionType = DefinitionType };
+            DetailModelData NewEntityModel = new DetailModelData { ModelName = EntityName, ModelType = EntityType, PartNumber = FactoryNumber, SnDefinitionType = DefinitionType };
             CreateEntityModel(NewEntityModel);
             return NewEntityModel;
         }

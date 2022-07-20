@@ -19,25 +19,25 @@ public class DcFileService
 
     public List<FileData> ListAllDcFileData()
     {
-        List<FileData>? FileDataList = _db.FileData?.ToList();
+        List<FileData>? FileDataList = _db.Files?.ToList();
         return FileDataList;
     }
 
     public void CreateFileModel(FileData objFileModel)
     {
-        _db.FileData?.Add(objFileModel);
+        _db.Files?.Add(objFileModel);
         _db.SaveChanges();
         return;
     }
 
     public FileData GetFileDataInfoById(int ID)
     {
-        return _db.FileData.First(s => s.FileId == ID);
+        return _db.Files.First(s => s.FileId == ID);
     }
 
     public List<FileData> ListFilesOfSpecificCategory()
     {
-        List<FileData>? SelectedFileList = _db.FileData.Where(s => (s.FileCategory == "Детали") && (s.IsAppliedToTable == false)).ToList();
+        List<FileData>? SelectedFileList = _db.Files.Where(s => (s.FileCategory == "Детали") && (s.IsAppliedToTable == false)).ToList();
         //List<FileData>? SelectedFileList = _db.FileData.Where(s =>  s.IsAppliedToTable == false).ToList();
         return SelectedFileList;
     }

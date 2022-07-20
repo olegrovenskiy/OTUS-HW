@@ -81,12 +81,12 @@
     [Parameter]
     public int ID { get; set; }
 
-    InitialDetailTableData ChosenDetailTable = new InitialDetailTableData ();
+    DetailTableData ChosenDetailTable = new DetailTableData ();
     List<FileData> DcFileList = new List<FileData>();
     FileData UpdatedFile = new FileData();
     List<VedomostData> AllVedomostList = new List<VedomostData>();
     //List<EntityModelData> AllEntities = new List<EntityModelData>();
-    List<InitialDetailRecordData> SingleRecord = new List<InitialDetailRecordData>();
+    List<DetailRecordData> SingleRecord = new List<DetailRecordData>();
     List<string> LogEntityData = new List<string>();
     bool IsFileParsed = false;
     bool IsDataSourceChosen = false;
@@ -95,8 +95,9 @@
     string ContractName = "";
     //EntityModelData? UsedModel;
     SpecDetailData? UsedSpecaRecord;
-    InitialDetailRecordData? UsedInitialRecord;
-    OperationData? UsedOperation;
+    DetailRecordData? UsedDetailRecord;
+    OperationSummaryData? UsedGlobalOperation;
+    DetailOperationData? UsedDetailOperation;
     int CurrentChassisId = 0;
     int CurrentCardId = 0;
     ChassisData? ChassisObject;
@@ -159,10 +160,9 @@
 
             UsedSpecaRecord = objEntityService.FindOrCreateSpecaRecordFromExcel(SingleVedomostRecord);
             //UsedModel = objEntityService.FindOrCreateEntityModelFromExcel(SingleVedomostRecord);            //добавить логирование операции
-            UsedOperation = new OperationData { OperationType = "Добавление первичной записи", OperationDate = DateOnly.FromDateTime(DateTime.Now)};
-            objOperationService.CreateOperationModel(UsedOperation);
-
-            UsedInitialRecord = new InitialDetailRecordData
+            
+            //Создаём деталь
+            UsedDetailRecord = new DetailRecordData
                         {
                             SpecDetailId = UsedSpecaRecord.SpecDetailId,
                             DetailOrigin = 0,
@@ -171,7 +171,7 @@
                             InventoryNumber = SingleVedomostRecord.InventoryNumber ?? "не применимо",
                             Location = SingleVedomostRecord.DataCenter,
                             IsSplittable = false,
-                            OperationId = UsedOperation.OperationId,
+                            //GlobalOperationId = UsedGlobalOperation.GlobalOperationId,
                             IsVisibleInExcel = SingleVedomostRecord.Quantity == 1 ? true : false,
                             IsExcludedFromPrint = false
                             //DetailOfficialName = SingleVedomostRecord.FullDetailName,
@@ -180,8 +180,15 @@
                             //EntityModelId = UsedModel.EntityModelId,
                             //DeliveryYear = SingleVedomostRecord.Year
                         };
-            objDetailRecordService.CreateDetailRecordModel (UsedInitialRecord);
+            objDetailRecordService.CreateDetailRecordModel (UsedDetailRecord);
 
+            //Создаём глобальную операцию
+            UsedGlobalOperation = new OperationSummaryData { OperationType = "Работа с деталью", OperationDate = DateOnly.FromDateTime(DateTime.Now) };
+            objOperationService.CreateSummaryOperation(UsedGlobalOperation);
+
+            //Создаём частную операцию добавления детали
+            UsedDetailOperation = new DetailOperationData { OperationSubtype = "Добавление детали", DetailRecordId = UsedDetailRecord.DetailRecordId, GlobalOperationId = UsedGlobalOperation.GlobalOperationId };
+            objOperationService.CreateDetailOperation(UsedDetailOperation);
 
             if (UsedSpecaRecord.EntityModel.ModelType == "Шасси")
             {
@@ -219,7 +226,7 @@
                         {
                             //IsInstalled = true,
                             ChassisStatus = "в работе",
-                            InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
+                            InitialDetailRecordId = UsedDetailRecord.DetailRecordId,
                             Hostname = SingleVedomostRecord.AsbiHostname,
                             Comments = SingleVedomostRecord.Comments ?? "пусто"
                         };
@@ -236,7 +243,7 @@
                     if (CurrentUnitInRack == FirstOccupiedSlot) UsedUnitObject.IsChassisLowerUnit = true;
                 }
 
-                UsedInitialRecord.IsSuccessfullyUploaded = true;
+                UsedDetailRecord.IsSuccessfullyUploaded = true;
 
             }
             else if (UsedSpecaRecord.EntityModel.ModelType == "Плата")
@@ -245,14 +252,14 @@
                 CardObject = new CardData
                     {
                           IsInstalled = true,
-                          InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
+                          InitialDetailRecordId = UsedDetailRecord.DetailRecordId,
                           Comments = SingleVedomostRecord.Comments  ?? "пусто",
                           ChassisId = CurrentChassisId,
                           PositionInUpperEntity = SingleVedomostRecord.Place ?? "пусто"
                     };
                 objCardService.CreateCardModel(CardObject);
                 CurrentCardId = CardObject.CardId;
-                UsedInitialRecord.IsSuccessfullyUploaded = true;
+                UsedDetailRecord.IsSuccessfullyUploaded = true;
             }
             else
             {
@@ -266,14 +273,14 @@
                 ModuleObject = new ModuleData
                     {
                           IsInstalled = true,
-                          InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
+                          InitialDetailRecordId = UsedDetailRecord.DetailRecordId,
                           Comments = SingleVedomostRecord.Comments ?? "пусто",
                           ChassisId = CurrentChassisId,
                           PositionInUpperEntity = SingleVedomostRecord.Place ?? "пусто",
                           HydraEndNumber = HydraNumber
                     };
                 objModuleService.CreateModuleModel(ModuleObject);
-                UsedInitialRecord.IsSuccessfullyUploaded = true;
+                UsedDetailRecord.IsSuccessfullyUploaded = true;
             }
             if (UsedSpecaRecord.EntityModel.ModelType == "Кабель")
             {
@@ -281,7 +288,7 @@
                  CableObject = new CableData
                     {
                           IsInstalled = true,
-                          InitialDetailRecordId = UsedInitialRecord.InitialDetailRecordId,
+                          InitialDetailRecordId = UsedDetailRecord.DetailRecordId,
                           Comments = SingleVedomostRecord.Comments  ?? "пусто",
                     };
                 objCableService.CreateCableModel(CableObject);

@@ -1,17 +1,21 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
 namespace TspuWebPortal.Model
 {
-    public class DcData
+    public class MaterialModelData
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int DataCenterId { get; set; }
-        public string? DataCenterName { get; set; } = string.Empty;
-        public string? DataCenterAddress { get; set;} = string.Empty;
-        public List<RoomData>? Rooms { get; set; }
+        public int MaterialEntityModelId { get; set; }
+
+        public string MaterialModelName { get; set; } = string.Empty;
+
+        public string MaterialModelType { get; set; } = string.Empty;
+
+        public string Comments { get; set; } = string.Empty;
+
         public ICollection<MaterialStorageData>? MaterialStorageItems { get; set; }
+
     }
 }

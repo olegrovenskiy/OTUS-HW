@@ -7,7 +7,7 @@ namespace TspuWebPortal.Model
     {
         [Key]
         public int RequestCreationId { get; set; }
-        public OperationData? Operation { get; set; }
+        public OperationSummaryData? Operation { get; set; }
         public int OperationId { get; set; }
         public ChangeApplicationData? ChangeApplication { get; set; }
 

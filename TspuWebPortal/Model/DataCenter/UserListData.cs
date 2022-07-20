@@ -12,6 +12,6 @@ namespace TspuWebPortal.Model
         //Список групп. Добавить после создания.
         public string Username { get; set; } = string.Empty;
         public string PasswordHash { get; set; } = string.Empty;
-        public List<OperationData>? Operations { get; set; }
+        public List<OperationSummaryData>? Operations { get; set; }
     }
 }

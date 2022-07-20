@@ -29,7 +29,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (InitialDetailTableData CurrentDetailTableModel in DcDetailTableModelList)
+            @foreach (DetailTableData CurrentDetailTableModel in DcDetailTableModelList)
             {
                 <tr>
                     <td>@CurrentDetailTableModel.InitialDetailTableId</td>
@@ -45,7 +45,7 @@ else
 
 @code 
 {
-    List<InitialDetailTableData> DcDetailTableModelList = new List<InitialDetailTableData>();
+    List<DetailTableData> DcDetailTableModelList = new List<DetailTableData>();
     List<FileData> DcFileDataList = new List<FileData>();
     bool IsDisplayListDownloaded = false;
 
@@ -60,7 +60,7 @@ else
     
     async Task AddNewDetailTableModel()
     {
-        objDetailTableService.CreateDetailTableModel (new InitialDetailTableData ());
+        objDetailTableService.CreateDetailTableModel (new DetailTableData ());
         DcDetailTableModelList = await Task.Run(() => objDetailTableService.ListAllDetailTableData());
     }
 

@@ -13,11 +13,11 @@ namespace TspuWebPortal.Model
         public string SpecItemType { get; set; } = string.Empty;
         public int DeliveryYear { get; set; }
 
-        public List<InitialDetailRecordData>? InitialDetailRecords { get; set; }
+        public List<DetailRecordData>? InitialDetailRecords { get; set; }
 
         public int EntityModelId { get; set; }
         [ForeignKey("EntityModelId")]
-        public EntityModelData? EntityModel { get; set; }
+        public DetailModelData? EntityModel { get; set; }
 
 
     }

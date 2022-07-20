@@ -14,28 +14,28 @@ public class DcInitialDetailRecordService
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    Таблицы деталей    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    public List<InitialDetailRecordData> ListAllDetailRecordData()
+    public List<DetailRecordData> ListAllDetailRecordData()
     {
-        List<InitialDetailRecordData>? DetailRecordDataList = _db.DetailRecord?.ToList();
+        List<DetailRecordData>? DetailRecordDataList = _db.DetailRecords?.ToList();
         return DetailRecordDataList;
     }
 
-    public void CreateDetailRecordModel(InitialDetailRecordData objDetailRecordModel)
+    public void CreateDetailRecordModel(DetailRecordData objDetailRecordModel)
     {
-        _db.DetailRecord?.Add(objDetailRecordModel);
+        _db.DetailRecords?.Add(objDetailRecordModel);
         _db.SaveChanges();
         return;
     }
 
-    public InitialDetailRecordData GetDetailRecordDataInfoById(int ID)
+    public DetailRecordData GetDetailRecordDataInfoById(int ID)
     {
 
-        InitialDetailRecordData? DetailRecordDataInfo = _db.DetailRecord?.FirstOrDefault(s => s.InitialDetailRecordId == ID);
+        DetailRecordData? DetailRecordDataInfo = _db.DetailRecords?.FirstOrDefault(s => s.DetailRecordId == ID);
 
         if (DetailRecordDataInfo == null)
         {
-            InitialDetailRecordData DetailRecordDataDefaultInfo = new InitialDetailRecordData();
-            DetailRecordDataInfo.InitialDetailRecordId = ID;
+            DetailRecordData DetailRecordDataDefaultInfo = new DetailRecordData();
+            DetailRecordDataInfo.DetailRecordId = ID;
             return DetailRecordDataDefaultInfo;
         }
 
@@ -46,10 +46,10 @@ public class DcInitialDetailRecordService
 
 
 
-    public void UpdateDetailRecordInfo(InitialDetailRecordData objDetailRecordModel)
+    public void UpdateDetailRecordInfo(DetailRecordData objDetailRecordModel)
     {
 
-        _db.DetailRecord?.Update(objDetailRecordModel);
+        _db.DetailRecords?.Update(objDetailRecordModel);
         _db.SaveChanges();
         return;
     }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TspuWebPortal.Model
 {
-    public class EntityModelData
+    public class DetailModelData
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

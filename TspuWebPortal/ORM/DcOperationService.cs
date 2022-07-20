@@ -15,31 +15,40 @@ public class DcOperationService
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    Помещения    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    public List<OperationData> ListAllDcOperations()
+    public List<OperationSummaryData> ListAllDcOperations()
     {
-        List<OperationData>? OperationList = _db.Operations?.ToList();
+        List<OperationSummaryData>? OperationList = _db.OperationSummary?.ToList();
         return OperationList;
     }
 
-    public List<OperationData> ListAllOperations(int ID)
+    public List<OperationSummaryData> ListAllOperations(int ID)
     {
         //List<OperationData>? OperationList = _db.Operations?.ToList();
-        List<OperationData>? SelectedOperationList = _db.Operations.Where(s => s.OperationId == ID).ToList();
+        List<OperationSummaryData>? SelectedOperationList = _db.OperationSummary.Where(s => s.GlobalOperationId == ID).ToList();
         return SelectedOperationList;
     }
 
 
-    public void CreateOperationModel(OperationData objOperation)
+    public void CreateSummaryOperation(OperationSummaryData objOperation)
     {
-        _db.Operations?.Add(objOperation);
+        _db.OperationSummary?.Add(objOperation);
         _db.SaveChanges();
         return;
     }
 
-    public OperationData GetOperationInfoById(int ID)
+    public void CreateDetailOperation(DetailOperationData objOperation)
+    {
+        _db.DetailOperations?.Add(objOperation);
+        _db.SaveChanges();
+        return;
+    }
+
+    //objOperationService.CreateDetailOperation(UsedDetailOperation);
+
+    public OperationSummaryData GetOperationInfoById(int ID)
     {
 
-        OperationData? OperationInfo = _db.Operations?.FirstOrDefault(s => s.OperationId == ID);
+        OperationSummaryData? OperationInfo = _db.OperationSummary?.FirstOrDefault(s => s.GlobalOperationId == ID);
         /*
         if (OperationInfo == null)
         {
@@ -55,9 +64,9 @@ public class DcOperationService
         return OperationInfo;
     }
 
-    public void UpdateOperationInfo(OperationData objDcOperation)
+    public void UpdateOperationInfo(OperationSummaryData objDcOperation)
     {
-        _db.Operations?.Update(objDcOperation);
+        _db.OperationSummary?.Update(objDcOperation);
         _db.SaveChanges();
         return;
     }

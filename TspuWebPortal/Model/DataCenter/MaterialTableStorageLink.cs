@@ -13,6 +13,6 @@ namespace TspuWebPortal.Model
         
         //[Key] 
         public int InitialMaterialTableId { get; set; }
-        public InitialMaterialTableData InitialMaterialTableData { get; set; }
+        public MaterialTableData InitialMaterialTableData { get; set; }
     }
 }
