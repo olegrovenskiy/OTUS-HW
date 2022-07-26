@@ -37,7 +37,7 @@ public class TspuDbContext : DbContext
         public DbSet<OperationSummaryData>? OperationSummary { get; set; }
         public DbSet<DetailOperationData>? DetailOperations { get; set; }
         public DbSet<MaterialOperationData>? MaterialOperations { get; set; }
-        public DbSet<MaterialStorageData>? StorageRecords { get; set; }
+        public DbSet<MaterialStorageData>? MaterialStorageRecords { get; set; }
         public DbSet<SpecDetailData>? SpecificationRecords { get; set; }
         public DbSet<MaterialModelData>? MaterialEntityModels { get; set; }
 

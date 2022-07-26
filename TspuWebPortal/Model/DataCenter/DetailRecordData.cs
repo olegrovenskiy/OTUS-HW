@@ -19,7 +19,7 @@ namespace TspuWebPortal.Model
         public DetailTableData? InitialDetailTable { get; set; }
 
         public string SerialNumber { get; set; } = string.Empty;
-        public string DetailOfficialName { get; set; } = string.Empty;
+        //public string DetailOfficialName { get; set; } = string.Empty;
         public string InventoryNumber { get; set; } = string.Empty;
         public string Location { get; set; } = string.Empty;
         public bool IsSplittable { get; set; } = false;
