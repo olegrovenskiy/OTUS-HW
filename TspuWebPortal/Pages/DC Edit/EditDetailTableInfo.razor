@@ -173,12 +173,12 @@
                             IsSplittable = false,
                             //GlobalOperationId = UsedGlobalOperation.GlobalOperationId,
                             IsVisibleInExcel = SingleVedomostRecord.Quantity == 1 ? true : false,
-                            IsExcludedFromPrint = false
+                            IsExcludedFromPrint = false,
                             //DetailOfficialName = SingleVedomostRecord.FullDetailName,
                             //Quantity = SingleVedomostRecord.Quantity,
                             //Category = UsedModel.ModelType,
                             //EntityModelId = UsedModel.EntityModelId,
-                            //DeliveryYear = SingleVedomostRecord.Year
+                            DeliveryYear = SingleVedomostRecord.Year
                         };
             objDetailRecordService.CreateDetailRecordModel (UsedDetailRecord);
 

@@ -106,7 +106,7 @@ public class DcEntityService
                 SpecItemFullName = FullName,
                 SpecItemShortName = ShortName,
                 SpecItemType = Type,
-                DeliveryYear = Year,
+                //DeliveryYear = Year,
                 EntityModel = EntityModel,
                 EntityModelId = EntityModel.EntityModelId
             };
