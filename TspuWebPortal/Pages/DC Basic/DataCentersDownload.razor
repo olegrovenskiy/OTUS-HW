@@ -1,5 +1,8 @@
 ﻿@page "/dc_download"
+@using System;
 @using System.Threading.Tasks;
+@using System.Linq;
+@using System.Collections.Generic;
 @inject IWebHostEnvironment Environment
 @inject DcSiteService objDcService
 @inject DcFileService objFileService
@@ -162,12 +165,16 @@
                                 InnerChassisDataList = new List<InnerChassisData>(InnerDetailList),
                             });
                         InnerDetailList.Clear();
-                        AllRacksVedomostList.AddRange((from item in OutputVedomostList orderby item.LowerUnit select item).ToList());
-                        OutputVedomostList.Clear();
+
+                        
+                        //AllRacksVedomostList.AddRange(OutputVedomostList);
+                        //OutputVedomostList.Clear();
                     }
                 }
-
+                        AllRacksVedomostList.AddRange(OutputVedomostList.OrderBy(item => item.LowerUnit));
+                        OutputVedomostList.Clear();
             }
+            //AllDatacentersDeviceData.Add(new AllDevicesInDatacenter { FullSingleRackData = new List<OuterChassisData>(AllRacksVedomostList), DataCenterName = CurrentDc.DataCenterName });
             AllDatacentersDeviceData.Add(new AllDevicesInDatacenter { FullSingleRackData = new List<OuterChassisData>(AllRacksVedomostList), DataCenterName = CurrentDc.DataCenterName });
             AllRacksVedomostList.Clear();
         }
