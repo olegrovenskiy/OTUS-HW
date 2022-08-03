@@ -14,8 +14,8 @@ public class ParseVedomost
     }
     */
 
-
-    public static List<VedomostData> GetAllRecords(string VedomostPath)
+    //Добавил флаг новой таблицы деталей
+    public static List<FullVedomostData> GetAllVedomostRecords(string VedomostPath, bool IsNewTable)
     {
         string _ExcelFile;
         _ExcelFile = VedomostPath;
@@ -25,27 +25,28 @@ public class ParseVedomost
         Excel.Workbook xlWorkbook = xlApp.Workbooks.Open(VedomostPath);
         Excel.Worksheet xlWorksheet = (Excel.Worksheet)xlWorkbook.Worksheets.get_Item(1);
         Excel.Range xlRange = xlWorksheet.UsedRange;
-        List<VedomostData> ListAllRecords = new List<VedomostData>();
+        List<FullVedomostData> ListAllRecords = new List<FullVedomostData>();
         //Console.WriteLine($"Строк: {xlRange.Rows.Count}");
 
         for (int intCurrentRow = 2; intCurrentRow <= xlRange.Rows.Count; intCurrentRow++)
         {
-            ListAllRecords.Add(new VedomostData { 
+           
+            ListAllRecords.Add(new FullVedomostData { 
                 SerialNumber = ((Excel.Range)xlWorksheet.Cells[intCurrentRow, 1]).Value,
-                ItemNumber = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 2]).Value),
-                FullDetailName = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 3]).Value),
-                FactoryNumber = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 4]).Value),
-                AsbiHostname = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 5]).Value),
-                InventoryNumber = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 6]).Value),
-                Comments = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 7]).Value),
-                Rack = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 8]).Value),
-                Place = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 9]).Value),
-                Quantity = Convert.ToInt32(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 10]).Value),
-                DefinitionType = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 11]).Value),
-                Year = Convert.ToInt32(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 12]).Value),
-                DataCenter = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 13]).Value),
-                RoomName = Convert.ToString(((Excel.Range) xlWorksheet.Cells[intCurrentRow, 14]).Value),
-                RowName = Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 15]).Value),
+                ItemNumber = IsNewTable ? "нет" : Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 2]).Value),
+                FullDetailName = IsNewTable ? Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 2]).Value) : Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 3]).Value),
+                FactoryNumber = IsNewTable ? "нет" : Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 4]).Value),
+                AsbiHostname = IsNewTable ? "не назначено" : Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 5]).Value),
+                InventoryNumber = IsNewTable ? "не назначено" : Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 6]).Value),
+                Comments = IsNewTable ? "не назначено" : Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 7]).Value),
+                Rack = IsNewTable ? "не назначено" : Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 8]).Value),
+                Place = IsNewTable ? "не назначено" : Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 9]).Value),
+                Quantity = IsNewTable ? 1 : Convert.ToInt32(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 10]).Value),
+                DefinitionType = IsNewTable ? "не назначено" : Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 11]).Value),
+                Year = IsNewTable ? 0 : Convert.ToInt32(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 12]).Value),
+                DataCenter = IsNewTable ? Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 3]).Value) : Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 13]).Value),
+                RoomName = IsNewTable ? "не назначено" : Convert.ToString(((Excel.Range) xlWorksheet.Cells[intCurrentRow, 14]).Value),
+                RowName = IsNewTable ? "не назначено" : Convert.ToString(((Excel.Range)xlWorksheet.Cells[intCurrentRow, 15]).Value),
             });
             Console.WriteLine($"Строка: {intCurrentRow}");
         }

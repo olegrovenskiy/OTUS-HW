@@ -1,6 +1,6 @@
 ﻿namespace TspuWebPortal.Model
 {
-    public class VedomostData
+    public class FullVedomostData
     {
         public string SerialNumber { get; set; }
         public string ItemNumber { get; set; }

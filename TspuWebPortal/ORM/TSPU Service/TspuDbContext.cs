@@ -25,7 +25,8 @@ public class TspuDbContext : DbContext
         public DbSet<ChangeApplicationData>? DetailChange { get; set; }
         public DbSet<DetailRecordData>? DetailRecords { get; set; }
         public DbSet<DetailTableData>? DetailTables { get; set; }
-        //public DbSet<InitialMaterialRecordData>? MaterialRecord { get; set; }
+        //public DbSet<DetailTableNewData>? NewDetailTables { get; set; }
+    //public DbSet<InitialMaterialRecordData>? MaterialRecord { get; set; }
         public DbSet<MaterialTableData>? MaterialTable { get; set; }
         public DbSet<LinkData>? Links { get; set; }
         public DbSet<UserListData>? UserAccounts { get; set; }

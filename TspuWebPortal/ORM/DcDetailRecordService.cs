@@ -48,6 +48,16 @@ public class DcDetailRecordService
 
     }
 
+    //ListAllAnattendedDetails
+    public List<DetailRecordData> ListAllAnattendedDetails()
+    {
+        List<DetailRecordData>? DetailRecordDataList = _db.DetailRecords?
+            .Where(record => record.IsSuccessfullyUploaded == false)
+            .Include(record => record.SpecDetail)
+            .ToList();
+        return DetailRecordDataList;
+    }
+
 
 
     public void UpdateDetailRecordInfo(DetailRecordData objDetailRecordModel)

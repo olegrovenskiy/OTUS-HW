@@ -1,0 +1,53 @@
+﻿@page "/dc_distribution"
+@inject DcDetailRecordService objDetailRecordService
+@using TspuWebPortal.Model
+@using TspuWebPortal.ORM
+@using TspuWebPortal.Shared
+
+
+<h3>Распределение новых деталей по стойкам и устройствам</h3>
+
+
+@if (!DetailListDownloaded)
+{
+    <p><em>Список загружается...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Серийный номер</th>
+                <th>Номенклатурное название</th>
+                <th>ЦОД размещения</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DetailRecordData CurrentDetailRecord in UnattendedDetails)
+            {
+                <tr>
+                    <td>@CurrentDetailRecord.SerialNumber</td>
+                    <td>@CurrentDetailRecord.SpecDetail?.SpecItemFullName</td>
+                    <td>@CurrentDetailRecord.Location</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+
+}
+
+
+@code {
+    bool DetailListDownloaded = false;
+    List<DetailRecordData> UnattendedDetails = new List<DetailRecordData>(); 
+
+    protected override async Task OnInitializedAsync()
+    {
+        UnattendedDetails = await Task.Run(() => objDetailRecordService.ListAllAnattendedDetails());
+        DetailListDownloaded = true;
+    } 
+
+
+}

@@ -89,7 +89,7 @@ public class DcEntityService
         return;
     }
 
-    public SpecDetailData FindOrCreateSpecaRecordFromExcel(VedomostData ExcelObject)
+    public SpecDetailData FindOrCreateSpecaRecordFromExcel(FullVedomostData ExcelObject)
     {
         SpecDetailData? SpecaInfo = _db.SpecificationRecords?.FirstOrDefault(s => s.SpecItemFullName == ExcelObject.FullDetailName);
         if (SpecaInfo == null)
@@ -124,7 +124,7 @@ public class DcEntityService
 
 
 
-    public DetailModelData FindOrCreateEntityModelFromExcel(VedomostData ExcelObject)
+    public DetailModelData FindOrCreateEntityModelFromExcel(FullVedomostData ExcelObject)
     {
         DetailModelData? EntityModelInfo = _db.EntityModel?.FirstOrDefault(s => s.PartNumber == ExcelObject.FactoryNumber);
         if (EntityModelInfo == null)
