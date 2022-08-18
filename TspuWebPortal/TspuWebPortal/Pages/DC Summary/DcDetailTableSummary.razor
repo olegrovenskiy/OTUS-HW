@@ -1,0 +1,67 @@
+﻿@page "/detailtable_navigation"
+@using TspuWebPortal.Model
+@using TspuWebPortal.Scripts;
+@inject SiteDataService objDataService
+@inject DcFileService objFileService
+@inject DcDetailTableService objDetailTableService
+
+<h3>Добавление и Редактирование Загруженных Таблиц Деталей</h3>
+
+@if (!IsDisplayListDownloaded)
+{
+    <p><em>Список загружается...</em></p>
+}
+else
+{
+    <p>
+        <label>
+            <button class="btn btn-primary" @onclick="AddNewDetailTableModel">Добавить таблицу</button>
+        </label>
+    </p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID таблицы</th>
+                <th>Путь к файлу</th>
+                <th>Дата обработки</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DetailTableData CurrentDetailTableModel in DcDetailTableModelList)
+            {
+                <tr>
+                    <td>@CurrentDetailTableModel.InitialDetailTableId</td>
+                    <td>@CurrentDetailTableModel.TableFile?.FilePath</td>
+                    <td>@CurrentDetailTableModel.RegisterDate</td>
+                    <td><a href=@($"/detailtable_navigation/{CurrentDetailTableModel?.InitialDetailTableId}")>Парсить</a></td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+
+@code 
+{
+    List<DetailTableData> DcDetailTableModelList = new List<DetailTableData>();
+    List<FileData> DcFileDataList = new List<FileData>();
+    bool IsDisplayListDownloaded = false;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        DcFileDataList = await Task.Run(() => objFileService.ListAllDcFileData());
+        DcDetailTableModelList = await Task.Run(() => objDetailTableService.ListAllDetailTableData());
+        IsDisplayListDownloaded = true;
+    } 
+    
+    async Task AddNewDetailTableModel()
+    {
+        objDetailTableService.CreateDetailTableModel (new DetailTableData ());
+        DcDetailTableModelList = await Task.Run(() => objDetailTableService.ListAllDetailTableData());
+    }
+
+}

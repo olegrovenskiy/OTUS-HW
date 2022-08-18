@@ -1,0 +1,67 @@
+﻿@page "/materialtable_navigation"
+@using TspuWebPortal.Model
+@using TspuWebPortal.Scripts;
+@inject SiteDataService objDataService
+@inject DcFileService objFileService
+@inject DcMaterialTableService objMaterialTableService
+
+<h3>Добавление и Редактирование Загруженных Таблиц Материалов</h3>
+
+@if (!IsDisplayListDownloaded)
+{
+    <p><em>Список загружается...</em></p>
+}
+else
+{
+    <p>
+        <label>
+            <button class="btn btn-primary" @onclick="AddNewMaterialTableModel">Добавить таблицу</button>
+        </label>
+    </p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID таблицы</th>
+                <th>Путь к файлу</th>
+                <th>Дата обработки</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (MaterialTableData CurrentMaterialTableModel in DcMaterialTableModelList)
+            {
+                <tr>
+                    <td>@CurrentMaterialTableModel.InitialMaterialTableId</td>
+                    <td>@CurrentMaterialTableModel.TableFile?.FilePath</td>
+                    <td>@CurrentMaterialTableModel.RegisterDate</td>
+                    <td><a href=@($"/materialtable_navigation/{CurrentMaterialTableModel?.InitialMaterialTableId}")>Парсить</a></td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+
+@code 
+{
+    List<MaterialTableData> DcMaterialTableModelList = new List<MaterialTableData>();
+    List<FileData> DcFileDataList = new List<FileData>();
+    bool IsDisplayListDownloaded = false;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        DcFileDataList = await Task.Run(() => objFileService.ListAllDcFileData());
+        DcMaterialTableModelList = await Task.Run(() => objMaterialTableService.ListAllMaterialTableData());
+        IsDisplayListDownloaded = true;
+    } 
+    
+    async Task AddNewMaterialTableModel()
+    {
+        objMaterialTableService.CreateMaterialTableModel (new MaterialTableData ());
+        DcMaterialTableModelList = await Task.Run(() => objMaterialTableService.ListAllMaterialTableData());
+    }
+
+}

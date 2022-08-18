@@ -1,0 +1,69 @@
+﻿@page "/room_navigation"
+@using TspuWebPortal.Model
+@inject SiteDataService objDataService
+@inject DcSiteService objSiteService
+@inject DcRoomService objRoomService
+
+<h3>Добавление и Редактирование Помещений</h3>
+
+
+
+@if (!IsDisplayListDownloaded)
+{
+    <p><em>Список загружается...</em></p>
+}
+else
+{
+    <p>
+    <label>
+        <button class="btn btn-primary" @onclick="AddNewRoom">Добавить помещение</button>
+    </label>
+    </p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID помещения</th>
+                <th>Название помещения</th>
+                <th>Координаты</th>
+                <th>Название ЦОДа</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (RoomData CurrentDcRoom in DcRoomList)
+            { 
+                    <tr>
+                    <td>@CurrentDcRoom.RoomId</td>
+                    <td>@CurrentDcRoom.RoomName</td>
+                    <td>@CurrentDcRoom.RoomCoordinates</td>
+                    <td>@CurrentDcRoom.DataCenter?.DataCenterName</td>
+                    <td><a href=@($"/room_navigation/{CurrentDcRoom?.RoomId}")>Редактировать</a></td>
+                    </tr>
+            }
+               
+        </tbody>
+    </table>    
+}
+
+@code 
+{
+    List<DcData> DcSiteList = new List<DcData>();
+    List<RoomData> DcRoomList = new List<RoomData>();
+    bool IsDisplayListDownloaded = false;
+    protected override async Task OnInitializedAsync()
+    {
+        DcSiteList = await Task.Run(() => objSiteService.ListAllDcSites());
+        DcRoomList = await Task.Run(() => objRoomService.ListAllDcRooms());
+        IsDisplayListDownloaded = true;
+    } 
+    
+    async Task AddNewRoom()
+    {
+        //objDataService.CreateRoom (new RoomData {RoomName = "не назначен", RoomCoordinates = "не назначен", DataCenterId = 0});
+        //objDataService.CreateRoom (new RoomData {RoomName = "не назначен", DataCenterId = 0});
+        objRoomService.CreateRoom (new RoomData ());
+        DcRoomList = await Task.Run(() => objRoomService.ListAllDcRooms());
+    }
+
+}

@@ -1,0 +1,65 @@
+﻿@page "/site_navigation"
+@using TspuWebPortal.Model
+@using TspuWebPortal.ORM
+@inject DcSiteService objDcService
+@inject NavigationManager NavigationManager
+
+<h3>Добавление и Редактирование Площадок</h3>
+
+
+
+
+@if (!IsDisplayListDownloaded)
+{
+    <p><em>Список загружается...</em></p>
+}
+else
+{
+    <p>
+    <label>
+        <button class="btn btn-primary" @onclick="AddNewDc">Добавить ЦОД</button>
+    </label>
+    </p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID ЦОДа</th>
+                <th>Название ЦОДа</th>
+                <th>Адрес ЦОДа</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DcData DcSite in DcSiteList)
+            { 
+                    <tr>
+                    <td>@DcSite.DataCenterId</td>
+                    <td>@DcSite.DataCenterName</td>
+                    <td>@DcSite.DataCenterAddress</td>
+                    <td><a href=@($"/site_navigation/{DcSite.DataCenterId}")>Редактировать</a></td>
+                    </tr>
+            }
+               
+        </tbody>
+    </table>    
+}
+
+@code 
+{
+    bool IsDisplayListDownloaded = false;
+    List<DcData> DcSiteList = new List<DcData>();
+    protected override async Task OnInitializedAsync()
+    {
+        DcSiteList = await Task.Run(() => objDcService.ListAllDcSites());
+        IsDisplayListDownloaded = true;
+    }
+
+    async Task AddNewDc()
+    {
+        //objDataService.CreateDc (new DcData {DataCenterAddress = "не назначен", DataCenterName = "не назначен"});
+        objDcService.CreateDc (new DcData ());
+        DcSiteList = await Task.Run(() => objDcService.ListAllDcSites());
+    }
+
+}

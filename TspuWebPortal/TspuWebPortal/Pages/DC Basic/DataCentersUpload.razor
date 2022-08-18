@@ -1,0 +1,124 @@
+﻿@page "/dc_upload"
+@using System.Threading.Tasks;
+@inject IWebHostEnvironment Environment
+@inject SiteDataService objDataService
+@inject DcFileService objFileService
+@using TspuWebPortal.Model
+@using TspuWebPortal.ORM
+@using TspuWebPortal.Shared
+
+@using System.Collections.Generic
+
+
+
+
+<h3>Загрузка файла ведомости (только файлы .xlsx)</h3>
+
+
+<label>
+    <input type="checkbox" name="Vedom" value="Детали" />
+    Детали
+</label>
+<br />
+<label>
+    <input type="checkbox" name="Vedom" value="Материалы" />
+    Материалы
+</label>
+
+<br />
+<br />
+<input type="submit" value="Отправить" id="OK" />
+
+<br />
+<br />
+<br />
+
+
+
+<InputFile OnChange="@UploadExcel" />
+<br>
+<p style = "color:red;">@IncorrectFileTypeMessage</p>
+
+
+@if (IsFileUploaded)
+{
+    <p>Сохранено в @FilePath</p>
+    <p>
+        <label>
+            <button class="btn btn-primary" @onclick="AddNewFile">Добавить в базу файлов</button>
+        </label>
+    </p>
+}
+
+@if (IsFileAddedToTable)
+{
+    <a>Добавлена запись в таблицу загруженных файлов.</a>
+    <NavLink class="nav-link" href="filedata_navigation">
+        <span class="oi oi-plus" aria-hidden="true"></span> Просмотреть таблицу
+    </NavLink>
+}
+
+
+@code
+{
+    string FileName = "";
+    DateOnly LastModifiedDate;
+    string FileSize = "";
+    string ContentType = "";
+
+    string FilePath = "";
+    string IncorrectFileTypeMessage = "";
+
+    bool IsFileUploaded = false;
+    bool IsFileAddedToTable = false;
+
+    // ----------
+
+
+
+ //   string FileCategory1 = Request.Form["Vedom"];
+
+
+
+    // ----------
+
+    async Task UploadExcel(InputFileChangeEventArgs e)
+    {
+        IBrowserFile LoadedFile = e.File;
+        //FileName = $"{LoadedFile.Name}_{DateTime.Now}";                           //Почему не цепляется дата?             
+        FileName = $"{LoadedFile.Name}";    
+        LastModifiedDate = DateOnly.FromDateTime(LoadedFile.LastModified.DateTime);
+        FileSize = LoadedFile.Size.ToString();
+        ContentType = LoadedFile.ContentType;
+
+        FilePath = Path.Combine(Environment.ContentRootPath, Environment.EnvironmentName, "unsafe_uploads", FileName);
+        await using FileStream fs = new(FilePath, FileMode.Create);
+        //IsFileUploaded = true;
+        await LoadedFile.OpenReadStream().CopyToAsync(fs);
+
+        if (ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        {
+            IncorrectFileTypeMessage = "";
+            IsFileUploaded = true;
+        }
+        else
+        {
+            IsFileUploaded = false;
+            IsFileAddedToTable = false;
+            IncorrectFileTypeMessage = "Загружен не .xlsx";
+        }
+
+        
+    }
+
+    void AddNewFile()
+    {
+        objFileService.CreateFileModel (new FileData {FileName = this.FileName, UploadDate = DateOnly.FromDateTime(DateTime.Now), LastChangeDate = LastModifiedDate, FilePath = this.FilePath, FileCategory = "Детали", IsAppliedToTable = false});
+        IsFileAddedToTable = true;
+        //DateTime test1 = LastModifiedDate.DateTime;
+    }
+
+
+
+    //var trustedFileNameForFileStorage = Path.GetRandomFileName();
+}

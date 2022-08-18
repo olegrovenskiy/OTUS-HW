@@ -1,0 +1,47 @@
+﻿
+@page "/site_navigation/{ID:int}"
+@inject SiteDataService objDataService
+@inject DcSiteService objDcService
+@using TspuWebPortal.Model
+@using TspuWebPortal.ORM
+@using TspuWebPortal.Shared
+
+<h3>Площадка @ChosenDc.DataCenterId. Редактирование данных площадки ЦОДа.</h3>
+
+
+
+<EditForm Model=@ChosenDc OnSubmit=@FormSubmitted>
+  <div class="row">
+    <div class = "col-2">
+        <label for="DataCenterName">Название ЦОДа</label>
+        <InputText @bind-Value=ChosenDc.DataCenterName class="form-control" id="FederalDistrict"  Size="20" />
+    </div>
+    <div class = "col-4">
+        <label for="DataCenterAddress">Адрес ЦОДа</label>
+        <InputText @bind-Value=ChosenDc.DataCenterAddress class="form-control" id="MaintainanceStatus" />
+    </div>
+  </div>
+  <br>
+<input type="submit" class="btn btn-primary" value="Сохранить"/>
+</EditForm>
+
+
+
+
+
+@code {
+        [Parameter]
+        public int ID { get; set; }
+
+        DcData ChosenDc = new DcData ();
+        protected override async Task OnInitializedAsync()
+        {
+            ChosenDc = await Task.Run(() => objDcService.GetDcInfoById(Convert.ToInt32(ID)));
+        }
+
+        void FormSubmitted(EditContext editContext)
+        {
+            bool formIsValid = editContext.Validate();
+            if (formIsValid) objDcService.UpdateDcInfo(ChosenDc);
+        }        
+    }

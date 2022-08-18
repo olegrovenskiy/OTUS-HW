@@ -1,0 +1,80 @@
+﻿@page "/entitymodel_navigation"
+@using TspuWebPortal.Model
+@inject SiteDataService objDataService
+@inject DcEntityService objEntityService
+
+<h3>Добавление и Редактирование Сущностей</h3>
+
+@if (!IsDisplayListDownloaded)
+{
+    <p><em>Список загружается...</em></p>
+}
+else
+{
+    <p>
+    <label>
+        <button class="btn btn-primary" @onclick="AddNewEntityModel">Добавить сущность</button>
+    </label>
+    </p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID сущности</th>
+                <th>Вендор</th>
+                <th>Тип</th>
+                <th>Название модели</th>
+                <th>P/N</th>
+                <th>Power (nominal/max)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DetailModelData CurrentDcEntityModel in DcEntityModelList)
+            { 
+                    <tr>
+                    <td>@CurrentDcEntityModel.EntityModelId</td>
+                    <td>@CurrentDcEntityModel.Manufacturer</td>
+                    <td>@CurrentDcEntityModel.ModelType</td>
+                    <td>@CurrentDcEntityModel.ModelName</td>
+                    <td>@CurrentDcEntityModel.PartNumber</td>
+                    <td>@CurrentDcEntityModel.NominalPower/@CurrentDcEntityModel.MaximalPower</td>
+                    <td><a href=@($"/entitymodel_navigation/{CurrentDcEntityModel?.EntityModelId}")>Редактировать</a></td>
+                    </tr>
+            }
+               
+        </tbody>
+    </table>    
+}
+
+@code 
+{
+    List<DetailModelData> DcEntityModelList = new List<DetailModelData>();
+    bool IsDisplayListDownloaded = false;
+    protected override async Task OnInitializedAsync()
+    {
+        DcEntityModelList = await Task.Run(() => objEntityService.ListAllDcEntityModels());
+        IsDisplayListDownloaded = true;
+    } 
+    
+    async Task AddNewEntityModel()
+    {
+        //objDataService.CreateRoom (new RoomData {RoomName = "не назначен", RoomCoordinates = "не назначен", DataCenterId = 0});
+        objEntityService.CreateEntityModel (new DetailModelData ());
+        DcEntityModelList = await Task.Run(() => objEntityService.ListAllDcEntityModels());
+    }
+
+    /*
+        public EntityModelData FindOrCreateEntityModelFromExcel(VedomostData ExcelObject)
+        {
+            EntityModelData? EntityModelInfo = _db.EntityModel?.FirstOrDefault(s => s.ModelName == ExcelObject.Description);
+            if (EntityModelInfo == null)
+            {
+                EntityModelData NewEntityModel = new EntityModelData { ModelName = ExcelObject.Description, ModelType = "chassis" };
+                return NewEntityModel;
+            }
+            else return EntityModelInfo;
+        }
+     */
+
+}

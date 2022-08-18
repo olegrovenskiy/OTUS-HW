@@ -1,0 +1,71 @@
+﻿@page "/row_navigation"
+@using TspuWebPortal.Model
+@inject SiteDataService objDataService
+@inject DcSiteService objSiteService
+@inject DcRoomService objRoomService
+@inject DcRowService objRowService
+
+<h3>Добавление и Редактирование Рядов</h3>
+
+
+
+@if (!IsDisplayListDownloaded)
+{
+    <p><em>Список загружается...</em></p>
+}
+else
+{
+    <p>
+    <label>
+        <button class="btn btn-primary" @onclick="AddNewRow">Добавить ряд</button>
+    </label>
+    </p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID ряда</th>
+                <th>Название ряда АСБИ</th>
+                <th>Название ряда ЦОД</th>
+                <th>Название помещения</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (RowData CurrentDcRow in DcRowList)
+            { 
+                    <tr>
+                    <td>@CurrentDcRow.RowId</td>
+                    <td>@CurrentDcRow.RowNameAsbi</td>
+                    <td>@CurrentDcRow.RowNameDataCenter</td>
+                    <td>@CurrentDcRow.Room?.RoomName</td>
+                    <td><a href=@($"/row_navigation/{CurrentDcRow.RowId}")>Редактировать</a></td>
+                    </tr>
+            }
+               
+        </tbody>
+    </table>    
+}
+
+@code 
+{
+    List<DcData> DcSiteList = new List<DcData>();
+    List<RoomData> DcRoomList = new List<RoomData>();
+    List<RowData> DcRowList = new List<RowData>();
+    bool IsDisplayListDownloaded = false;
+    protected override async Task OnInitializedAsync()
+    {
+        DcSiteList = await Task.Run(() => objSiteService.ListAllDcSites());
+        DcRoomList = await Task.Run(() => objRoomService.ListAllDcRooms());
+        DcRowList = await Task.Run(() => objRowService.ListAllDcRows());
+        IsDisplayListDownloaded = true;
+    } 
+    
+    async Task AddNewRow()
+    {
+        //objDataService.CreateRoom (new RoomData {RoomName = "не назначен", RoomCoordinates = "не назначен", DataCenterId = 0});
+        objRowService.CreateRow (new RowData ());
+        DcRowList = await Task.Run(() => objRowService.ListAllDcRows());
+    }
+
+}

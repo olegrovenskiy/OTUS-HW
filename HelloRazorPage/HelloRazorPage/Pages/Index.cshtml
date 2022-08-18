@@ -1,0 +1,40 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+
+
+<label>
+    <input type="checkbox" name="Fruit" value="1" />
+    Mango
+</label>
+<br />
+<label>
+    <input type="checkbox" name="Fruit" value="2" />
+    Apple
+</label>
+<br />
+<label>
+    <input type="checkbox" name="Fruit" value="3" />
+    Pineapple
+</label>
+<br />
+<label>
+    <input type="checkbox" name="Fruit" value="4" />
+    Papaya
+</label>
+<br />
+<label>
+    <input type="checkbox" name="Fruit" value="5" />
+    Grapes
+</label>
+<br />
+<br />
+<asp:Button Text="Submit" runat="server" OnClick="Submit" />
