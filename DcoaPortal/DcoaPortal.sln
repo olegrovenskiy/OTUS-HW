@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{4F9356C3-A741-4AAB-8DA7-F63D362F87D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DcoaPortal.UseCases", "DcoaPortal.UseCases\DcoaPortal.UseCases.csproj", "{4BB1C9BD-A9FB-4264-9792-FDEB401EECC0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DcoaPortal.SiteBuilder", "DcoaPortal.SiteBuilder\DcoaPortal.SiteBuilder.csproj", "{52A9FD9A-2399-43C2-8D09-464D16B076F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DcoaPortal.OrmPlugins", "DcoaPortal.OrmPlugins\DcoaPortal.OrmPlugins.csproj", "{3E8A9797-59A7-4E9F-A406-937F67ADDBDC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DcoaPortal.TspuModels", "DcoaPortal.TspuModels\DcoaPortal.TspuModels.csproj", "{8385A7EC-1082-4972-864A-EAFFE0A69C7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DcoaPortal.WebApp", "DcoaPortal.WebApp\DcoaPortal.WebApp.csproj", "{E243A8CA-7F0A-405F-B3C3-D9D47EFEE4AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +19,26 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4F9356C3-A741-4AAB-8DA7-F63D362F87D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4F9356C3-A741-4AAB-8DA7-F63D362F87D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4F9356C3-A741-4AAB-8DA7-F63D362F87D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4F9356C3-A741-4AAB-8DA7-F63D362F87D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BB1C9BD-A9FB-4264-9792-FDEB401EECC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BB1C9BD-A9FB-4264-9792-FDEB401EECC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BB1C9BD-A9FB-4264-9792-FDEB401EECC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BB1C9BD-A9FB-4264-9792-FDEB401EECC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52A9FD9A-2399-43C2-8D09-464D16B076F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52A9FD9A-2399-43C2-8D09-464D16B076F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52A9FD9A-2399-43C2-8D09-464D16B076F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52A9FD9A-2399-43C2-8D09-464D16B076F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E8A9797-59A7-4E9F-A406-937F67ADDBDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E8A9797-59A7-4E9F-A406-937F67ADDBDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E8A9797-59A7-4E9F-A406-937F67ADDBDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E8A9797-59A7-4E9F-A406-937F67ADDBDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8385A7EC-1082-4972-864A-EAFFE0A69C7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8385A7EC-1082-4972-864A-EAFFE0A69C7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8385A7EC-1082-4972-864A-EAFFE0A69C7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8385A7EC-1082-4972-864A-EAFFE0A69C7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E243A8CA-7F0A-405F-B3C3-D9D47EFEE4AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E243A8CA-7F0A-405F-B3C3-D9D47EFEE4AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E243A8CA-7F0A-405F-B3C3-D9D47EFEE4AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E243A8CA-7F0A-405F-B3C3-D9D47EFEE4AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

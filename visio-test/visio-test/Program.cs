@@ -1,6 +1,16 @@
-﻿using System;
+﻿
+using System;
 using Visio = Microsoft.Office.Interop.Visio;
-using Excel = Microsoft.Office.Interop.Excel;
+using System.Windows.Forms;
+using System.Threading;
+//using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Data;
+using System.Threading.Tasks;
+//using Microsoft.Data.SqlClient;
+using MySql.Data.MySqlClient;
+
 
 //generate the VISIO file
 
